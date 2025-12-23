@@ -75,6 +75,14 @@
             color: #cbd5e1;
         }
 
+        /* Special Green Button for R-Native */
+        .btn-r-native.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            border: none;
+        }
+
         .progress-bar {
             height: 8px;
             border-radius: 4px;
@@ -149,6 +157,26 @@
             border-left: 6px solid #475569;
         }
 
+        .flow-arrow-down {
+            width: 2px;
+            height: 40px;
+            background: #475569;
+            margin: 5px 0;
+            position: relative;
+        }
+        
+        .flow-arrow-down::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            bottom: 0;
+            width: 0; 
+            height: 0; 
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #475569;
+        }
+
         /* Animation classes */
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -169,7 +197,10 @@
 
         <!-- View Toggles -->
         <div class="flex flex-wrap justify-center gap-4 mt-8">
-            <button onclick="switchView('business')" id="btn-business" class="btn-toggle active px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+            <button onclick="switchView('prereq')" id="btn-prereq" class="btn-toggle active px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+                <i class="fas fa-clipboard-list"></i> Project Prerequisites
+            </button>
+            <button onclick="switchView('business')" id="btn-business" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-briefcase"></i> Business Plan
             </button>
             <button onclick="switchView('process')" id="btn-process" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
@@ -177,6 +208,9 @@
             </button>
             <button onclick="switchView('tech')" id="btn-tech" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-server"></i> Technical Deep Dive
+            </button>
+            <button onclick="switchView('rnative')" id="btn-rnative" class="btn-toggle btn-r-native inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+                <span class="bg-green-500 text-white text-[10px] px-1 rounded font-bold">R</span> Native Arch
             </button>
             <button onclick="switchView('risk')" id="btn-risk" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-chart-line"></i> Timeline & Risks
@@ -193,9 +227,88 @@
     <main class="max-w-6xl mx-auto relative min-h-[800px]">
         
         <!-- ========================================== -->
+        <!-- PREREQUISITES VIEW (NEW)                   -->
+        <!-- ========================================== -->
+        <div id="view-prereq" class="fade-in">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-yellow-500">Discovery Phase: What We Need</h2>
+            <p class="text-slate-400 mb-8 max-w-3xl">To start building the MVP, we need the following materials and definitions from the Client.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- 1. The Raw Material -->
+                <div class="card p-6 rounded-xl border-t-2 border-yellow-400">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-yellow-500/20 p-3 rounded-lg text-yellow-400 text-2xl">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">1. Source Documents</h3>
+                            <p class="text-sm text-slate-300 mb-2">We need <strong>3-5 actual PDF examples</strong> of the TASE/Treasury regulations you process manually.</p>
+                            <ul class="text-xs text-slate-400 list-disc list-inside">
+                                <li>Diverse formats (Tables, Scanned images, Text).</li>
+                                <li><strong>Why?</strong> To test our AI OCR accuracy on Hebrew financial terms.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. The Logic -->
+                <div class="card p-6 rounded-xl border-t-2 border-blue-400">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-500/20 p-3 rounded-lg text-blue-400 text-2xl">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">2. The "Golden Formulas"</h3>
+                            <p class="text-sm text-slate-300 mb-2">The exact math logic you apply to the extracted data.</p>
+                            <ul class="text-xs text-slate-400 list-disc list-inside">
+                                <li><em>Example:</em> "Take Row A from the PDF, multiply by 0.20 (Tax), and subtract Row B."</li>
+                                <li><strong>Why?</strong> The AI extracts data; the code must calculate the result perfectly.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. The Goal -->
+                <div class="card p-6 rounded-xl border-t-2 border-green-400">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-green-500/20 p-3 rounded-lg text-green-400 text-2xl">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">3. Target Output</h3>
+                            <p class="text-sm text-slate-300 mb-2">One example of a <strong>Final Completed Report</strong> (Excel or Word) that matches one of the source PDFs.</p>
+                            <ul class="text-xs text-slate-400 list-disc list-inside">
+                                <li>This acts as our "Answer Key" to verify the system is working.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Success Criteria -->
+                <div class="card p-6 rounded-xl border-t-2 border-purple-400">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-purple-500/20 p-3 rounded-lg text-purple-400 text-2xl">
+                            <i class="fas fa-flag-checkered"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">4. Definition of Done</h3>
+                            <p class="text-sm text-slate-300 mb-2">What is the minimum viable result for the Pilot?</p>
+                            <ul class="text-xs text-slate-400 list-disc list-inside">
+                                <li>Is 90% accuracy acceptable with manual review?</li>
+                                <li>Or must it be 100% automated? (Affects timeline & cost).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================== -->
         <!-- BUSINESS VIEW (Executive Summary)          -->
         <!-- ========================================== -->
-        <div id="view-business" class="fade-in">
+        <div id="view-business" class="hidden">
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="card p-8 rounded-2xl border-l-4 border-red-500">
                     <h3 class="text-xl font-bold text-white mb-3 flex items-center">
@@ -335,7 +448,7 @@
                 </div>
             </div>
 
-            <!-- Legend / Detailed Breakdown (Expanded to 6 Cards) -->
+            <!-- Legend / Detailed Breakdown -->
             <div class="mt-8 grid md:grid-cols-3 gap-4">
                 
                 <!-- 1. User -->
@@ -465,6 +578,160 @@
                     </div>
                  </div>
                  <p class="text-[10px] text-slate-400 mt-2 italic">*This decoupling prevents a Python error from corrupting financial logic, and allows you to update R formulas without redeploying the API.</p>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- R-NATIVE ARCHITECTURE VIEW (NEW)           -->
+        <!-- ========================================== -->
+        <div id="view-rnative" class="hidden">
+            <div class="flex items-start justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white pl-2 border-l-4 border-green-500">R-Native Architecture</h2>
+                    <p class="text-slate-400 text-sm mt-1">Alternative Strategy: "One Language, Zero Friction"</p>
+                </div>
+                <div class="bg-green-900/30 text-green-400 px-4 py-2 rounded-lg text-xs font-bold border border-green-500/30">
+                    Recommended for MVP
+                </div>
+            </div>
+
+            <!-- Simplified Diagram -->
+            <div class="w-full overflow-x-auto p-6 bg-slate-800/30 rounded-2xl border border-green-500/30 mb-8">
+                <h3 class="text-xs text-green-400 font-bold uppercase mb-4 text-center tracking-widest">Unified R Stack</h3>
+                <div class="flex justify-center items-center gap-6">
+                    
+                    <!-- User -->
+                    <div class="diagram-node flex flex-col items-center">
+                        <div class="w-14 h-14 bg-slate-600 rounded-full flex items-center justify-center border-2 border-slate-500 shadow-xl text-white">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow-right"></div>
+
+                    <!-- The Monolith (R) -->
+                    <div class="relative p-6 bg-green-900/20 border-2 border-green-500 rounded-xl w-64 text-center">
+                        <div class="absolute -top-3 left-4 bg-green-900 px-2 text-[10px] text-white uppercase font-bold rounded">The R Monolith</div>
+                        
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-green-800/60 p-2 rounded text-xs font-bold text-white">Shiny UI (bslib)</div>
+                            <div class="bg-green-700/60 p-2 rounded text-xs font-bold text-white">Plumber API</div>
+                            <div class="bg-green-600/60 p-2 rounded text-xs font-bold text-white">Calculation Logic</div>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow-right"></div>
+
+                    <!-- External Services -->
+                    <div class="flex flex-col gap-4">
+                        <div class="p-2 bg-purple-900/40 border border-purple-500/50 rounded text-center w-32">
+                            <span class="text-[10px] text-purple-300 block mb-1">Via <code>httr2</code></span>
+                            <strong class="text-white text-xs">OpenAI / DocAI</strong>
+                        </div>
+                        <div class="p-2 bg-orange-900/40 border border-orange-500/50 rounded text-center w-32">
+                            <span class="text-[10px] text-orange-300 block mb-1">Via <code>RPostgres</code></span>
+                            <strong class="text-white text-xs">Supabase DB</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Why R? -->
+                <div class="card p-6 rounded-xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Why choose this path?</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-bolt text-yellow-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Velocity:</strong>
+                                <p class="text-xs text-slate-400">You already know R. No time wasted learning Python environments, async/await, or Pydantic.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-code text-cyan-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Simplicity:</strong>
+                                <p class="text-xs text-slate-400">Zero "context switching". You write the UI, the API, and the Math in the same language.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- The Trade-off -->
+                <div class="card p-6 rounded-xl border-t-2 border-red-500/50">
+                    <h3 class="text-lg font-bold text-white mb-4">The "Scalability Tax"</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-exclamation-circle text-red-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Single Threaded:</strong>
+                                <p class="text-xs text-slate-400">R processes one request at a time by default. If 50 users click "Upload" at once, the 50th user waits.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-lock text-red-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Auth Complexity:</strong>
+                                <p class="text-xs text-slate-400">Implementing "Login with Microsoft" is harder in Shiny Open Source than in Python.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <h4 class="text-sm font-bold text-green-400 uppercase mb-3">Replacement Stack</h4>
+                <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">FastAPI <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">Plumber</span></div>
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">LangChain <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">httr2</span></div>
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">React <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">Shiny</span></div>
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">SQLAlchemy <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">DBI</span></div>
+                </div>
+            </div>
+
+            <!-- NEW SECTION: Handling 10 Users + Auth -->
+            <div class="mt-8 grid md:grid-cols-2 gap-6">
+                <!-- Concurrency Card -->
+                <div class="card p-6 rounded-xl border-t-2 border-yellow-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-users text-yellow-400 text-xl"></i>
+                        <h4 class="font-bold text-white">Handling 10 Users (Concurrency)</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-3">
+                        <strong>Problem:</strong> R creates a queue. User B waits for User A.<br>
+                        <strong>Solution:</strong> <code class="text-green-400">library(future)</code> & <code class="text-green-400">library(promises)</code>.
+                    </p>
+                    <div class="bg-black/40 p-3 rounded border border-slate-700 text-[10px] text-slate-400 font-mono">
+                        # Async Calculation Pattern<br>
+                        future::future({<br>
+                        &nbsp;&nbsp;heavy_math(data)<br>
+                        }) %...>% (function(result) {<br>
+                        &nbsp;&nbsp;showNotification("Report Ready!")<br>
+                        })
+                    </div>
+                    <p class="text-[10px] text-slate-500 mt-2 italic">This spawns a "background R" process for the math, keeping the UI instant for everyone else.</p>
+                </div>
+
+                <!-- Auth Card -->
+                <div class="card p-6 rounded-xl border-t-2 border-purple-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-key text-purple-400 text-xl"></i>
+                        <h4 class="font-bold text-white">R-Native Authentication</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-3">
+                        We don't build auth; we leverage <strong>Supabase Auth</strong> directly from R.
+                    </p>
+                    <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
+                        <li>User enters creds in Shiny input.</li>
+                        <li>R sends <code>POST /auth/v1/token</code> to Supabase.</li>
+                        <li>Supabase returns a <strong>JWT (Session Token)</strong>.</li>
+                        <li>R stores this token in the user's session state.</li>
+                    </ul>
+                    <div class="mt-3 text-[10px] bg-purple-900/30 text-purple-300 px-2 py-1 rounded inline-block border border-purple-500/30">
+                        Result: Secure Enterprise Login
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -877,7 +1144,7 @@
         }
 
         function switchView(viewName) {
-            const views = ['business', 'tech', 'risk', 'tools', 'security', 'process'];
+            const views = ['business', 'tech', 'risk', 'tools', 'security', 'process', 'rnative', 'prereq'];
             
             views.forEach(v => {
                 const el = document.getElementById('view-' + v);
