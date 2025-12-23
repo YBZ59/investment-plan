@@ -212,6 +212,9 @@
             <button onclick="switchView('rnative')" id="btn-rnative" class="btn-toggle btn-r-native inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <span class="bg-green-500 text-white text-[10px] px-1 rounded font-bold">R</span> Native Arch
             </button>
+            <button onclick="switchView('deployment')" id="btn-deployment" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+                <i class="fas fa-server"></i> Deployment & Scale
+            </button>
             <button onclick="switchView('risk')" id="btn-risk" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-chart-line"></i> Timeline & Risks
             </button>
@@ -487,6 +490,95 @@
                     <p class="text-xs text-slate-400">The final document is stored in Supabase. A secure download link appears on the user's dashboard.</p>
                 </div>
 
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- DEPLOYMENT VIEW (NEW)                      -->
+        <!-- ========================================== -->
+        <div id="view-deployment" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-pink-500">Infrastructure & Deployment</h2>
+            
+            <!-- Recommendations -->
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- Hosting -->
+                <div class="card p-6 rounded-xl border-t-2 border-pink-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-cloud text-pink-400 text-xl"></i>
+                        <h4 class="font-bold text-white">Where to Host?</h4>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-slate-800 rounded border border-slate-700">
+                            <strong class="text-green-400 text-xs uppercase block mb-1">Recommended for MVP</strong>
+                            <h5 class="text-white font-bold text-sm">Railway.app / Render</h5>
+                            <p class="text-xs text-slate-400 mt-1">Best balance. Supports Dockerfiles (needed for R), handles SSL automatically, and scales with one click.</p>
+                        </div>
+                        <div class="p-3 bg-slate-800/50 rounded border border-slate-700 opacity-70">
+                            <strong class="text-slate-500 text-xs uppercase block mb-1">Alternative (Easiest)</strong>
+                            <h5 class="text-slate-300 font-bold text-sm">ShinyApps.io</h5>
+                            <p class="text-xs text-slate-500 mt-1">Built into RStudio. Easiest to deploy, but harder to connect securely to databases and handle long timeouts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compute -->
+                <div class="card p-6 rounded-xl border-t-2 border-cyan-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-microchip text-cyan-400 text-xl"></i>
+                        <h4 class="font-bold text-white">Processing Capability</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-4">Since heavily lifting (OCR) is done via API, the local server needs <strong>RAM</strong> more than CPU.</p>
+                    
+                    <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="bg-black/30 p-3 rounded">
+                            <span class="block text-cyan-400 font-bold text-lg">4 GB</span>
+                            <span class="text-[10px] text-slate-500">Min RAM</span>
+                        </div>
+                        <div class="bg-black/30 p-3 rounded">
+                            <span class="block text-cyan-400 font-bold text-lg">2 vCPU</span>
+                            <span class="text-[10px] text-slate-500">Min Cores</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-[10px] text-slate-400">
+                        <i class="fas fa-info-circle text-blue-400 mr-1"></i> R loads data into RAM. For 10 concurrent users processing PDFs, 4GB is the safety baseline.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Estimator -->
+            <h3 class="text-lg font-bold text-white mb-4">Monthly Running Costs (Est.)</h3>
+            <div class="w-full overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-400">
+                    <thead class="text-xs text-slate-200 uppercase bg-slate-800">
+                        <tr>
+                            <th class="px-4 py-3 rounded-tl-lg">Service</th>
+                            <th class="px-4 py-3">Role</th>
+                            <th class="px-4 py-3 rounded-tr-lg text-right">Cost / Month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-slate-800/50 border-b border-slate-700">
+                            <td class="px-4 py-3 font-medium text-white">Railway/DO</td>
+                            <td class="px-4 py-3">App Hosting</td>
+                            <td class="px-4 py-3 text-right text-green-400">$20 - $40</td>
+                        </tr>
+                        <tr class="bg-slate-800/50 border-b border-slate-700">
+                            <td class="px-4 py-3 font-medium text-white">Supabase</td>
+                            <td class="px-4 py-3">Database & Auth</td>
+                            <td class="px-4 py-3 text-right text-green-400">$25 (Pro)</td>
+                        </tr>
+                        <tr class="bg-slate-800/50 border-b border-slate-700">
+                            <td class="px-4 py-3 font-medium text-white">OpenAI/Google API</td>
+                            <td class="px-4 py-3">AI Processing</td>
+                            <td class="px-4 py-3 text-right text-green-400">~$50 (Usage Based)</td>
+                        </tr>
+                        <tr class="bg-slate-700/50 font-bold text-white">
+                            <td class="px-4 py-3">TOTAL</td>
+                            <td class="px-4 py-3"></td>
+                            <td class="px-4 py-3 text-right">~$100 - $120</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -1144,7 +1236,7 @@
         }
 
         function switchView(viewName) {
-            const views = ['business', 'tech', 'risk', 'tools', 'security', 'process', 'rnative', 'prereq'];
+            const views = ['business', 'tech', 'risk', 'tools', 'security', 'process', 'rnative', 'prereq', 'deployment'];
             
             views.forEach(v => {
                 const el = document.getElementById('view-' + v);
