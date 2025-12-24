@@ -83,6 +83,14 @@
             border: none;
         }
 
+        /* Special Cyan Button for UI Journey */
+        .btn-ui-journey.active {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            border: none;
+        }
+
         .progress-bar {
             height: 8px;
             border-radius: 4px;
@@ -177,9 +185,259 @@
             border-top: 6px solid #475569;
         }
 
+        /* Journey Flow Arrows */
+        .journey-step {
+            flex: 1;
+            position: relative;
+            padding: 15px;
+            background: #1e293b;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            text-align: center;
+            z-index: 2;
+            min-width: 140px;
+        }
+        
+        .journey-connector {
+            flex: 0 0 30px;
+            height: 2px;
+            background: #475569;
+            position: relative;
+            align-self: center;
+        }
+        .journey-connector::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: -4px;
+            width: 0; height: 0; 
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 6px solid #475569;
+        }
+
         /* Animation classes */
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* UI Journey specific */
+        .screen-mock {
+            border: 2px solid #334155;
+            border-radius: 8px;
+            padding: 10px;
+            background: #1e293b;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        .screen-mock::before {
+            content: '● ● ●';
+            display: block;
+            font-size: 8px;
+            color: #64748b;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        /* UI JOURNEY UPGRADED STYLES */
+        .app-window {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .app-sidebar {
+            width: 200px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            padding: 20px 10px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .app-nav-item:hover {
+            background: rgba(51, 65, 85, 0.5);
+            color: #cbd5e1;
+        }
+        .app-nav-item.active {
+            background: #334155;
+            color: #fff;
+            font-weight: 600;
+            border-left: 3px solid #38bdf8;
+        }
+        
+        .app-content {
+            flex-grow: 1;
+            padding: 30px;
+            background: radial-gradient(circle at 10% 10%, #1e293b 0%, #0f172a 100%);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        /* Improved Flow Nodes for UI Journey */
+        .flow-card {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 10px;
+            width: 130px;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+        
+        .flow-card-title {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .flow-arrow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            padding: 0 5px;
+        }
+
+        .flow-line {
+            height: 2px;
+            background: #475569;
+            width: 100%;
+            position: relative;
+        }
+        .flow-line::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 6px solid #475569;
+        }
+
+        .flow-action-label {
+            font-size: 0.6rem;
+            color: #60a5fa;
+            background: #0f172a;
+            padding: 2px 6px;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            margin-bottom: -9px; /* Sit on line */
+            z-index: 20;
+            white-space: nowrap;
+        }
+
+        /* Mock UI Elements */
+        .mock-table { width: 100%; font-size: 0.65rem; color: #cbd5e1; border-collapse: collapse; }
+        .mock-table th { text-align: left; padding: 6px; border-bottom: 1px solid #475569; color: #64748b; }
+        .mock-table td { padding: 6px; border-bottom: 1px solid #334155; }
+        .mock-table tr:hover { background: rgba(51, 65, 85, 0.3); }
+        
+        .mock-btn-sm { padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; cursor: pointer; display: inline-block; }
+        .btn-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .btn-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+        .btn-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+        /* UI Mock Screen Styles (Small) */
+        .mock-window-sm {
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .mock-header-sm {
+            background: #334155;
+            height: 10px;
+            border-bottom: 1px solid #475569;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            gap: 2px;
+        }
+        .mock-dot-sm { width: 3px; height: 3px; border-radius: 50%; background: #64748b; }
+
+        /* Simple Charts */
+        .pie-chart {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(#3b82f6 0% 70%, #10b981 70% 90%, #f59e0b 90% 100%);
+        }
+        .chart-bar {
+            width: 12px;
+            background: #3b82f6;
+            border-radius: 2px 2px 0 0;
+            margin: 0 4px;
+        }
+
+        /* Data Sheet Styles */
+        .ds-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            color: #e2e8f0;
+        }
+        .ds-table th {
+            background: #1e293b;
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #334155;
+        }
+        .ds-table td {
+            padding: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+        }
+        .ds-cell-calc {
+            color: #60a5fa;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1) !important;
+        }
+        .ds-cell-manual {
+            color: #fff;
+        }
+        .ds-input {
+            background: transparent;
+            border: 1px solid transparent;
+            color: white;
+            width: 100%;
+        }
+        .ds-input.editing {
+            border: 1px solid #3b82f6;
+            background: #1e293b;
+            padding: 2px;
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
@@ -199,6 +457,9 @@
         <div class="flex flex-wrap justify-center gap-4 mt-8">
             <button onclick="switchView('prereq')" id="btn-prereq" class="btn-toggle active px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-clipboard-list"></i> Project Prerequisites
+            </button>
+            <button onclick="switchView('ui-journey')" id="btn-ui-journey" class="btn-toggle btn-ui-journey inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+                <i class="fas fa-laptop-medical"></i> UI Journey
             </button>
             <button onclick="switchView('business')" id="btn-business" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-briefcase"></i> Business Plan
@@ -230,7 +491,7 @@
     <main class="max-w-6xl mx-auto relative min-h-[800px]">
         
         <!-- ========================================== -->
-        <!-- PREREQUISITES VIEW (NEW)                   -->
+        <!-- PREREQUISITES VIEW                         -->
         <!-- ========================================== -->
         <div id="view-prereq" class="fade-in">
             <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-yellow-500">Discovery Phase: What We Need</h2>
@@ -305,6 +566,397 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- UI JOURNEY VIEW (INTERACTIVE APP MOCK)     -->
+        <!-- ========================================== -->
+        <div id="view-ui-journey" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-cyan-500">Interactive Application Walkthrough</h2>
+            <p class="text-slate-400 mb-6 max-w-3xl">Click on the sidebar items in the preview below to see the user journey for each module.</p>
+            
+            <div class="app-window">
+                
+                <!-- Interactive Sidebar -->
+                <div class="app-sidebar">
+                    <!-- LOGO HERE -->
+                    <div class="mb-8 px-2 flex items-center gap-3 border-b border-slate-700 pb-6">
+                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg overflow-hidden">
+                             <img src="logo.png" alt="M" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                             <div class="hidden w-full h-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-xl">M</div>
+                        </div>
+                        <div class="leading-tight">
+                            <div class="text-white font-bold text-sm tracking-wide">MORE</div>
+                            <div class="text-[9px] text-slate-400 uppercase tracking-widest">Investments</div>
+                        </div>
+                    </div>
+
+                    <div class="text-[10px] text-slate-500 uppercase font-bold mb-4 tracking-widest px-2">Navigation</div>
+                    
+                    <div id="nav-dashboard" class="app-nav-item active" onclick="openUiPage('dashboard')">
+                        <i class="fas fa-home w-5"></i> Dashboard
+                    </div>
+                    <div id="nav-templates" class="app-nav-item" onclick="openUiPage('templates')">
+                        <i class="fas fa-layer-group w-5"></i> Templates
+                    </div>
+                    <div id="nav-datasheet" class="app-nav-item" onclick="openUiPage('datasheet')">
+                        <i class="fas fa-table w-5"></i> Data Sheets
+                    </div>
+                    <div id="nav-reports" class="app-nav-item" onclick="openUiPage('reports')">
+                        <i class="fas fa-file-invoice w-5"></i> Reports
+                    </div>
+                    <div id="nav-audit" class="app-nav-item" onclick="openUiPage('audit')">
+                        <i class="fas fa-history w-5"></i> Audit Logs
+                    </div>
+                    
+                    <div class="mt-auto pt-10 border-t border-slate-700">
+                        <div class="app-nav-item"><i class="fas fa-cog w-5"></i> Settings</div>
+                        <div class="app-nav-item text-red-400"><i class="fas fa-sign-out-alt w-5"></i> Logout</div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="app-content relative">
+                    
+                    <!-- PAGE: DASHBOARD -->
+                    <div id="ui-page-dashboard" class="fade-in">
+                        <div class="flex justify-between items-end mb-6">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">Welcome back, Admin</h3>
+                                <p class="text-xs text-slate-400">System Status: <span class="text-green-400">Operational</span></p>
+                            </div>
+                            <button class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20" onclick="openUiPage('reports')">
+                                <i class="fas fa-plus mr-2"></i> New Report
+                            </button>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="grid grid-cols-3 gap-4 mb-8">
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                                <div class="text-slate-400 text-[10px] uppercase font-bold">Total Templates</div>
+                                <div class="text-2xl text-white font-bold mt-1">44</div>
+                            </div>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                                <div class="text-slate-400 text-[10px] uppercase font-bold">Reports this Month</div>
+                                <div class="text-2xl text-white font-bold mt-1">12</div>
+                            </div>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                                <div class="text-slate-400 text-[10px] uppercase font-bold">Pending Audit</div>
+                                <div class="text-2xl text-yellow-400 font-bold mt-1">3</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Visual Charts -->
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col items-center justify-center">
+                                <h4 class="text-xs text-slate-400 mb-4 uppercase font-bold">Reports by Type</h4>
+                                <div class="pie-chart mb-4"></div>
+                                <div class="flex gap-4 text-[9px] text-slate-400">
+                                    <span class="flex items-center gap-1"><div class="w-2 h-2 bg-blue-500 rounded-full"></div> ETF</span>
+                                    <span class="flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full"></div> Mutual</span>
+                                    <span class="flex items-center gap-1"><div class="w-2 h-2 bg-yellow-500 rounded-full"></div> Bond</span>
+                                </div>
+                            </div>
+                            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col items-center justify-center">
+                                <h4 class="text-xs text-slate-400 mb-4 uppercase font-bold">Submission Volume (Weekly)</h4>
+                                <div class="flex items-end h-20 gap-2">
+                                    <div class="chart-bar" style="height: 30%;"></div>
+                                    <div class="chart-bar" style="height: 50%;"></div>
+                                    <div class="chart-bar" style="height: 80%;"></div>
+                                    <div class="chart-bar" style="height: 60%;"></div>
+                                    <div class="chart-bar" style="height: 90%;"></div>
+                                    <div class="chart-bar" style="height: 40%;"></div>
+                                    <div class="chart-bar" style="height: 70%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PAGE: TEMPLATES (Reverse Engineering Flow) -->
+                    <div id="ui-page-templates" class="hidden">
+                        
+                        <!-- Step 1: List View -->
+                        <div id="template-step-list">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-bold text-white">Template Library</h3>
+                                <button onclick="startTemplateWizard()" class="bg-purple-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-purple-500 transition shadow-lg shadow-purple-500/20">
+                                    <i class="fas fa-magic mr-2"></i> + New Template (AI)
+                                </button>
+                            </div>
+                            <!-- Mock List -->
+                            <div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700">
+                                <table class="mock-table">
+                                    <thead>
+                                        <tr class="bg-slate-700/50">
+                                            <th>Name</th>
+                                            <th>Regulation Source</th>
+                                            <th>Last Updated</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="font-bold text-white">ETF Monthly V1</td>
+                                            <td>Reg 12b (2024)</td>
+                                            <td>2 days ago</td>
+                                            <td><span class="mock-btn-sm btn-blue">Edit</span> <span class="mock-btn-sm btn-green">Use</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-bold text-white">TASE Weekly Summary</td>
+                                            <td>TASE 10-K</td>
+                                            <td>1 week ago</td>
+                                            <td><span class="mock-btn-sm btn-blue">Edit</span> <span class="mock-btn-sm btn-green">Use</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Restored Flow Diagram -->
+                            <div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6">
+                                <h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Creating a New Template</h4>
+                                <div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center">
+                                    <div class="flow-card">
+                                        <div class="flow-card-title">1. Upload</div>
+                                        <div class="mock-window-sm h-12 w-20"><div class="mock-header-sm"></div><div class="text-[6px] text-slate-500 flex justify-center items-center h-full">PDF + Excel</div></div>
+                                    </div>
+                                    <div class="flow-arrow-container pt-6"><div class="flow-action-label">System Reads</div><div class="flow-line"></div></div>
+                                    <div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20">
+                                        <div class="flow-card-title">2. AI Logic</div>
+                                        <i class="fas fa-cogs fa-spin text-purple-400 text-lg"></i>
+                                        <span class="text-[8px] text-purple-300 mt-1">Mapping Fields...</span>
+                                    </div>
+                                    <div class="flow-arrow-container pt-6"><div class="flow-action-label">Review Map</div><div class="flow-line"></div></div>
+                                    <div class="flow-card">
+                                        <div class="flow-card-title">3. Save</div>
+                                        <i class="fas fa-save text-green-400 text-lg"></i>
+                                        <span class="text-[8px] text-slate-400 mt-1">Available in Library</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Wizard Overlay -->
+                        <div id="template-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10">
+                             <div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative">
+                                <button onclick="cancelTemplateWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
+                                
+                                <h3 class="text-xl font-bold text-white mb-6 text-center">New Template Wizard</h3>
+                                
+                                <!-- Sub-steps -->
+                                <div id="wiz-upload" class="text-center">
+                                    <div class="border-2 border-dashed border-slate-600 rounded-xl p-8 mb-6 hover:border-purple-500 transition cursor-pointer">
+                                        <i class="fas fa-cloud-upload-alt text-4xl text-slate-500 mb-2"></i>
+                                        <p class="text-xs text-slate-400">Drag & Drop <strong>Final PDF Report</strong> + <strong>Excel Source</strong> here</p>
+                                    </div>
+                                    <button onclick="runAiAnalysis()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Reverse Engineering</button>
+                                </div>
+
+                                <div id="wiz-processing" class="hidden text-center py-10">
+                                    <i class="fas fa-circle-notch fa-spin text-4xl text-purple-400 mb-4"></i>
+                                    <h4 class="text-white font-bold">AI Processing...</h4>
+                                    <p class="text-xs text-slate-400 mt-2">Mapping Regulation Formulas to Excel Cells...</p>
+                                </div>
+
+                                <div id="wiz-success" class="hidden text-center">
+                                    <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-check text-green-400 text-3xl"></i>
+                                    </div>
+                                    <h4 class="text-white font-bold text-lg">Analysis Complete</h4>
+                                    <p class="text-xs text-slate-400 mt-1 mb-6">Successfully mapped <strong>45 fields</strong> and <strong>3 regulation formulas</strong>.</p>
+                                    <button onclick="finishTemplateWizard()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">Save Template to Library</button>
+                                </div>
+                             </div>
+                        </div>
+
+                    </div>
+                    
+                    <!-- PAGE: DATA SHEET (New) -->
+                    <div id="ui-page-datasheet" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-white">ETF_Data_Master.xlsx</h3>
+                                <p class="text-xs text-slate-400">Linked Regulation: <strong>Reg 12b</strong></p>
+                            </div>
+                            <button onclick="toggleDataEdit()" id="btn-data-edit" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition border border-blue-400">
+                                <i class="fas fa-pencil-alt mr-2"></i> Edit Data
+                            </button>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-700 rounded-lg overflow-hidden">
+                            <table class="ds-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Field Name</th>
+                                        <th>Value (Current)</th>
+                                        <th>Type</th>
+                                        <th>Source</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>001</td>
+                                        <td>Total Assets</td>
+                                        <td><input type="text" value="1,500,000" class="ds-input" readonly></td>
+                                        <td><span class="text-slate-400">Manual</span></td>
+                                        <td>User Input</td>
+                                    </tr>
+                                    <tr>
+                                        <td>002</td>
+                                        <td>Cash Flow</td>
+                                        <td><input type="text" value="200,000" class="ds-input" readonly></td>
+                                        <td><span class="text-slate-400">Manual</span></td>
+                                        <td>User Input</td>
+                                    </tr>
+                                    <tr class="bg-blue-900/10">
+                                        <td>003</td>
+                                        <td>Risk Weight</td>
+                                        <td class="ds-cell-calc">0.15</td>
+                                        <td><span class="text-blue-400"><i class="fas fa-calculator mr-1"></i> Calculated</span></td>
+                                        <td>Reg 12b (pg. 4)</td>
+                                    </tr>
+                                    <tr class="bg-blue-900/10">
+                                        <td>004</td>
+                                        <td>Tax Liability</td>
+                                        <td class="ds-cell-calc">300,000</td>
+                                        <td><span class="text-blue-400"><i class="fas fa-calculator mr-1"></i> Calculated</span></td>
+                                        <td>(Assets * 0.2)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>005</td>
+                                        <td>Fund Manager</td>
+                                        <td><input type="text" value="John Doe" class="ds-input" readonly></td>
+                                        <td><span class="text-slate-400">Manual</span></td>
+                                        <td>User Input</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- PAGE: REPORTS (Production Flow) -->
+                    <div id="ui-page-reports" class="hidden">
+                        
+                        <!-- Report List -->
+                        <div id="report-step-list">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-bold text-white">Generated Reports</h3>
+                                <div class="flex gap-2">
+                                    <input type="text" placeholder="Search..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40">
+                                    <button onclick="startReportWizard()" class="bg-green-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-green-500 transition shadow-lg shadow-green-500/20">
+                                        <i class="fas fa-plus mr-2"></i> Generate New
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Mock List -->
+                            <div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700">
+                                <table class="mock-table">
+                                    <thead>
+                                        <tr class="bg-slate-700/50">
+                                            <th>Report Name</th>
+                                            <th>Status</th>
+                                            <th>Author</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="font-bold text-white">Oct 2024 ETF Report</td>
+                                            <td><span class="text-yellow-400 text-[9px] border border-yellow-500 px-1 rounded">Draft</span></td>
+                                            <td>Analyst A</td>
+                                            <td><span class="mock-btn-sm btn-blue">Edit</span> <span class="mock-btn-sm btn-red">Delete</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-bold text-white">Q3 Summary</td>
+                                            <td><span class="text-green-400 text-[9px] border border-green-500 px-1 rounded">Submitted</span></td>
+                                            <td>Analyst B</td>
+                                            <td><span class="mock-btn-sm btn-green">View</span> <span class="mock-btn-sm btn-blue">Diff</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Restored Flow Diagram -->
+                            <div class="border border-green-500/30 bg-green-900/10 rounded-2xl p-6">
+                                <h4 class="text-green-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Generating a Report</h4>
+                                <div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center">
+                                    <div class="flow-card">
+                                        <div class="flow-card-title">1. Select</div>
+                                        <div class="text-[8px] text-slate-400">Pick "ETF Monthly"</div>
+                                    </div>
+                                    <div class="flow-arrow-container pt-6"><div class="flow-action-label">Load Data Sheet</div><div class="flow-line"></div></div>
+                                    <div class="flow-card w-40 border-yellow-500/50">
+                                        <div class="flow-card-title text-yellow-400">2. Data Editor</div>
+                                        <div class="mock-window-sm h-10 w-full border-yellow-500/30 bg-slate-900">
+                                            <div class="mock-header-sm bg-yellow-900/40"></div>
+                                            <div class="grid grid-cols-3 gap-0.5 p-0.5">
+                                                <div class="bg-slate-700 h-2"></div><div class="bg-yellow-500/20 h-2"></div><div class="bg-slate-700 h-2"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-[8px] text-slate-400 mt-1">Manual updates only</span>
+                                    </div>
+                                    <div class="flow-arrow-container pt-6"><div class="flow-action-label">Run & Calc</div><div class="flow-line"></div></div>
+                                    <div class="flow-card">
+                                        <div class="flow-card-title">3. Audit</div>
+                                        <i class="fas fa-search-dollar text-green-400 text-lg"></i>
+                                        <span class="text-[8px] text-slate-400 mt-1">Verify Output</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Report Wizard Overlay -->
+                        <div id="report-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-4">
+                            <div class="bg-slate-800 p-6 rounded-2xl border border-green-500/50 max-w-2xl w-full shadow-2xl relative">
+                                <button onclick="cancelReportWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
+                                
+                                <div class="grid grid-cols-2 gap-6 h-full">
+                                    
+                                    <!-- Sidebar Steps -->
+                                    <div class="border-r border-slate-700 pr-4">
+                                        <h3 class="text-lg font-bold text-white mb-4">New Report</h3>
+                                        <div class="space-y-4">
+                                            <div class="text-xs text-green-400 font-bold">1. Select Template</div>
+                                            <div class="text-xs text-slate-500">2. Data Editor</div>
+                                            <div class="text-xs text-slate-500">3. Review & Audit</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step Content -->
+                                    <div>
+                                        <label class="text-xs text-slate-400 block mb-2">Choose Template:</label>
+                                        <select class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white mb-4">
+                                            <option>ETF Monthly V1</option>
+                                            <option>TASE Weekly</option>
+                                        </select>
+                                        
+                                        <label class="text-xs text-slate-400 block mb-2">Select Data Source:</label>
+                                        <select class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white mb-6">
+                                            <option>ETF_Data_Master.xlsx (Latest)</option>
+                                            <option>ETF_Data_Master_v2.xlsx</option>
+                                        </select>
+                                        
+                                        <button onclick="finishReportWizard()" class="bg-green-600 text-white w-full py-2 rounded text-xs font-bold">Launch Data Editor</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- PAGE: AUDIT LOGS -->
+                    <div id="ui-page-audit" class="hidden">
+                        <h3 class="text-xl font-bold text-white mb-6">Audit History</h3>
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 font-mono text-xs text-slate-400 h-64 overflow-y-auto">
+                            <div class="mb-2"><span class="text-slate-500">[10:05 AM]</span> User <strong>Analyst_A</strong> updated "Cash Flow" in <em>Oct Report</em> from <span class="text-red-400">1.2M</span> to <span class="text-green-400">1.5M</span>.</div>
+                            <div class="mb-2"><span class="text-slate-500">[09:30 AM]</span> User <strong>Admin</strong> created new template "Bond Summary V2".</div>
+                            <div class="mb-2"><span class="text-slate-500">[Yesterday]</span> System generated "Q3 Summary" (Success).</div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -494,161 +1146,114 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- DEPLOYMENT VIEW (NEW)                      -->
-        <!-- ========================================== -->
-        <div id="view-deployment" class="hidden">
-            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-pink-500">Infrastructure & Deployment</h2>
-            
-            <!-- Recommendations -->
-            <div class="grid md:grid-cols-2 gap-6 mb-8">
-                <!-- Hosting -->
-                <div class="card p-6 rounded-xl border-t-2 border-pink-500 bg-slate-900/50">
-                    <div class="flex items-center gap-3 mb-3">
-                        <i class="fas fa-cloud text-pink-400 text-xl"></i>
-                        <h4 class="font-bold text-white">Where to Host?</h4>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-slate-800 rounded border border-slate-700">
-                            <strong class="text-green-400 text-xs uppercase block mb-1">Recommended for MVP</strong>
-                            <h5 class="text-white font-bold text-sm">Railway.app / Render</h5>
-                            <p class="text-xs text-slate-400 mt-1">Best balance. Supports Dockerfiles (needed for R), handles SSL automatically, and scales with one click.</p>
-                        </div>
-                        <div class="p-3 bg-slate-800/50 rounded border border-slate-700 opacity-70">
-                            <strong class="text-slate-500 text-xs uppercase block mb-1">Alternative (Easiest)</strong>
-                            <h5 class="text-slate-300 font-bold text-sm">ShinyApps.io</h5>
-                            <p class="text-xs text-slate-500 mt-1">Built into RStudio. Easiest to deploy, but harder to connect securely to databases and handle long timeouts.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Compute -->
-                <div class="card p-6 rounded-xl border-t-2 border-cyan-500 bg-slate-900/50">
-                    <div class="flex items-center gap-3 mb-3">
-                        <i class="fas fa-microchip text-cyan-400 text-xl"></i>
-                        <h4 class="font-bold text-white">Processing Capability</h4>
-                    </div>
-                    <p class="text-xs text-slate-300 mb-4">Since heavily lifting (OCR) is done via API, the local server needs <strong>RAM</strong> more than CPU.</p>
-                    
-                    <div class="grid grid-cols-2 gap-3 text-center">
-                        <div class="bg-black/30 p-3 rounded">
-                            <span class="block text-cyan-400 font-bold text-lg">4 GB</span>
-                            <span class="text-[10px] text-slate-500">Min RAM</span>
-                        </div>
-                        <div class="bg-black/30 p-3 rounded">
-                            <span class="block text-cyan-400 font-bold text-lg">2 vCPU</span>
-                            <span class="text-[10px] text-slate-500">Min Cores</span>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-[10px] text-slate-400">
-                        <i class="fas fa-info-circle text-blue-400 mr-1"></i> R loads data into RAM. For 10 concurrent users processing PDFs, 4GB is the safety baseline.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cost Estimator -->
-            <h3 class="text-lg font-bold text-white mb-4">Monthly Running Costs (Est.)</h3>
-            <div class="w-full overflow-x-auto">
-                <table class="w-full text-sm text-left text-slate-400">
-                    <thead class="text-xs text-slate-200 uppercase bg-slate-800">
-                        <tr>
-                            <th class="px-4 py-3 rounded-tl-lg">Service</th>
-                            <th class="px-4 py-3">Role</th>
-                            <th class="px-4 py-3 rounded-tr-lg text-right">Cost / Month</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-slate-800/50 border-b border-slate-700">
-                            <td class="px-4 py-3 font-medium text-white">Railway/DO</td>
-                            <td class="px-4 py-3">App Hosting</td>
-                            <td class="px-4 py-3 text-right text-green-400">$20 - $40</td>
-                        </tr>
-                        <tr class="bg-slate-800/50 border-b border-slate-700">
-                            <td class="px-4 py-3 font-medium text-white">Supabase</td>
-                            <td class="px-4 py-3">Database & Auth</td>
-                            <td class="px-4 py-3 text-right text-green-400">$25 (Pro)</td>
-                        </tr>
-                        <tr class="bg-slate-800/50 border-b border-slate-700">
-                            <td class="px-4 py-3 font-medium text-white">OpenAI/Google API</td>
-                            <td class="px-4 py-3">AI Processing</td>
-                            <td class="px-4 py-3 text-right text-green-400">~$50 (Usage Based)</td>
-                        </tr>
-                        <tr class="bg-slate-700/50 font-bold text-white">
-                            <td class="px-4 py-3">TOTAL</td>
-                            <td class="px-4 py-3"></td>
-                            <td class="px-4 py-3 text-right">~$100 - $120</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- TECH VIEW                                  -->
+        <!-- TECH VIEW (UPDATED & DEEPENED)             -->
         <!-- ========================================== -->
         <div id="view-tech" class="hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <p class="text-slate-400 mb-8 max-w-3xl">A hybrid architecture leveraging Python for AI orchestration and R for financial precision.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                
+                <!-- 1. Python Box -->
                 <div class="card p-6 rounded-xl border-t-4 border-blue-500">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fab fa-python text-3xl text-blue-500"></i>
-                        <h3 class="font-bold text-lg text-white">Python Core</h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fab fa-python text-3xl text-blue-500"></i>
+                            <h3 class="font-bold text-lg text-white">Python Orchestrator</h3>
+                        </div>
                     </div>
-                    <p class="text-sm text-slate-400 mb-4">The backend engine responsible for API handling and AI orchestration.</p>
-                    <div class="space-y-2">
-                        <div class="tech-pill px-3 py-2 rounded text-xs text-blue-200">FastAPI (High-perf API)</div>
-                        <div class="tech-pill px-3 py-2 rounded text-xs text-blue-200">LangChain (Orchestrator)</div>
+                    <p class="text-sm text-slate-300 mb-4 min-h-[50px]">The traffic controller. It never does math, but it manages the entire data pipeline.</p>
+                    
+                    <div class="space-y-3 border-t border-slate-700 pt-3">
+                        <div>
+                            <span class="text-xs font-bold text-blue-400 uppercase">Key Libraries</span>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="bg-slate-800 text-[10px] px-2 py-1 rounded text-slate-300 border border-slate-600">FastAPI</span>
+                                <span class="bg-slate-800 text-[10px] px-2 py-1 rounded text-slate-300 border border-slate-600">Celery/Redis</span>
+                                <span class="bg-slate-800 text-[10px] px-2 py-1 rounded text-slate-300 border border-slate-600">PyMuPDF</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-blue-400 uppercase">Deep Technical Role</span>
+                            <ul class="text-xs text-slate-400 list-disc list-inside mt-1">
+                                <li>Async Request Handling (Non-blocking I/O)</li>
+                                <li>AI Prompt Engineering & Validation</li>
+                                <li>Spawns R subprocesses for calculation</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
+                <!-- 2. R Box (NEW & DETAILED) -->
+                <div class="card p-6 rounded-xl border-t-4 border-green-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl font-bold text-green-500">R</span>
+                            <h3 class="font-bold text-lg text-white">Calculation Engine</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-300 mb-4 min-h-[50px]">The "Black Box" of financial truth. Isolated from the web layer for stability and accuracy.</p>
+                    
+                    <div class="space-y-3 border-t border-slate-700 pt-3">
+                        <div>
+                            <span class="text-xs font-bold text-green-400 uppercase">Key Libraries</span>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="bg-slate-800 text-[10px] px-2 py-1 rounded text-slate-300 border border-slate-600">jsonlite</span>
+                                <span class="bg-slate-800 text-[10px] px-2 py-1 rounded text-slate-300 border border-slate-600">tidyverse</span>
+                                <span class="bg-slate-800 text-[10px] px-2 py-1 rounded text-slate-300 border border-slate-600">finreportr</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-green-400 uppercase">Deep Technical Role</span>
+                            <ul class="text-xs text-slate-400 list-disc list-inside mt-1">
+                                <li>Vectorized financial math (Tax, Risk, PnL)</li>
+                                <li>Formula verification (Unit tests in R)</li>
+                                <li>Generates tabular data for the final report</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Data Box -->
                 <div class="card p-6 rounded-xl border-t-4 border-orange-500">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-database text-3xl text-orange-500"></i>
-                        <h3 class="font-bold text-lg text-white">Data & Storage</h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-database text-3xl text-orange-500"></i>
+                            <h3 class="font-bold text-lg text-white">Data Layer</h3>
+                        </div>
                     </div>
-                    <p class="text-sm text-slate-400 mb-4">PostgreSQL (via Supabase) handling structured relational data and unstructured JSON.</p>
-                    <div class="space-y-2">
-                        <div class="tech-pill px-3 py-2 rounded text-xs text-orange-200">PostgreSQL (Primary DB)</div>
-                        <div class="tech-pill px-3 py-2 rounded text-xs text-orange-200">JSONB (Flexible Schemas)</div>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <span class="text-xs font-bold text-orange-400 uppercase">Storage Strategy</span>
+                            <ul class="text-xs text-slate-400 list-disc list-inside mt-1">
+                                <li><strong>S3 Buckets:</strong> Raw PDFs (Private, Encrypted)</li>
+                                <li><strong>Postgres JSONB:</strong> Extracted data (schemaless for flexibility)</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
+                <!-- 4. Security Box -->
                 <div class="card p-6 rounded-xl border-t-4 border-purple-500">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-shield-alt text-3xl text-purple-500"></i>
-                        <h3 class="font-bold text-lg text-white">Security</h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-shield-alt text-3xl text-purple-500"></i>
+                            <h3 class="font-bold text-lg text-white">Security Layer</h3>
+                        </div>
                     </div>
-                    <p class="text-sm text-slate-400 mb-4">Compliance-ready security architecture for financial data.</p>
-                    <div class="space-y-2">
-                        <div class="tech-pill px-3 py-2 rounded text-xs text-purple-200">AES-256 (Encryption)</div>
-                        <div class="tech-pill px-3 py-2 rounded text-xs text-purple-200">MFA (Multi-Factor Auth)</div>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <span class="text-xs font-bold text-purple-400 uppercase">Key Protocols</span>
+                            <ul class="text-xs text-slate-400 list-disc list-inside mt-1">
+                                <li><strong>Presidio:</strong> PII Redaction before AI</li>
+                                <li><strong>RLS:</strong> Row-Level Security in DB</li>
+                                <li><strong>MFA:</strong> Required for Admin actions</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- R Logic Core (Detailed) -->
-            <div class="card p-6 rounded-xl border-t-4 border-green-500 mb-8">
-                 <div class="flex items-center gap-3 mb-3">
-                    <div class="bg-green-900/30 p-2 rounded text-green-400 text-xl font-bold">R</div>
-                    <h3 class="text-lg font-bold text-white">The R Logic Core</h3>
-                 </div>
-                 <p class="text-sm text-slate-300 mb-4">
-                    While Python manages the web and AI, <strong>R is the mathematical authority</strong>. It runs as a subprocess, accepting clean JSON data and returning verified financial calculations.
-                 </p>
-                 <div class="grid md:grid-cols-2 gap-4">
-                    <div class="bg-slate-800/50 p-3 rounded border border-slate-700">
-                        <h5 class="text-xs font-bold text-green-400 uppercase mb-2">Key R Libraries</h5>
-                        <ul class="text-xs text-slate-400 space-y-1">
-                            <li>• <code>jsonlite</code>: To parse input from Python.</li>
-                            <li>• <code>tidyverse</code>: For robust data manipulation.</li>
-                            <li>• <code>finreportr</code>: (Optional) for formatting financial outputs.</li>
-                        </ul>
-                    </div>
-                    <div class="bg-slate-800/50 p-3 rounded border border-slate-700">
-                        <h5 class="text-xs font-bold text-green-400 uppercase mb-2">Why R?</h5>
-                        <p class="text-xs text-slate-400">
-                            R's vectorized operations make complex Treasury formulas (like Risk Weighted Assets or Tax tiers) significantly easier to write and audit than Python loops.
-                        </p>
-                    </div>
-                 </div>
+
             </div>
             
             <!-- The Handshake Protocol -->
@@ -670,160 +1275,6 @@
                     </div>
                  </div>
                  <p class="text-[10px] text-slate-400 mt-2 italic">*This decoupling prevents a Python error from corrupting financial logic, and allows you to update R formulas without redeploying the API.</p>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- R-NATIVE ARCHITECTURE VIEW (NEW)           -->
-        <!-- ========================================== -->
-        <div id="view-rnative" class="hidden">
-            <div class="flex items-start justify-between mb-6">
-                <div>
-                    <h2 class="text-2xl font-bold text-white pl-2 border-l-4 border-green-500">R-Native Architecture</h2>
-                    <p class="text-slate-400 text-sm mt-1">Alternative Strategy: "One Language, Zero Friction"</p>
-                </div>
-                <div class="bg-green-900/30 text-green-400 px-4 py-2 rounded-lg text-xs font-bold border border-green-500/30">
-                    Recommended for MVP
-                </div>
-            </div>
-
-            <!-- Simplified Diagram -->
-            <div class="w-full overflow-x-auto p-6 bg-slate-800/30 rounded-2xl border border-green-500/30 mb-8">
-                <h3 class="text-xs text-green-400 font-bold uppercase mb-4 text-center tracking-widest">Unified R Stack</h3>
-                <div class="flex justify-center items-center gap-6">
-                    
-                    <!-- User -->
-                    <div class="diagram-node flex flex-col items-center">
-                        <div class="w-14 h-14 bg-slate-600 rounded-full flex items-center justify-center border-2 border-slate-500 shadow-xl text-white">
-                            <i class="fas fa-user"></i>
-                        </div>
-                    </div>
-
-                    <div class="flow-arrow-right"></div>
-
-                    <!-- The Monolith (R) -->
-                    <div class="relative p-6 bg-green-900/20 border-2 border-green-500 rounded-xl w-64 text-center">
-                        <div class="absolute -top-3 left-4 bg-green-900 px-2 text-[10px] text-white uppercase font-bold rounded">The R Monolith</div>
-                        
-                        <div class="flex flex-col gap-3">
-                            <div class="bg-green-800/60 p-2 rounded text-xs font-bold text-white">Shiny UI (bslib)</div>
-                            <div class="bg-green-700/60 p-2 rounded text-xs font-bold text-white">Plumber API</div>
-                            <div class="bg-green-600/60 p-2 rounded text-xs font-bold text-white">Calculation Logic</div>
-                        </div>
-                    </div>
-
-                    <div class="flow-arrow-right"></div>
-
-                    <!-- External Services -->
-                    <div class="flex flex-col gap-4">
-                        <div class="p-2 bg-purple-900/40 border border-purple-500/50 rounded text-center w-32">
-                            <span class="text-[10px] text-purple-300 block mb-1">Via <code>httr2</code></span>
-                            <strong class="text-white text-xs">OpenAI / DocAI</strong>
-                        </div>
-                        <div class="p-2 bg-orange-900/40 border border-orange-500/50 rounded text-center w-32">
-                            <span class="text-[10px] text-orange-300 block mb-1">Via <code>RPostgres</code></span>
-                            <strong class="text-white text-xs">Supabase DB</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Why R? -->
-                <div class="card p-6 rounded-xl">
-                    <h3 class="text-lg font-bold text-white mb-4">Why choose this path?</h3>
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-bolt text-yellow-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-200 text-sm">Velocity:</strong>
-                                <p class="text-xs text-slate-400">You already know R. No time wasted learning Python environments, async/await, or Pydantic.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-code text-cyan-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-200 text-sm">Simplicity:</strong>
-                                <p class="text-xs text-slate-400">Zero "context switching". You write the UI, the API, and the Math in the same language.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- The Trade-off -->
-                <div class="card p-6 rounded-xl border-t-2 border-red-500/50">
-                    <h3 class="text-lg font-bold text-white mb-4">The "Scalability Tax"</h3>
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-exclamation-circle text-red-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-200 text-sm">Single Threaded:</strong>
-                                <p class="text-xs text-slate-400">R processes one request at a time by default. If 50 users click "Upload" at once, the 50th user waits.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-lock text-red-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-200 text-sm">Auth Complexity:</strong>
-                                <p class="text-xs text-slate-400">Implementing "Login with Microsoft" is harder in Shiny Open Source than in Python.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="mt-6">
-                <h4 class="text-sm font-bold text-green-400 uppercase mb-3">Replacement Stack</h4>
-                <div class="grid grid-cols-4 gap-2 text-center text-xs">
-                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">FastAPI <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">Plumber</span></div>
-                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">LangChain <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">httr2</span></div>
-                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">React <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">Shiny</span></div>
-                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">SQLAlchemy <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">DBI</span></div>
-                </div>
-            </div>
-
-            <!-- NEW SECTION: Handling 10 Users + Auth -->
-            <div class="mt-8 grid md:grid-cols-2 gap-6">
-                <!-- Concurrency Card -->
-                <div class="card p-6 rounded-xl border-t-2 border-yellow-500 bg-slate-900/50">
-                    <div class="flex items-center gap-3 mb-3">
-                        <i class="fas fa-users text-yellow-400 text-xl"></i>
-                        <h4 class="font-bold text-white">Handling 10 Users (Concurrency)</h4>
-                    </div>
-                    <p class="text-xs text-slate-300 mb-3">
-                        <strong>Problem:</strong> R creates a queue. User B waits for User A.<br>
-                        <strong>Solution:</strong> <code class="text-green-400">library(future)</code> & <code class="text-green-400">library(promises)</code>.
-                    </p>
-                    <div class="bg-black/40 p-3 rounded border border-slate-700 text-[10px] text-slate-400 font-mono">
-                        # Async Calculation Pattern<br>
-                        future::future({<br>
-                        &nbsp;&nbsp;heavy_math(data)<br>
-                        }) %...>% (function(result) {<br>
-                        &nbsp;&nbsp;showNotification("Report Ready!")<br>
-                        })
-                    </div>
-                    <p class="text-[10px] text-slate-500 mt-2 italic">This spawns a "background R" process for the math, keeping the UI instant for everyone else.</p>
-                </div>
-
-                <!-- Auth Card -->
-                <div class="card p-6 rounded-xl border-t-2 border-purple-500 bg-slate-900/50">
-                    <div class="flex items-center gap-3 mb-3">
-                        <i class="fas fa-key text-purple-400 text-xl"></i>
-                        <h4 class="font-bold text-white">R-Native Authentication</h4>
-                    </div>
-                    <p class="text-xs text-slate-300 mb-3">
-                        We don't build auth; we leverage <strong>Supabase Auth</strong> directly from R.
-                    </p>
-                    <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
-                        <li>User enters creds in Shiny input.</li>
-                        <li>R sends <code>POST /auth/v1/token</code> to Supabase.</li>
-                        <li>Supabase returns a <strong>JWT (Session Token)</strong>.</li>
-                        <li>R stores this token in the user's session state.</li>
-                    </ul>
-                    <div class="mt-3 text-[10px] bg-purple-900/30 text-purple-300 px-2 py-1 rounded inline-block border border-purple-500/30">
-                        Result: Secure Enterprise Login
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -1115,6 +1566,52 @@
                         </div>
                     </div>
                 </div>
+                
+                 <!-- 5. R Logic Core (Detailed) -->
+                <div class="card p-0 rounded-xl overflow-hidden">
+                    <div class="bg-green-900/20 p-4 border-b border-green-500/20 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl text-green-400 font-bold">R</span>
+                            <h3 class="text-lg font-bold text-white">Financial Logic (R Language)</h3>
+                        </div>
+                        <span class="text-xs font-bold bg-green-600 text-white px-2 py-1 rounded">15% Stake</span>
+                    </div>
+                    
+                    <div class="p-6 grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-sm font-bold text-green-300 mb-2 uppercase tracking-wide">Implementation Details</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                The mathematical core. Isolated to ensure financial accuracy.
+                            </p>
+                            <ul class="text-sm text-slate-400 space-y-3 mb-4">
+                                <li>
+                                    <strong>1. Vectorized Math:</strong> Efficiently calculating entire columns of data at once.
+                                </li>
+                                <li>
+                                    <strong>2. Formula Verification:</strong> Unit tests to ensure calculations match Treasury regulations.
+                                </li>
+                                <li>
+                                    <strong>3. Reporting:</strong> Generating output data for the final report.
+                                </li>
+                            </ul>
+                             <div class="bg-slate-800/50 p-3 rounded text-xs text-slate-400 border border-slate-700">
+                                <strong>Why R?</strong> Unbeatable for statistical and financial modeling accuracy.
+                            </div>
+                        </div>
+                        <div class="alt-box">
+                            <h4 class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wide">Alternatives Considered</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-200">Python (Pandas):</strong>
+                                        <p class="text-slate-400 text-xs">Good, but R's syntax for statistical formulas is often cleaner and more expressive for this domain.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -1195,6 +1692,587 @@
              </div>
         </div>
 
+        <!-- ========================================== -->
+        <!-- R-NATIVE ARCHITECTURE VIEW (NEW)           -->
+        <!-- ========================================== -->
+        <div id="view-rnative" class="hidden">
+            <div class="flex items-start justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white pl-2 border-l-4 border-green-500">R-Native Architecture</h2>
+                    <p class="text-slate-400 text-sm mt-1">Alternative Strategy: "One Language, Zero Friction"</p>
+                </div>
+                <div class="bg-green-900/30 text-green-400 px-4 py-2 rounded-lg text-xs font-bold border border-green-500/30">
+                    Recommended for MVP
+                </div>
+            </div>
+
+            <!-- Simplified Diagram -->
+            <div class="w-full overflow-x-auto p-6 bg-slate-800/30 rounded-2xl border border-green-500/30 mb-8">
+                <h3 class="text-xs text-green-400 font-bold uppercase mb-4 text-center tracking-widest">Unified R Stack</h3>
+                <div class="flex justify-center items-center gap-6">
+                    
+                    <!-- User -->
+                    <div class="diagram-node flex flex-col items-center">
+                        <div class="w-14 h-14 bg-slate-600 rounded-full flex items-center justify-center border-2 border-slate-500 shadow-xl text-white">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow-right"></div>
+
+                    <!-- The Monolith (R) -->
+                    <div class="relative p-6 bg-green-900/20 border-2 border-green-500 rounded-xl w-64 text-center">
+                        <div class="absolute -top-3 left-4 bg-green-900 px-2 text-[10px] text-white uppercase font-bold rounded">The R Monolith</div>
+                        
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-green-800/60 p-2 rounded text-xs font-bold text-white">Shiny UI (bslib)</div>
+                            <div class="bg-green-700/60 p-2 rounded text-xs font-bold text-white">Plumber API</div>
+                            <div class="bg-green-600/60 p-2 rounded text-xs font-bold text-white">Calculation Logic</div>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow-right"></div>
+
+                    <!-- External Services -->
+                    <div class="flex flex-col gap-4">
+                        <div class="p-2 bg-purple-900/40 border border-purple-500/50 rounded text-center w-32">
+                            <span class="text-[10px] text-purple-300 block mb-1">Via <code>httr2</code></span>
+                            <strong class="text-white text-xs">OpenAI / DocAI</strong>
+                        </div>
+                        <div class="p-2 bg-orange-900/40 border border-orange-500/50 rounded text-center w-32">
+                            <span class="text-[10px] text-orange-300 block mb-1">Via <code>RPostgres</code></span>
+                            <strong class="text-white text-xs">Supabase DB</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Why R? -->
+                <div class="card p-6 rounded-xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Why choose this path?</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-bolt text-yellow-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Velocity:</strong>
+                                <p class="text-xs text-slate-400">You already know R. No time wasted learning Python environments, async/await, or Pydantic.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-code text-cyan-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Simplicity:</strong>
+                                <p class="text-xs text-slate-400">Zero "context switching". You write the UI, the API, and the Math in the same language.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- The Trade-off -->
+                <div class="card p-6 rounded-xl border-t-2 border-red-500/50">
+                    <h3 class="text-lg font-bold text-white mb-4">The "Scalability Tax"</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-exclamation-circle text-red-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Single Threaded:</strong>
+                                <p class="text-xs text-slate-400">R processes one request at a time by default. If 50 users click "Upload" at once, the 50th user waits.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-lock text-red-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-200 text-sm">Auth Complexity:</strong>
+                                <p class="text-xs text-slate-400">Implementing "Login with Microsoft" is harder in Shiny Open Source than in Python.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <h4 class="text-sm font-bold text-green-400 uppercase mb-3">Replacement Stack</h4>
+                <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">FastAPI <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">Plumber</span></div>
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">LangChain <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">httr2</span></div>
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">React <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">Shiny</span></div>
+                    <div class="bg-slate-800 p-2 rounded text-slate-400 border border-slate-700">SQLAlchemy <i class="fas fa-arrow-right mx-1"></i> <span class="text-white font-bold">DBI</span></div>
+                </div>
+            </div>
+
+            <!-- NEW SECTION: Handling 10 Users + Auth -->
+            <div class="mt-8 grid md:grid-cols-2 gap-6">
+                <!-- Concurrency Card -->
+                <div class="card p-6 rounded-xl border-t-2 border-yellow-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-users text-yellow-400 text-xl"></i>
+                        <h4 class="font-bold text-white">Handling 10 Users (Concurrency)</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-3">
+                        <strong>Problem:</strong> R creates a queue. User B waits for User A.<br>
+                        <strong>Solution:</strong> <code class="text-green-400">library(future)</code> & <code class="text-green-400">library(promises)</code>.
+                    </p>
+                    <div class="bg-black/40 p-3 rounded border border-slate-700 text-[10px] text-slate-400 font-mono">
+                        # Async Calculation Pattern<br>
+                        future::future({<br>
+                        &nbsp;&nbsp;heavy_math(data)<br>
+                        }) %...>% (function(result) {<br>
+                        &nbsp;&nbsp;showNotification("Report Ready!")<br>
+                        })
+                    </div>
+                    <p class="text-[10px] text-slate-500 mt-2 italic">This spawns a "background R" process for the math, keeping the UI instant for everyone else.</p>
+                </div>
+
+                <!-- Auth Card -->
+                <div class="card p-6 rounded-xl border-t-2 border-purple-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-key text-purple-400 text-xl"></i>
+                        <h4 class="font-bold text-white">R-Native Authentication</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-3">
+                        We don't build auth; we leverage <strong>Supabase Auth</strong> directly from R.
+                    </p>
+                    <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
+                        <li>User enters creds in Shiny input.</li>
+                        <li>R sends <code>POST /auth/v1/token</code> to Supabase.</li>
+                        <li>Supabase returns a <strong>JWT (Session Token)</strong>.</li>
+                        <li>R stores this token in the user's session state.</li>
+                    </ul>
+                    <div class="mt-3 text-[10px] bg-purple-900/30 text-purple-300 px-2 py-1 rounded inline-block border border-purple-500/30">
+                        Result: Secure Enterprise Login
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- DEPLOYMENT VIEW (NEW)                      -->
+        <!-- ========================================== -->
+        <div id="view-deployment" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-pink-500">Infrastructure & Deployment</h2>
+            
+            <!-- Recommendations -->
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- Hosting -->
+                <div class="card p-6 rounded-xl border-t-2 border-pink-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-cloud text-pink-400 text-xl"></i>
+                        <h4 class="font-bold text-white">Where to Host?</h4>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-slate-800 rounded border border-slate-700">
+                            <strong class="text-green-400 text-xs uppercase block mb-1">Recommended for MVP</strong>
+                            <h5 class="text-white font-bold text-sm">Railway.app / Render</h5>
+                            <p class="text-xs text-slate-400 mt-1">Best balance. Supports Dockerfiles (needed for R), handles SSL automatically, and scales with one click.</p>
+                        </div>
+                        <div class="p-3 bg-slate-800/50 rounded border border-slate-700 opacity-70">
+                            <strong class="text-slate-500 text-xs uppercase block mb-1">Alternative (Easiest)</strong>
+                            <h5 class="text-slate-300 font-bold text-sm">ShinyApps.io</h5>
+                            <p class="text-xs text-slate-500 mt-1">Built into RStudio. Easiest to deploy, but harder to connect securely to databases and handle long timeouts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compute -->
+                <div class="card p-6 rounded-xl border-t-2 border-cyan-500 bg-slate-900/50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-microchip text-cyan-400 text-xl"></i>
+                        <h4 class="font-bold text-white">Processing Capability</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-4">Since heavily lifting (OCR) is done via API, the local server needs <strong>RAM</strong> more than CPU.</p>
+                    
+                    <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="bg-black/30 p-3 rounded">
+                            <span class="block text-cyan-400 font-bold text-lg">4 GB</span>
+                            <span class="text-[10px] text-slate-500">Min RAM</span>
+                        </div>
+                        <div class="bg-black/30 p-3 rounded">
+                            <span class="block text-cyan-400 font-bold text-lg">2 vCPU</span>
+                            <span class="text-[10px] text-slate-500">Min Cores</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-[10px] text-slate-400">
+                        <i class="fas fa-info-circle text-blue-400 mr-1"></i> R loads data into RAM. For 10 concurrent users processing PDFs, 4GB is the safety baseline.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Estimator -->
+            <h3 class="text-lg font-bold text-white mb-4">Monthly Running Costs (Est.)</h3>
+            <div class="w-full overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-400">
+                    <thead class="text-xs text-slate-200 uppercase bg-slate-800">
+                        <tr>
+                            <th class="px-4 py-3 rounded-tl-lg">Service</th>
+                            <th class="px-4 py-3">Role</th>
+                            <th class="px-4 py-3 rounded-tr-lg text-right">Cost / Month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-slate-800/50 border-b border-slate-700">
+                            <td class="px-4 py-3 font-medium text-white">Railway/DO</td>
+                            <td class="px-4 py-3">App Hosting</td>
+                            <td class="px-4 py-3 text-right text-green-400">$20 - $40</td>
+                        </tr>
+                        <tr class="bg-slate-800/50 border-b border-slate-700">
+                            <td class="px-4 py-3 font-medium text-white">Supabase</td>
+                            <td class="px-4 py-3">Database & Auth</td>
+                            <td class="px-4 py-3 text-right text-green-400">$25 (Pro)</td>
+                        </tr>
+                        <tr class="bg-slate-800/50 border-b border-slate-700">
+                            <td class="px-4 py-3 font-medium text-white">OpenAI/Google API</td>
+                            <td class="px-4 py-3">AI Processing</td>
+                            <td class="px-4 py-3 text-right text-green-400">~$50 (Usage Based)</td>
+                        </tr>
+                        <tr class="bg-slate-700/50 font-bold text-white">
+                            <td class="px-4 py-3">TOTAL</td>
+                            <td class="px-4 py-3"></td>
+                            <td class="px-4 py-3 text-right">~$100 - $120</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- RISK & TIMELINE VIEW (Interactive)         -->
+        <!-- ========================================== -->
+        <div id="view-risk" class="hidden">
+            
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-white pl-2 border-l-4 border-blue-500">Execution Roadmap</h2>
+                
+                <!-- SOLO TOGGLE -->
+                <div class="mode-switch">
+                    <div class="mode-btn unselected" id="mode-team" onclick="setMode('team')">Team Speed</div>
+                    <div class="mode-btn selected" id="mode-solo" onclick="setMode('solo')">Solo Dev (Reality)</div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12" id="timeline-container">
+                <!-- Timeline content injected via JS -->
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-red-500">Risk Matrix</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div class="card p-5 rounded-xl flex gap-4">
+                    <div class="text-red-500 text-2xl"><i class="fas fa-language"></i></div>
+                    <div>
+                        <h4 class="font-bold text-white">Hebrew OCR Accuracy</h4>
+                        <p class="text-sm text-slate-400 mt-1">Financial Hebrew is complex.<br><strong class="text-red-400">Mitigation:</strong> Use specialized models (Claude 3.5 / GPT-4o).</p>
+                    </div>
+                </div>
+                <div class="card p-5 rounded-xl flex gap-4">
+                    <div class="text-orange-500 text-2xl"><i class="fas fa-user-clock"></i></div>
+                    <div>
+                        <h4 class="font-bold text-white">Solo Developer Burnout</h4>
+                        <p class="text-sm text-slate-400 mt-1">Context switching between Day Job, Trading, and Coding.<br><strong class="text-orange-400">Mitigation:</strong> "Concierge MVP" (No UI initially).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TOOLS & EFFORT VIEW (Restored & Detailed)  -->
+        <!-- ========================================== -->
+        <div id="view-tools" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-cyan-500">Technology Breakdown</h2>
+            <p class="text-slate-400 mb-8 max-w-3xl">Detailed analysis of selected tools, their specific responsibilities, and why they were chosen over common alternatives.</p>
+
+            <!-- DIAGRAM SECTION -->
+            <div class="mb-10 w-full overflow-x-auto">
+                <div class="min-w-[700px] bg-slate-800/40 p-8 rounded-xl border border-slate-700 relative">
+                    <h3 class="text-sm text-slate-400 uppercase tracking-widest font-bold mb-6 text-center">Data Flow Architecture</h3>
+                    
+                    <div class="flex justify-between items-center gap-4">
+                        
+                        <!-- 1. Frontend -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-24 h-24 bg-cyan-900/30 border border-cyan-500/50 rounded-xl flex flex-col items-center justify-center shadow-lg shadow-cyan-500/10 z-10">
+                                <i class="fas fa-laptop-code text-3xl text-cyan-400 mb-2"></i>
+                                <span class="text-xs font-bold text-white">R Shiny</span>
+                            </div>
+                            <span class="text-xs text-slate-400 mt-2">User</span>
+                        </div>
+
+                        <div class="flow-arrow-right"></div>
+
+                        <!-- 2. Backend Cluster -->
+                        <div class="border border-dashed border-blue-500/40 p-4 rounded-xl bg-blue-900/10 relative w-64">
+                            <div class="absolute -top-3 left-4 bg-blue-900 border border-blue-500 px-2 text-[10px] text-blue-200 uppercase font-bold rounded">Python Orchestrator</div>
+                            
+                            <div class="flex flex-col gap-3 items-center pt-2">
+                                <div class="px-4 py-2 bg-blue-600 rounded text-white text-xs font-bold w-full text-center shadow">FastAPI Gateway</div>
+                                <i class="fas fa-arrow-down text-slate-500 text-xs"></i>
+                                <div class="flex gap-2 w-full">
+                                    <div class="flex-1 p-2 bg-purple-900/60 border border-purple-500/50 rounded text-[10px] text-center text-purple-200">
+                                        <i class="fas fa-brain block mb-1"></i> AI (OCR)
+                                    </div>
+                                    <div class="flex-1 p-2 bg-green-900/60 border border-green-500/50 rounded text-[10px] text-center text-green-200">
+                                        <span class="block font-bold mb-1">R</span> Calc Logic
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flow-arrow-right"></div>
+
+                        <!-- 3. Database -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-24 h-24 bg-orange-900/30 border border-orange-500/50 rounded-xl flex flex-col items-center justify-center shadow-lg shadow-orange-500/10 z-10">
+                                <i class="fas fa-database text-3xl text-orange-400 mb-2"></i>
+                                <span class="text-xs font-bold text-white">Supabase</span>
+                            </div>
+                            <span class="text-xs text-slate-400 mt-2">Storage</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workflow Logic Explanation -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+                    <div class="bg-slate-800/60 p-4 rounded-lg border border-cyan-500/20">
+                        <h4 class="text-cyan-400 font-bold text-sm mb-2">1. Frontend (R Shiny)</h4>
+                        <p class="text-xs text-slate-400">User logs in, drags & drops the PDF/Excel files. The UI sends files securely to the API.</p>
+                    </div>
+                    <div class="bg-slate-800/60 p-4 rounded-lg border border-blue-500/20">
+                        <h4 class="text-blue-400 font-bold text-sm mb-2">2. Python (Orchestrator)</h4>
+                        <p class="text-xs text-slate-400">FastAPI receives the file. It cleans the text and decides which parts go to AI vs R.</p>
+                    </div>
+                    <div class="bg-slate-800/60 p-4 rounded-lg border border-green-500/20">
+                        <h4 class="text-green-400 font-bold text-sm mb-2">3. The Brain (AI + R)</h4>
+                        <p class="text-xs text-slate-400">
+                            <strong>AI:</strong> Extracts raw text/tables.<br>
+                            <strong>R:</strong> Takes that clean data and runs the official Treasury formulas.
+                        </p>
+                    </div>
+                    <div class="bg-slate-800/60 p-4 rounded-lg border border-orange-500/20">
+                        <h4 class="text-orange-400 font-bold text-sm mb-2">4. Database (Supabase)</h4>
+                        <p class="text-xs text-slate-400">Stores the original file, the extracted JSON, and the final calculated report.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- END DIAGRAM SECTION -->
+
+            <div class="space-y-8">
+                
+                <!-- 1. Python Backend -->
+                <div class="card p-0 rounded-xl overflow-hidden">
+                    <div class="bg-blue-900/20 p-4 border-b border-blue-500/20 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fab fa-python text-2xl text-blue-400"></i>
+                            <h3 class="text-lg font-bold text-white">Python Backend (FastAPI + Celery)</h3>
+                        </div>
+                        <span class="text-xs font-bold bg-blue-500 text-white px-2 py-1 rounded">45% Stake</span>
+                    </div>
+                    
+                    <div class="p-6 grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-sm font-bold text-blue-300 mb-2 uppercase tracking-wide">Implementation Details</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                Acts as the "Orchestrator." It manages the API, job queues, and AI routing.
+                            </p>
+                            <ul class="text-sm text-slate-400 space-y-2 mb-4">
+                                <li><strong>API Gateway:</strong> <code>FastAPI</code> for sub-50ms response times.</li>
+                                <li><strong>Async Workers:</strong> <code>Celery + Redis</code> to handle 50-page PDFs without freezing the UI.</li>
+                                <li><strong>PDF Parsing:</strong> <code>PyMuPDF</code> (faster) or <code>pdfplumber</code> (better for tables).</li>
+                            </ul>
+                            <div class="bg-slate-800/50 p-3 rounded text-xs text-slate-400 border border-slate-700">
+                                <strong>Solo Note:</strong> Use AI IDEs (Cursor) to generate boilerplate code and Pytest suites.
+                            </div>
+                        </div>
+                        <div class="alt-box">
+                            <h4 class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wide">Alternatives Considered</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-200">Node.js (Express):</strong>
+                                        <p class="text-slate-400 text-xs">Lacks native data science libraries (Pandas/NumPy) essential for financial data manipulation.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Frontend -->
+                <div class="card p-0 rounded-xl overflow-hidden">
+                    <div class="bg-cyan-900/20 p-4 border-b border-cyan-500/20 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-laptop-code text-2xl text-cyan-400"></i>
+                            <h3 class="text-lg font-bold text-white">Frontend (R Shiny)</h3>
+                        </div>
+                        <span class="text-xs font-bold bg-cyan-600 text-white px-2 py-1 rounded">25% Stake</span>
+                    </div>
+                    
+                    <div class="p-6 grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-sm font-bold text-cyan-300 mb-2 uppercase tracking-wide">Implementation Details</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                The user dashboard. Handles drag-and-drop uploads and previews.
+                            </p>
+                            <ul class="text-sm text-slate-400 space-y-2 mb-4">
+                                <li><strong>Styling:</strong> <code>bslib</code> for dark mode and modern cards.</li>
+                                <li><strong>Interactivity:</strong> <code>shinyjs</code> for client-side toggles/alerts.</li>
+                                <li><strong>Charts:</strong> <code>highcharter</code> or <code>plotly</code> for financial visualization.</li>
+                            </ul>
+                            <div class="bg-slate-800/50 p-3 rounded text-xs text-slate-400 border border-slate-700">
+                                <strong>Why Shiny?</strong> You know R. It's the fastest path to a GUI without learning React JS immediately.
+                            </div>
+                        </div>
+                        <div class="alt-box">
+                            <h4 class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wide">Alternatives Considered</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-200">React.js + Tailwind:</strong>
+                                        <p class="text-slate-400 text-xs">Better for massive scale, but adds 3+ months of learning curve for a solo founder.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Supabase -->
+                <div class="card p-0 rounded-xl overflow-hidden">
+                    <div class="bg-orange-900/20 p-4 border-b border-orange-500/20 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-database text-2xl text-orange-400"></i>
+                            <h3 class="text-lg font-bold text-white">Database (Supabase)</h3>
+                        </div>
+                        <span class="text-xs font-bold bg-orange-600 text-white px-2 py-1 rounded">10% Stake</span>
+                    </div>
+                    
+                    <div class="p-6 grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-sm font-bold text-orange-300 mb-2 uppercase tracking-wide">Implementation Details</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                "Backend-as-a-Service". Handles Auth, DB, and Storage.
+                            </p>
+                            <ul class="text-sm text-slate-400 space-y-2 mb-4">
+                                <li><strong>Auth:</strong> Built-in JWT handling (Login with Google/Microsoft).</li>
+                                <li><strong>Storage:</strong> S3-compatible buckets for secure PDF hosting.</li>
+                                <li><strong>Realtime:</strong> Subscriptions to show "Processing..." progress bars in Shiny.</li>
+                            </ul>
+                        </div>
+                        <div class="alt-box">
+                            <h4 class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wide">Alternatives Considered</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-200">Firebase:</strong>
+                                        <p class="text-slate-400 text-xs">NoSQL structure is risky for strict financial data relationships (User -> Portfolio -> Report).</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. AI Services (Expanded) -->
+                <div class="card p-0 rounded-xl overflow-hidden">
+                    <div class="bg-purple-900/20 p-4 border-b border-purple-500/20 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-robot text-2xl text-purple-400"></i>
+                            <h3 class="text-lg font-bold text-white">AI Services (Extraction Pipeline)</h3>
+                        </div>
+                        <span class="text-xs font-bold bg-purple-600 text-white px-2 py-1 rounded">5% Stake</span>
+                    </div>
+                    
+                    <div class="p-6 grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-sm font-bold text-purple-300 mb-2 uppercase tracking-wide">Implementation Details</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                Transforming unstructured PDF pixels into structured JSON data for R.
+                            </p>
+                            <ul class="text-sm text-slate-400 space-y-3 mb-4">
+                                <li>
+                                    <strong>1. JSON Mode:</strong> We force GPT-4o to output <em>only</em> valid JSON, ensuring the R script never crashes on "chatty" responses.
+                                </li>
+                                <li>
+                                    <strong>2. Pydantic Validation:</strong> A Python layer that checks the AI's math before saving. 
+                                    <br><em class="text-xs text-slate-500">Example: If AI says "Revenue": "Unknown", the code rejects it.</em>
+                                </li>
+                                <li>
+                                    <strong>3. Context Management:</strong> We split large PDFs into chunks to stay within token limits and reduce costs.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="alt-box">
+                            <h4 class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wide">Alternatives Considered</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-200">Tesseract (Open Source):</strong>
+                                        <p class="text-slate-400 text-xs">Free, but accuracy on Hebrew financial tables is too low (~60%).</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-200">Claude 3.5 Sonnet:</strong>
+                                        <p class="text-slate-400 text-xs">A strong alternative to GPT-4o for massive documents (200k+ context window).</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                 <!-- 5. R Logic Core (Detailed) -->
+                <div class="card p-0 rounded-xl overflow-hidden">
+                    <div class="bg-green-900/20 p-4 border-b border-green-500/20 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl text-green-400 font-bold">R</span>
+                            <h3 class="text-lg font-bold text-white">Financial Logic (R Language)</h3>
+                        </div>
+                        <span class="text-xs font-bold bg-green-600 text-white px-2 py-1 rounded">15% Stake</span>
+                    </div>
+                    
+                    <div class="p-6 grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-sm font-bold text-green-300 mb-2 uppercase tracking-wide">Implementation Details</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                The mathematical core. Isolated to ensure financial accuracy.
+                            </p>
+                            <ul class="text-sm text-slate-400 space-y-3 mb-4">
+                                <li>
+                                    <strong>1. Vectorized Math:</strong> Efficiently calculating entire columns of data at once.
+                                </li>
+                                <li>
+                                    <strong>2. Formula Verification:</strong> Unit tests to ensure calculations match Treasury regulations.
+                                </li>
+                                <li>
+                                    <strong>3. Reporting:</strong> Generating output data for the final report.
+                                </li>
+                            </ul>
+                             <div class="bg-slate-800/50 p-3 rounded text-xs text-slate-400 border border-slate-700">
+                                <strong>Why R?</strong> Unbeatable for statistical and financial modeling accuracy.
+                            </div>
+                        </div>
+                        <div class="alt-box">
+                            <h4 class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wide">Alternatives Considered</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-200">Python (Pandas):</strong>
+                                        <p class="text-slate-400 text-xs">Good, but R's syntax for statistical formulas is often cleaner and more expressive for this domain.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </main>
 
     <footer class="text-center text-slate-600 text-sm mt-12 mb-8 border-t border-slate-800 pt-8">
@@ -1236,28 +2314,142 @@
         }
 
         function switchView(viewName) {
-            const views = ['business', 'tech', 'risk', 'tools', 'security', 'process', 'rnative', 'prereq', 'deployment'];
+            const views = ['business', 'tech', 'risk', 'tools', 'security', 'process', 'rnative', 'prereq', 'deployment', 'ui-journey'];
             
             views.forEach(v => {
                 const el = document.getElementById('view-' + v);
                 const btn = document.getElementById('btn-' + v);
                 
                 if(v === viewName) {
-                    el.style.display = 'block';
-                    el.classList.add('fade-in');
-                    btn.classList.remove('inactive');
-                    btn.classList.add('active');
+                    if(el) {
+                        el.style.display = 'block';
+                        el.classList.add('fade-in');
+                    }
+                    if(btn) {
+                        btn.classList.remove('inactive');
+                        btn.classList.add('active');
+                    }
                 } else {
-                    el.style.display = 'none';
-                    el.classList.remove('fade-in');
-                    btn.classList.remove('active');
-                    btn.classList.add('inactive');
+                    if(el) {
+                        el.style.display = 'none';
+                        el.classList.remove('fade-in');
+                    }
+                    if(btn) {
+                        btn.classList.remove('active');
+                        btn.classList.add('inactive');
+                    }
                 }
             });
         }
 
+        function openUiPage(pageName) {
+            const pages = ['dashboard', 'templates', 'reports', 'audit', 'datasheet'];
+            
+            // Hide all sub-pages
+            pages.forEach(p => {
+                const el = document.getElementById('ui-page-' + p);
+                const nav = document.getElementById('nav-' + p);
+                
+                if(p === pageName) {
+                    if(el) {
+                        el.style.display = 'block';
+                        el.classList.add('fade-in');
+                    }
+                    if(nav) nav.classList.add('active');
+                } else {
+                    if(el) {
+                        el.style.display = 'none';
+                        el.classList.remove('fade-in');
+                    }
+                    if(nav) nav.classList.remove('active');
+                }
+            });
+            
+            // Reset wizard states when navigating
+            const tList = document.getElementById('template-step-list');
+            if(tList) tList.classList.remove('hidden');
+            const tWiz = document.getElementById('template-step-wizard');
+            if(tWiz) tWiz.classList.add('hidden');
+            
+            const rList = document.getElementById('report-step-list');
+            if(rList) rList.classList.remove('hidden');
+            const rWiz = document.getElementById('report-step-wizard');
+            if(rWiz) rWiz.classList.add('hidden');
+        }
+        
+        // Data Edit Toggle
+        function toggleDataEdit() {
+            const btn = document.getElementById('btn-data-edit');
+            const inputs = document.querySelectorAll('.ds-input');
+            const isEditing = btn.innerText.includes("Save");
+            
+            if(!isEditing) {
+                btn.innerHTML = '<i class="fas fa-save mr-2"></i> Save Changes';
+                btn.classList.remove('bg-blue-600', 'hover:bg-blue-500', 'border-blue-400');
+                btn.classList.add('bg-green-600', 'hover:bg-green-500', 'border-green-400');
+                
+                inputs.forEach(inp => {
+                    inp.removeAttribute('readonly');
+                    inp.classList.add('editing');
+                });
+            } else {
+                btn.innerHTML = '<i class="fas fa-pencil-alt mr-2"></i> Edit Data';
+                btn.classList.add('bg-blue-600', 'hover:bg-blue-500', 'border-blue-400');
+                btn.classList.remove('bg-green-600', 'hover:bg-green-500', 'border-green-400');
+                
+                inputs.forEach(inp => {
+                    inp.setAttribute('readonly', true);
+                    inp.classList.remove('editing');
+                });
+            }
+        }
+
+        // New Template Wizard Functions
+        function startTemplateWizard() {
+            document.getElementById('template-step-list').classList.add('hidden');
+            document.getElementById('template-step-wizard').classList.remove('hidden');
+            document.getElementById('wiz-upload').classList.remove('hidden');
+            document.getElementById('wiz-processing').classList.add('hidden');
+            document.getElementById('wiz-success').classList.add('hidden');
+        }
+
+        function runAiAnalysis() {
+            document.getElementById('wiz-upload').classList.add('hidden');
+            document.getElementById('wiz-processing').classList.remove('hidden');
+            
+            // Fake delay
+            setTimeout(() => {
+                document.getElementById('wiz-processing').classList.add('hidden');
+                document.getElementById('wiz-success').classList.remove('hidden');
+            }, 2500);
+        }
+
+        function finishTemplateWizard() {
+             cancelTemplateWizard(); // Just go back to list
+        }
+
+        function cancelTemplateWizard() {
+            document.getElementById('template-step-wizard').classList.add('hidden');
+            document.getElementById('template-step-list').classList.remove('hidden');
+        }
+
+        // New Report Wizard Functions
+        function startReportWizard() {
+            document.getElementById('report-step-list').classList.add('hidden');
+            document.getElementById('report-step-wizard').classList.remove('hidden');
+        }
+        
+        function finishReportWizard() {
+            openUiPage('datasheet');
+        }
+
+        function cancelReportWizard() {
+             document.getElementById('report-step-wizard').classList.add('hidden');
+             document.getElementById('report-step-list').classList.remove('hidden');
+        }
+
         // Init with Solo Mode because the user asked
-        setMode('solo');
+        if(document.getElementById('mode-solo')) setMode('solo');
     </script>
 </body>
 </html>
