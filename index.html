@@ -94,10 +94,10 @@
         .flow-packet.indigo { border-left-color: #6366f1; }
 
         /* Flow Diagram Basics */
-        .flow-arrow-container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 40px; padding: 0 2px; }
+        .flow-arrow-container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; padding: 0 5px; }
         .flow-line { height: 2px; background: #475569; width: 100%; position: relative; }
         .flow-line::after { content: ''; position: absolute; right: 0; top: -4px; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #475569; }
-        .flow-action-label { font-size: 0.6rem; color: #60a5fa; background: #0f172a; padding: 2px 4px; border: 1px solid #334155; border-radius: 10px; margin-bottom: -9px; z-index: 20; white-space: nowrap; }
+        .flow-action-label { font-size: 0.6rem; color: #60a5fa; background: #0f172a; padding: 2px 6px; border: 1px solid #334155; border-radius: 10px; margin-bottom: -9px; z-index: 20; white-space: nowrap; }
 
         /* UI Mock Elements */
         .app-window { background: #0f172a; border: 1px solid #334155; border-radius: 12px; overflow: hidden; display: flex; min-height: 600px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
@@ -127,8 +127,20 @@
         .ds-cell-calc { color: #60a5fa; font-weight: 600; background: rgba(59, 130, 246, 0.1) !important; cursor: pointer; }
         .ds-cell-calc:hover { background: rgba(59, 130, 246, 0.3) !important; }
         .ds-cell-manual { color: #fff; }
-        .ds-input { background-color: transparent !important; border: 1px solid transparent; color: #e2e8f0; width: 100%; outline: none; }
-        .ds-input.editing { border: 1px solid #3b82f6; background-color: #1e293b !important; padding: 2px; }
+        
+        /* FIXED: DS Input styling to remove white background */
+        .ds-input { 
+            background-color: transparent !important; 
+            border: 1px solid transparent; 
+            color: #e2e8f0; 
+            width: 100%; 
+            outline: none;
+        }
+        .ds-input.editing { 
+            border: 1px solid #3b82f6; 
+            background-color: #1e293b !important; 
+            padding: 2px; 
+        }
 
         /* Flow Cards & Windows */
         .flow-card { background: #1e293b; border: 1px solid #475569; border-radius: 8px; padding: 10px; width: 130px; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; z-index: 10; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
@@ -173,15 +185,11 @@
 
         <!-- View Toggles -->
         <div class="flex flex-wrap justify-center gap-4 mt-8">
-            <!-- 1. Business Process (FIRST) -->
             <button onclick="switchView('biz-process')" id="btn-biz-process" class="btn-toggle btn-biz-process active px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-cogs"></i> Business Process
             </button>
             <button onclick="switchView('ui-journey')" id="btn-ui-journey" class="btn-toggle btn-ui-journey inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-laptop-medical"></i> UI Journey
-            </button>
-            <button onclick="switchView('arch-options')" id="btn-arch-options" class="btn-toggle btn-arch-comp inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
-                <i class="fas fa-project-diagram"></i> Architecture Options
             </button>
             <button onclick="switchView('tech')" id="btn-tech" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-server"></i> Technical Deep Dive
@@ -211,7 +219,8 @@
             <p class="text-slate-400 mb-8 max-w-3xl">Operational flow integrating Secure Access, Cloud Infrastructure, and Human Review.</p>
 
             <div class="w-full overflow-x-auto p-4 bg-slate-800/30 rounded-2xl border border-indigo-500/30">
-                <div class="min-w-0 w-full flex items-center justify-between gap-2"> 
+                <!-- Tuned Width -->
+                <div class="min-w-[900px] lg:min-w-0 lg:w-full flex items-center justify-between gap-2"> 
 
                     <!-- 1. AUTH LAYER -->
                     <div class="flex flex-col items-center gap-2">
@@ -224,19 +233,19 @@
                     </div>
 
                     <!-- Connector -->
-                    <div class="flow-arrow-container">
-                        <div class="flow-action-label">Token</div>
+                    <div class="flow-arrow-container min-w-[30px]">
+                        <div class="flow-action-label text-[9px]">Valid</div>
                         <div class="flow-line"><div class="flow-packet indigo"></div></div>
                     </div>
 
                     <!-- 2. CLOUD INFRASTRUCTURE WRAPPER -->
-                    <div class="border-2 border-dashed border-slate-600 rounded-2xl p-4 bg-slate-900/40 relative flex items-center gap-4">
-                        <div class="absolute -top-3 left-6 bg-slate-700 text-slate-300 text-[9px] px-3 py-1 rounded font-bold border border-slate-500 uppercase">
+                    <div class="border-2 border-dashed border-slate-600 rounded-2xl p-3 bg-slate-900/40 relative flex items-center gap-3">
+                        <div class="absolute -top-3 left-6 bg-slate-700 text-slate-300 text-[9px] px-2 py-0.5 rounded font-bold border border-slate-500 uppercase">
                             <i class="fas fa-cloud mr-1"></i> Cloud (Railway)
                         </div>
 
                         <!-- Inputs -->
-                        <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-2">
                             <div class="bg-slate-800 border border-slate-600 p-2 rounded-lg w-32 flex items-center gap-2">
                                 <div class="text-xl text-blue-400"><i class="fas fa-file-upload"></i></div>
                                 <div>
@@ -254,21 +263,21 @@
                         </div>
 
                         <!-- Internal Connector -->
-                        <div class="flow-arrow-container">
+                        <div class="flow-arrow-container min-w-[30px]">
                             <div class="flow-line"><div class="flow-packet indigo"></div></div>
                         </div>
 
                         <!-- Engine -->
                          <div class="bg-slate-800 border-2 border-indigo-500 rounded-xl p-3 text-center w-36 shadow-xl relative">
-                            <i class="fas fa-cogs text-3xl text-indigo-400 mb-2 animate-spin-slow" style="animation-duration: 10s;"></i>
-                            <h4 class="text-white font-bold text-xs">Core</h4>
-                            <p class="text-[8px] text-slate-400 mt-1">AI + R Logic</p>
+                            <i class="fas fa-cogs text-2xl text-indigo-400 mb-2 animate-spin-slow" style="animation-duration: 10s;"></i>
+                            <h4 class="text-white font-bold text-xs">Compliance Core</h4>
+                            <p class="text-[8px] text-slate-400 mt-1">AI Extraction + R Logic</p>
                         </div>
                     </div>
 
                     <!-- Connector -->
-                    <div class="flow-arrow-container">
-                        <div class="flow-action-label">Draft</div>
+                    <div class="flow-arrow-container min-w-[30px]">
+                        <div class="flow-action-label text-[9px]">Draft</div>
                         <div class="flow-line"><div class="flow-packet indigo" style="animation-delay: 0.5s"></div></div>
                     </div>
 
@@ -294,8 +303,8 @@
                     </div>
 
                     <!-- Connector -->
-                    <div class="flow-arrow-container">
-                        <div class="flow-action-label">Sign</div>
+                    <div class="flow-arrow-container min-w-[30px]">
+                        <div class="flow-action-label text-[9px]">Sign</div>
                         <div class="flow-line"><div class="flow-packet green" style="animation-delay: 1s"></div></div>
                     </div>
 
@@ -381,12 +390,12 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- ARCHITECTURE COMPARISON VIEW (MERGED)      -->
+        <!-- TECH VIEW (RESTORED WITH TABLE)            -->
         <!-- ========================================== -->
-        <div id="view-arch-options" class="hidden">
-            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-purple-500">Architecture Strategy: Scale vs. Speed</h2>
-            <p class="text-slate-400 mb-8 max-w-3xl">Two distinct technical paths for building the engine.</p>
+        <div id="view-tech" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-cyan-500">Technical Deep Dive: Comparison</h2>
             
+            <!-- Side-by-Side Diagrams -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                 <!-- Option A: Python -->
                 <div>
@@ -577,51 +586,10 @@
                         <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">AI Ecosystem</td><td class="px-6 py-4">Native (First-class support)</td><td class="px-6 py-4">Wrapper (API based)</td></tr>
                         <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Concurrency</td><td class="px-6 py-4 font-bold text-blue-400">High (Async Native)</td><td class="px-6 py-4">Medium (Needs `future` lib)</td></tr>
                         <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Maintenance Overhead</td><td class="px-6 py-4">High (Multiple services)</td><td class="px-6 py-4 font-bold text-green-400">Low (Monolith)</td></tr>
+                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Infrastructure Cost</td><td class="px-6 py-4">Higher (More containers)</td><td class="px-6 py-4 font-bold text-green-400">Lower (Single container)</td></tr>
                         <tr class="bg-slate-700/30"><td class="px-6 py-4 font-bold text-white">VERDICT</td><td class="px-6 py-4">Build for Scale (Series A)</td><td class="px-6 py-4 font-bold text-white border-l-4 border-green-500">Build for MVP (First Client)</td></tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- TECH VIEW                                  -->
-        <!-- ========================================== -->
-        <div id="view-tech" class="hidden">
-            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-cyan-500">Technical Deep Dive: Comparison</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Python Stack -->
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3 mb-2">
-                        <i class="fab fa-python text-2xl text-blue-400"></i>
-                        <h3 class="text-xl font-bold text-white">Option A: Python Ecosystem</h3>
-                    </div>
-                    <div class="card p-4 rounded-xl border-l-4 border-blue-500 bg-slate-900/50">
-                        <h4 class="text-sm font-bold text-blue-300 uppercase mb-2">The "Scalable" Microservice</h4>
-                        <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
-                            <li><strong>Backend:</strong> <code>FastAPI</code>. Handles high-concurrency requests asynchronously.</li>
-                            <li><strong>Task Queue:</strong> <code>Celery</code> + <code>Redis</code>. Manages long-running AI jobs in the background.</li>
-                            <li><strong>AI Orchestrator:</strong> <code>LangChain</code>. Standard library for chaining LLM prompts and vector search.</li>
-                            <li><strong>AI Coding:</strong> <code>Pydantic</code> models are perfectly auto-generated by Cursor.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- R Stack -->
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3 mb-2">
-                         <span class="text-2xl text-green-400 font-bold">R</span>
-                        <h3 class="text-xl font-bold text-white">Option B: R-Native Ecosystem</h3>
-                    </div>
-                    <div class="card p-4 rounded-xl border-l-4 border-green-500 bg-slate-900/50">
-                        <h4 class="text-sm font-bold text-green-300 uppercase mb-2">The "Agile" Monolith</h4>
-                        <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
-                            <li><strong>Backend:</strong> <code>Plumber</code>. Turns R functions into REST API endpoints.</li>
-                            <li><strong>Task Queue:</strong> <code>future</code> + <code>promises</code>. Handles async jobs within the R session.</li>
-                            <li><strong>AI Orchestrator:</strong> <code>httr2</code>. Direct API calls to OpenAI/Anthropic.</li>
-                            <li><strong>Code Structure:</strong> Use <code>box</code> or <code>modules</code> to organize code for better Cursor understanding.</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -762,41 +730,8 @@
     </footer>
 
     <script>
-        // Init with Solo Mode because the user asked
-        function setMode(mode) {
-            const container = document.getElementById('timeline-container');
-            if (container) {
-                const timelines = {
-                    team: [
-                        { title: "Month 1", subtitle: "Proof of Concept", items: ["Python Script Reading PDF", "Validate Hebrew OCR", "Extract 10 variables"], color: "blue" },
-                        { title: "Month 2-3", subtitle: "MVP Alpha", items: ["Basic UI (Upload/Download)", "Connect Backend to R", "End-to-end flow"], color: "purple" },
-                        { title: "Month 4-6", subtitle: "SaaS Beta", items: ["Auth0 / Login", "Database History", "Client Pilot"], color: "green" }
-                    ],
-                    solo: [
-                        { title: "Month 1-2", subtitle: "Learning Curve", items: ["Learning FastAPI Basics", "Setting up Environment", "First 'Hello World' API"], color: "slate" },
-                        { title: "Month 3-4", subtitle: "Concierge MVP", items: ["No UI / No Login", "Manual Email Processing", "Validating Math Logic"], color: "orange" },
-                        { title: "Month 5+", subtitle: "Hiring Phase", items: ["Hire Freelancer for UI", "Focus only on R Logic", "First Paid Pilot"], color: "red" }
-                    ]
-                };
-                const data = timelines[mode];
-                const btnTeam = document.getElementById('mode-team');
-                const btnSolo = document.getElementById('mode-solo');
-                if(btnTeam) btnTeam.className = `mode-btn ${mode === 'team' ? 'selected' : 'unselected'}`;
-                if(btnSolo) btnSolo.className = `mode-btn ${mode === 'solo' ? 'selected' : 'unselected'}`;
-                container.innerHTML = data.map(t => `
-                    <div class="card p-6 rounded-xl border-t-2 border-${t.color}-400">
-                        <div class="text-xs font-bold text-${t.color}-400 uppercase tracking-wide mb-2">${t.title}</div>
-                        <h3 class="text-lg font-bold text-white mb-3">${t.subtitle}</h3>
-                        <ul class="text-sm text-slate-400 space-y-2">
-                            ${t.items.map(i => `<li>• <span class="text-slate-200">${i}</span></li>`).join('')}
-                        </ul>
-                    </div>
-                `).join('');
-            }
-        }
-
         function switchView(viewName) {
-            const views = ['tech', 'risk', 'security', 'deployment', 'ui-journey', 'biz-process', 'cost', 'arch-options'];
+            const views = ['tech', 'risk', 'security', 'deployment', 'ui-journey', 'biz-process', 'cost'];
             
             views.forEach(v => {
                 const el = document.getElementById('view-' + v);
@@ -1017,6 +952,7 @@
 
         function finishTemplateWizard() {
              cancelTemplateWizard(); // Just go back to list
+             // Simulate new row added (conceptually)
         }
 
         function cancelTemplateWizard() {
@@ -1071,9 +1007,6 @@
              document.getElementById('report-step-wizard').classList.add('hidden');
              document.getElementById('report-step-list').classList.remove('hidden');
         }
-
-        // Init with Solo Mode because the user asked
-        if(document.getElementById('mode-solo')) setMode('solo');
     </script>
 </body>
 </html>
