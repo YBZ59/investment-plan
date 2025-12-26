@@ -117,6 +117,7 @@
         .btn-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
         .btn-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
         .btn-purple { background: rgba(147, 51, 234, 0.2); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.4); }
+        .btn-gray { background: rgba(148, 163, 184, 0.1); color: #94a3b8; border: 1px solid #475569; cursor: not-allowed; }
 
         /* Charts & Data Sheet */
         .pie-chart { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#3b82f6 0% 70%, #10b981 70% 90%, #f59e0b 90% 100%); }
@@ -127,20 +128,8 @@
         .ds-cell-calc { color: #60a5fa; font-weight: 600; background: rgba(59, 130, 246, 0.1) !important; cursor: pointer; }
         .ds-cell-calc:hover { background: rgba(59, 130, 246, 0.3) !important; }
         .ds-cell-manual { color: #fff; }
-        
-        /* FIXED: DS Input styling to remove white background */
-        .ds-input { 
-            background-color: transparent !important; 
-            border: 1px solid transparent; 
-            color: #e2e8f0; 
-            width: 100%; 
-            outline: none;
-        }
-        .ds-input.editing { 
-            border: 1px solid #3b82f6; 
-            background-color: #1e293b !important; 
-            padding: 2px; 
-        }
+        .ds-input { background-color: transparent !important; border: 1px solid transparent; color: #e2e8f0; width: 100%; outline: none; }
+        .ds-input.editing { border: 1px solid #3b82f6; background-color: #1e293b !important; padding: 2px; }
 
         /* Flow Cards & Windows */
         .flow-card { background: #1e293b; border: 1px solid #475569; border-radius: 8px; padding: 10px; width: 130px; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; z-index: 10; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
@@ -219,8 +208,7 @@
             <p class="text-slate-400 mb-8 max-w-3xl">Operational flow integrating Secure Access, Cloud Infrastructure, and Human Review.</p>
 
             <div class="w-full overflow-x-auto p-4 bg-slate-800/30 rounded-2xl border border-indigo-500/30">
-                <!-- Tuned Width -->
-                <div class="min-w-[900px] lg:min-w-0 lg:w-full flex items-center justify-between gap-2"> 
+                <div class="min-w-0 w-full flex items-center justify-between gap-2"> 
 
                     <!-- 1. AUTH LAYER -->
                     <div class="flex flex-col items-center gap-2">
@@ -257,7 +245,7 @@
                                 <div class="text-xl text-slate-500"><i class="fas fa-network-wired"></i></div>
                                 <div>
                                     <div class="text-[8px] text-slate-500 uppercase font-bold">API</div>
-                                    <div class="text-[9px] text-slate-400">Maya Integ.</div>
+                                    <div class="text-[9px] text-slate-400">Maya / ISA</div>
                                 </div>
                             </div>
                         </div>
@@ -369,10 +357,86 @@
                      
                      <!-- PAGE: REGULATIONS -->
                      <div id="ui-page-regulations" class="hidden">
-                        <div id="reg-list-view"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Regulatory Documents</h3><div class="flex gap-2"><input type="text" placeholder="Search Docs..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40"><button onclick="startRegUpload()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-upload mr-2"></i> Upload New</button></div></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Document Name</th><th>Current Version</th><th>Effective Date</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> Capital Adequacy 12b</td><td>v1.0</td><td>2024-01-01</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="alert('Opening PDF Viewer...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('Capital Adequacy 12b')">History</span></td></tr><tr><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> TASE Listing Rules</td><td>v2.4</td><td>2023-11-15</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="alert('Opening PDF Viewer...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('TASE Listing Rules')">History</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6 mt-8"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Regulation Update Cycle</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. ISA</div><i class="fas fa-university text-slate-400 text-2xl my-2"></i><span class="text-[8px] text-slate-500">Issues New Reg</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Publishes</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card"><div class="flow-card-title">2. Ingest</div><i class="fas fa-cloud-upload-alt text-purple-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">PDF Upload</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">AI Processing</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">3. Diff Engine</div><div class="relative w-8 h-8 mx-auto my-2"><i class="fas fa-arrow-right absolute top-0 left-0 text-green-400 anim-diff-r"></i><i class="fas fa-arrow-left absolute bottom-0 right-0 text-red-400 anim-diff-l"></i></div><span class="text-[8px] text-purple-200">Detects Changes</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Alerts Admin</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 1s"></div></div></div><div class="flow-card"><div class="flow-card-title">4. Impact</div><i class="fas fa-exclamation-triangle text-yellow-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Flags Affected Templates</span></div></div></div></div>
-                        <div id="reg-upload-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10 absolute top-0 left-0 w-full bg-slate-900/95 z-50"><div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelRegUpload()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">Upload New Regulation Version</h3><div id="reg-wiz-upload" class="text-center"><div class="border-2 border-dashed border-slate-600 rounded-xl p-8 mb-6 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-pdf text-4xl text-slate-500 mb-2"></i><p class="text-xs text-slate-400">Drag & Drop <strong>Regulation PDF</strong> here</p></div><button onclick="runRegProcessing()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Processing</button></div><div id="reg-wiz-processing" class="hidden text-center py-6"><i class="fas fa-microchip fa-spin text-4xl text-purple-400 mb-4"></i><h4 class="text-white font-bold">AI Analyzing Changes...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="reg-progress-bar" class="bg-purple-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Comparing against v1.2...</p></div><div id="reg-wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-6">Detected <strong>2 modifications</strong> in formulas.</p><button onclick="finishRegUpload()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">View Diff & Confirm</button></div></div></div>
+                        <div id="reg-list-view"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Regulatory Documents</h3><div class="flex gap-2"><input type="text" placeholder="Search Docs..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40"><button onclick="startRegUpload()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-upload mr-2"></i> Upload New</button></div></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Document Name</th><th>Current Version</th><th>Effective Date</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> Capital Adequacy 12b</td><td>v1.0</td><td>2024-01-01</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="alert('Opening PDF Viewer...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('Capital Adequacy 12b')">History</span><span class="mock-btn-sm btn-purple" style="background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); color: #c4b5fd;" onclick="startRegUpload()">Replace</span></td></tr><tr id="reg-row-tase"><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> TASE Listing Rules</td><td>v2.4</td><td>2023-11-15</td><td><span class="text-green-400" id="reg-status-tase">● Active</span></td><td id="reg-actions-tase"><span class="mock-btn-sm btn-blue" onclick="alert('Opening PDF Viewer...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('TASE Listing Rules')">History</span><span class="mock-btn-sm btn-purple" style="background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); color: #c4b5fd;" onclick="startRegUpload()">Replace</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6 mt-8"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Regulation Update Cycle</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. ISA</div><i class="fas fa-university text-slate-400 text-2xl my-2"></i><span class="text-[8px] text-slate-500">Issues New Reg</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Publishes</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card"><div class="flow-card-title">2. Ingest</div><i class="fas fa-cloud-upload-alt text-purple-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">PDF Upload</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">AI Processing</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">3. Diff Engine</div><div class="relative w-8 h-8 mx-auto my-2"><i class="fas fa-arrow-right absolute top-0 left-0 text-green-400 anim-diff-r"></i><i class="fas fa-arrow-left absolute bottom-0 right-0 text-red-400 anim-diff-l"></i></div><span class="text-[8px] text-purple-200">Detects Changes</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Alerts Admin</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 1s"></div></div></div><div class="flow-card"><div class="flow-card-title">4. Impact</div><i class="fas fa-exclamation-triangle text-yellow-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Flags Affected Templates</span></div></div></div></div>
+                        <div id="reg-upload-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10 absolute top-0 left-0 w-full bg-slate-900/95 z-50"><div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelRegUpload()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">Replacing: TASE Listing Rules (v2.4)</h3><div id="reg-wiz-upload" class="text-center"><div class="border-2 border-dashed border-slate-600 rounded-xl p-8 mb-6 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-pdf text-4xl text-slate-500 mb-2"></i><p class="text-xs text-slate-400">Drag & Drop <strong>New Regulation PDF</strong> here</p></div><button onclick="runRegProcessing()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Processing</button></div><div id="reg-wiz-processing" class="hidden text-center py-6"><i class="fas fa-microchip fa-spin text-4xl text-purple-400 mb-4"></i><h4 class="text-white font-bold">AI Analyzing Changes...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="reg-progress-bar" class="bg-purple-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Comparing against previous version...</p></div><div id="reg-wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-6">Detected <strong>2 modifications</strong> in formulas.</p><button onclick="finishRegUpload()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">View Diff & Confirm</button></div></div></div>
                         <div id="reg-history-view" class="hidden h-full flex flex-col"><div class="flex justify-between items-center mb-6"><div class="flex items-center gap-3"><button onclick="closeRegHistory()" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i> Back to History</button><div><h3 class="text-xl font-bold text-white" id="reg-history-title">Capital Adequacy 12b</h3><p class="text-xs text-slate-400">Version History & Management</p></div></div><button onclick="startRegUpload()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-cloud-upload-alt mr-2"></i> Upload New Version</button></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 mb-6"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th class="w-10 text-center"><input type="checkbox"></th><th>Version</th><th>Uploaded Date</th><th>By</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr class="bg-slate-700/30"><td class="text-center"><input type="checkbox" checked disabled></td><td class="font-bold text-white">v1.2</td><td>2024-02-15</td><td>Admin</td><td><span class="text-green-400 border border-green-500/50 px-1 rounded text-[9px]">Active</span></td><td><span class="mock-btn-sm btn-blue">View</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.1</td><td>2024-01-20</td><td>User B</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="alert('v1.1 is now Active')">Activate</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.0</td><td>2024-01-01</td><td>Admin</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="alert('v1.0 is now Active')">Activate</span></td></tr></tbody></table></div><div class="bg-slate-900 border border-slate-700 p-4 rounded-xl flex justify-between items-center"><div class="text-xs text-slate-400"><i class="fas fa-info-circle mr-2 text-blue-400"></i> Select exactly two versions to compare changes.</div><button onclick="openRegDiff()" class="bg-purple-600 text-white text-xs px-6 py-2 rounded-lg hover:bg-purple-500 transition border border-purple-400">Compare Selected (2)</button></div></div>
-                        <div id="reg-diff-view" class="hidden h-full flex flex-col"><div class="flex justify-between items-center mb-4"><div class="flex items-center gap-3"><button onclick="closeRegDiff()" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i> Back to History</button><h3 class="text-lg font-bold text-white">Regulator Change Detection</h3></div><div class="text-xs text-slate-400">Comparing: <strong>v1.1</strong> vs <strong>v1.2 (Active)</strong></div></div><div class="flex-grow flex gap-4 overflow-hidden"><!-- Old Version --><div class="w-1/2 bg-slate-900 rounded-lg border border-slate-700 p-4 overflow-y-auto"><div class="text-[10px] text-slate-500 uppercase font-bold mb-2 border-b border-slate-700 pb-1">Version 1.1</div><p class="text-xs text-slate-400 leading-relaxed">4.1. Risk Weight Calculation.<br>The risk weight for asset class A shall be calculated as <span class="bg-red-900/50 text-red-300 px-1 rounded">12%</span> of the total exposure. This applies to all ETF instruments...</p></div><!-- New Version --><div class="w-1/2 bg-slate-900 rounded-lg border border-slate-700 p-4 overflow-y-auto"><div class="text-[10px] text-slate-500 uppercase font-bold mb-2 border-b border-slate-700 pb-1">Version 1.2 (Active)</div><p class="text-xs text-slate-400 leading-relaxed">4.1. Risk Weight Calculation.<br>The risk weight for asset class A shall be calculated as <span class="bg-green-900/50 text-green-300 px-1 rounded">15%</span> of the total exposure. This applies to all ETF instruments...</p></div></div><div class="mt-4 bg-yellow-900/20 border border-yellow-600/50 p-3 rounded flex justify-between items-center"><div class="text-xs text-yellow-200"><i class="fas fa-exclamation-triangle mr-2"></i><strong>Impact Analysis:</strong> This change affects <strong>14 Templates</strong> using the "Risk Weight" formula.</div></div></div>
+                        <div id="reg-diff-view" class="hidden h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center gap-3">
+                                    <button onclick="closeRegDiff()" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i> Back to List (Pending)</button>
+                                    <h3 class="text-lg font-bold text-white">Regulator Change Detection</h3>
+                                </div>
+                                <div class="text-xs text-slate-400">Comparing: <strong>v2.4</strong> vs <strong>v2.5 (New)</strong></div>
+                            </div>
+                            <div class="flex-grow flex gap-4 overflow-hidden">
+                                <!-- Old Version -->
+                                <div class="w-1/2 bg-slate-900 rounded-lg border border-slate-700 p-4 overflow-y-auto">
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mb-2 border-b border-slate-700 pb-1">Current Version (v2.4)</div>
+                                    <p class="text-xs text-slate-400 leading-relaxed">
+                                        4.1. Risk Weight Calculation.<br>
+                                        The risk weight for asset class A shall be calculated as <span class="bg-red-900/50 text-red-300 px-1 rounded">12%</span> of the total exposure. This applies to all ETF instruments...
+                                    </p>
+                                </div>
+                                <!-- New Version -->
+                                <div class="w-1/2 bg-slate-900 rounded-lg border border-slate-700 p-4 overflow-y-auto">
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mb-2 border-b border-slate-700 pb-1">New Upload (v2.5)</div>
+                                    <p class="text-xs text-slate-400 leading-relaxed">
+                                        4.1. Risk Weight Calculation.<br>
+                                        The risk weight for asset class A shall be calculated as <span class="bg-green-900/50 text-green-300 px-1 rounded">15%</span> of the total exposure. This applies to all ETF instruments...
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 bg-yellow-900/20 border border-yellow-600/50 p-3 rounded flex flex-col justify-between items-start gap-2">
+                                <div class="text-xs text-yellow-200"><i class="fas fa-exclamation-triangle mr-2"></i><strong>Impact Analysis:</strong> This change affects <strong>3 Templates</strong> (Click to Review):</div>
+                                <div class="flex gap-2 mt-1">
+                                    <button onclick="openTemplateImpact('ETF Monthly V1')" class="text-[10px] bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-300 px-2 py-1 rounded transition">ETF Monthly V1</button>
+                                    <button onclick="openTemplateImpact('Risk Report Q3')" class="text-[10px] bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-300 px-2 py-1 rounded transition">Risk Report Q3</button>
+                                    <button onclick="openTemplateImpact('Bond Yield Summary')" class="text-[10px] bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-300 px-2 py-1 rounded transition">Bond Yield Summary</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Template Impact Modal (NEW) -->
+                        <div id="template-impact-modal" class="hidden absolute top-0 left-0 w-full h-full bg-slate-900/95 z-50 flex items-center justify-center p-8">
+                            <div class="bg-slate-800 border border-slate-600 rounded-xl w-full max-w-4xl h-full max-h-[600px] flex flex-col shadow-2xl relative">
+                                <!-- Header -->
+                                <div class="flex justify-between items-center p-4 border-b border-slate-700">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-white" id="impact-template-title">ETF Monthly V1</h3>
+                                        <p class="text-xs text-slate-400">Reviewing impact of Regulation Change (v2.5)</p>
+                                    </div>
+                                    <button onclick="closeTemplateImpact()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="flex-grow p-4 overflow-auto">
+                                    <!-- Simulated Excel Grid -->
+                                     <table class="ds-table w-full">
+                                        <thead>
+                                            <tr><th>Cell</th><th>Formula</th><th>Previous Value</th><th>New Value</th><th>Status</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>C12</td><td>= (Assets * RiskWeight)</td><td>12%</td><td class="bg-green-900/30 text-green-400 border border-green-500">15%</td><td><span class="text-yellow-400">Pending Review</span></td></tr>
+                                            <tr><td>D14</td><td>= SUM(C10:C13)</td><td>1,200,000</td><td class="bg-green-900/30 text-green-400 border border-green-500">1,500,000</td><td><span class="text-yellow-400">Pending Review</span></td></tr>
+                                        </tbody>
+                                     </table>
+                                     
+                                     <div class="mt-6 bg-slate-900 p-4 rounded border border-purple-500/30">
+                                         <h4 class="text-sm font-bold text-purple-300 mb-2">AI Reasoning</h4>
+                                         <p class="text-xs text-slate-400">Regulation <strong>Section 4.1</strong> changed the base risk weight modifier. This template uses that variable in cell <strong>C12</strong>. Recalculation is required.</p>
+                                     </div>
+                                </div>
+
+                                <!-- Footer Actions -->
+                                <div class="p-4 border-t border-slate-700 flex justify-end gap-3">
+                                    <button onclick="closeTemplateImpact()" class="bg-transparent border border-slate-500 text-slate-300 px-4 py-2 rounded text-xs">Cancel</button>
+                                    <button onclick="alert('Change Rejected. Keeping v2.4 logic for this template.'); closeTemplateImpact();" class="bg-red-900/50 border border-red-500 text-red-300 px-4 py-2 rounded text-xs hover:bg-red-900">Reject Change</button>
+                                    <button onclick="alert('Change Approved. Template updated to v2.5 logic.'); closeTemplateImpact();" class="bg-green-600 text-white px-6 py-2 rounded text-xs font-bold hover:bg-green-500">Approve & Update</button>
+                                </div>
+                            </div>
+                        </div>
+
                      </div>
 
                      <!-- PAGE: DATA SHEET -->
@@ -730,8 +794,41 @@
     </footer>
 
     <script>
+        // Init with Solo Mode because the user asked
+        function setMode(mode) {
+            const container = document.getElementById('timeline-container');
+            if (container) {
+                const timelines = {
+                    team: [
+                        { title: "Month 1", subtitle: "Proof of Concept", items: ["Python Script Reading PDF", "Validate Hebrew OCR", "Extract 10 variables"], color: "blue" },
+                        { title: "Month 2-3", subtitle: "MVP Alpha", items: ["Basic UI (Upload/Download)", "Connect Backend to R", "End-to-end flow"], color: "purple" },
+                        { title: "Month 4-6", subtitle: "SaaS Beta", items: ["Auth0 / Login", "Database History", "Client Pilot"], color: "green" }
+                    ],
+                    solo: [
+                        { title: "Month 1-2", subtitle: "Learning Curve", items: ["Learning FastAPI Basics", "Setting up Environment", "First 'Hello World' API"], color: "slate" },
+                        { title: "Month 3-4", subtitle: "Concierge MVP", items: ["No UI / No Login", "Manual Email Processing", "Validating Math Logic"], color: "orange" },
+                        { title: "Month 5+", subtitle: "Hiring Phase", items: ["Hire Freelancer for UI", "Focus only on R Logic", "First Paid Pilot"], color: "red" }
+                    ]
+                };
+                const data = timelines[mode];
+                const btnTeam = document.getElementById('mode-team');
+                const btnSolo = document.getElementById('mode-solo');
+                if(btnTeam) btnTeam.className = `mode-btn ${mode === 'team' ? 'selected' : 'unselected'}`;
+                if(btnSolo) btnSolo.className = `mode-btn ${mode === 'solo' ? 'selected' : 'unselected'}`;
+                container.innerHTML = data.map(t => `
+                    <div class="card p-6 rounded-xl border-t-2 border-${t.color}-400">
+                        <div class="text-xs font-bold text-${t.color}-400 uppercase tracking-wide mb-2">${t.title}</div>
+                        <h3 class="text-lg font-bold text-white mb-3">${t.subtitle}</h3>
+                        <ul class="text-sm text-slate-400 space-y-2">
+                            ${t.items.map(i => `<li>• <span class="text-slate-200">${i}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                `).join('');
+            }
+        }
+
         function switchView(viewName) {
-            const views = ['tech', 'risk', 'security', 'deployment', 'ui-journey', 'biz-process', 'cost'];
+            const views = ['tech', 'risk', 'security', 'deployment', 'ui-journey', 'biz-process', 'cost', 'arch-options', 'prereq'];
             
             views.forEach(v => {
                 const el = document.getElementById('view-' + v);
@@ -816,6 +913,10 @@
             // Reset Reg Wizard
             const regWiz = document.getElementById('reg-upload-wizard');
             if(regWiz) regWiz.classList.add('hidden');
+            
+            // Reset Template Impact Modal
+            const tImpact = document.getElementById('template-impact-modal');
+            if(tImpact) tImpact.classList.add('hidden');
         }
         
         // Data Sheet Functions
@@ -920,6 +1021,21 @@
         function cancelRegUpload() {
             document.getElementById('reg-upload-wizard').classList.add('hidden');
         }
+        
+        // Template Impact Review Functions
+        function openTemplateImpact(templateName) {
+            const modal = document.getElementById('template-impact-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                const titleEl = document.getElementById('impact-template-title');
+                if(titleEl) titleEl.innerText = templateName;
+            }
+        }
+
+        function closeTemplateImpact() {
+            const modal = document.getElementById('template-impact-modal');
+            if(modal) modal.classList.add('hidden');
+        }
 
 
         // New Template Wizard Functions
@@ -952,7 +1068,6 @@
 
         function finishTemplateWizard() {
              cancelTemplateWizard(); // Just go back to list
-             // Simulate new row added (conceptually)
         }
 
         function cancelTemplateWizard() {
@@ -1007,6 +1122,9 @@
              document.getElementById('report-step-wizard').classList.add('hidden');
              document.getElementById('report-step-list').classList.remove('hidden');
         }
+
+        // Init with Solo Mode because the user asked
+        if(document.getElementById('mode-solo')) setMode('solo');
     </script>
 </body>
 </html>
