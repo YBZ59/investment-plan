@@ -64,6 +64,7 @@
         .btn-arch-comp.active { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
         .btn-cost.active { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
         .btn-infographic.active { background: linear-gradient(135deg, #db2777 0%, #be185d 100%); }
+        .btn-lifecycle.active { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
 
         /* Animation classes */
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -130,17 +131,35 @@
         
         /* Infographic Steps */
         .flow-step { position: relative; z-index: 10; }
+        
+        /* Toast & Modal */
+        #toast-notification {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #1e293b; border: 1px solid #60a5fa; color: white;
+            padding: 10px 20px; rounded: 8px; font-size: 0.8rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            z-index: 100; display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        #custom-confirm-modal {
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 60;
+        }
+        
+        /* Animations for KPI */
+        @keyframes kpiPulse {
+            0% { transform: scale(1); color: white; }
+            50% { transform: scale(1.3); color: #4ade80; }
+            100% { transform: scale(1); color: white; }
+        }
+        .kpi-update {
+            animation: kpiPulse 0.6s ease-in-out;
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
 
     <!-- Header -->
     <header class="max-w-6xl mx-auto mb-10 text-center relative">
-        <!-- TOP LEFT LOGO -->
-        <div class="absolute top-0 left-0 hidden md:block">
-            <img src="logo.png" alt="MORE" class="h-10 w-auto object-contain" onerror="this.style.display='none'">
-        </div>
-
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/20 border border-blue-500/20 text-blue-300 text-xs font-semibold mb-4 tracking-wider uppercase">
             <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
             System Architecture 1.0
@@ -158,14 +177,14 @@
             <button onclick="switchView('ui-journey')" id="btn-ui-journey" class="btn-toggle btn-ui-journey inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-laptop-medical"></i> UI Journey
             </button>
+            <button onclick="switchView('lifecycle')" id="btn-lifecycle" class="btn-toggle btn-lifecycle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+                <i class="fas fa-sync-alt"></i> Report Lifecycle
+            </button>
             <button onclick="switchView('tech')" id="btn-tech" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-server"></i> Technical Deep Dive
             </button>
             <button onclick="switchView('deployment')" id="btn-deployment" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-server"></i> Deployment & Scale
-            </button>
-            <button onclick="switchView('risk')" id="btn-risk" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
-                <i class="fas fa-chart-line"></i> Risks & Mitigation
             </button>
             <button onclick="switchView('security')" id="btn-security" class="btn-toggle inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
                 <i class="fas fa-shield-alt"></i> Security
@@ -174,7 +193,7 @@
                 <i class="fas fa-coins"></i> Cost Analysis
             </button>
             <button onclick="switchView('infographic')" id="btn-infographic" class="btn-toggle btn-infographic inactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
-                <i class="fas fa-project-diagram"></i> MVP Plan
+                <i class="fas fa-project-diagram"></i> MVP Plan (8 Months)
             </button>
         </div>
     </header>
@@ -186,7 +205,7 @@
         <!-- ========================================== -->
         <div id="view-biz-process" class="fade-in">
             <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-indigo-500">End-to-End Business Logic & Infrastructure</h2>
-            <p class="text-slate-400 mb-8 max-w-3xl">Operational flow integrating Secure Access, Cloud Infrastructure, and Human Review.</p>
+            <p class="text-slate-400 mb-8 max-w-3xl">Operational flow: Ingesting previous reports with data sheets to generate new compliant submissions.</p>
 
             <div class="w-full overflow-x-auto p-4 bg-slate-800/30 rounded-2xl border border-indigo-500/30">
                 <div class="min-w-0 w-full flex items-center justify-between gap-2"> 
@@ -218,8 +237,8 @@
                             <div class="bg-slate-800 border border-slate-600 p-2 rounded-lg w-32 flex items-center gap-2">
                                 <div class="text-xl text-blue-400"><i class="fas fa-file-upload"></i></div>
                                 <div>
-                                    <div class="text-[8px] text-slate-400 uppercase font-bold">Uploads</div>
-                                    <div class="text-[9px] text-white">PDF, Excel</div>
+                                    <div class="text-[8px] text-slate-400 uppercase font-bold">Ingest</div>
+                                    <div class="text-[8px] text-white">Prev Report + Data Sheet</div>
                                 </div>
                             </div>
                              <div class="bg-slate-800 border border-slate-600 p-2 rounded-lg w-32 flex items-center gap-2 opacity-70">
@@ -238,9 +257,9 @@
 
                         <!-- Engine -->
                          <div class="bg-slate-800 border-2 border-indigo-500 rounded-xl p-3 text-center w-36 shadow-xl relative">
-                            <i class="fas fa-cogs text-2xl text-indigo-400 mb-2 animate-spin-slow" style="animation-duration: 10s;"></i>
+                            <i class="fas fa-sync text-2xl text-indigo-400 mb-2 animate-spin-slow" style="animation-duration: 10s;"></i>
                             <h4 class="text-white font-bold text-xs">Compliance Core</h4>
-                            <p class="text-[8px] text-slate-400 mt-1">AI Extraction + R Logic</p>
+                            <p class="text-[8px] text-slate-400 mt-1">Smart Mapping & Overwrite</p>
                         </div>
                     </div>
 
@@ -259,7 +278,7 @@
                                 <i class="fas fa-user-edit text-yellow-400 text-sm"></i>
                                 <span class="text-[10px] font-bold text-white">Analyst</span>
                             </div>
-                            <p class="text-[8px] text-slate-400">Amend & Regen</p>
+                            <p class="text-[8px] text-slate-400">Review Mapped Values</p>
                         </div>
 
                         <div class="bg-green-900/20 border border-green-500/50 p-2 rounded-lg w-36">
@@ -267,7 +286,7 @@
                                 <i class="fas fa-user-check text-green-400 text-sm"></i>
                                 <span class="text-[10px] font-bold text-white">Auditor</span>
                             </div>
-                            <p class="text-[8px] text-slate-400">Validate</p>
+                            <p class="text-[8px] text-slate-400">Validate & Sign</p>
                         </div>
                     </div>
 
@@ -294,7 +313,129 @@
         <div id="view-ui-journey" class="hidden">
              <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-cyan-500">Interactive Application Walkthrough</h2>
              <p class="text-slate-400 mb-6 max-w-3xl">Click on the sidebar items in the preview below to see the user journey for each module.</p>
-             <div class="app-window">
+             <div class="app-window relative">
+                 
+                 <!-- GLOBAL TOAST -->
+                 <div id="toast-notification">Notification Message</div>
+
+                 <!-- CUSTOM CONFIRM MODAL -->
+                 <div id="custom-confirm-modal" class="hidden absolute inset-0 flex items-center justify-center fade-in">
+                     <div class="bg-slate-800 border border-slate-600 p-6 rounded-xl shadow-2xl w-80 text-center">
+                         <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl mb-3" id="confirm-icon"></i>
+                         <h4 class="text-white font-bold text-sm mb-2" id="confirm-title">Confirm Action</h4>
+                         <p class="text-xs text-slate-400 mb-6" id="confirm-msg">Are you sure?</p>
+                         <div class="flex justify-center gap-3">
+                             <button class="px-4 py-2 rounded text-xs bg-slate-700 text-white hover:bg-slate-600" onclick="closeConfirmModal()">Cancel</button>
+                             <button class="px-4 py-2 rounded text-xs bg-red-600 text-white hover:bg-red-500 transition" id="confirm-btn-action">Confirm</button>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- REPORT PREVIEW MODAL -->
+                 <div id="report-view-modal" class="hidden absolute inset-0 bg-slate-900/95 z-50 flex flex-col fade-in">
+                     <div class="flex justify-between items-center p-4 border-b border-slate-700 bg-slate-800">
+                         <div class="flex items-center gap-2">
+                             <i class="fas fa-file-pdf text-red-400 text-xl"></i>
+                             <h4 class="text-white font-bold text-sm" id="report-preview-title">Report Preview</h4>
+                         </div>
+                         <button onclick="document.getElementById('report-view-modal').classList.add('hidden')" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+                     </div>
+                     <div class="flex-grow p-8 overflow-y-auto flex justify-center">
+                         <div class="bg-white text-black w-[600px] min-h-[800px] shadow-lg p-10 text-xs">
+                             <h1 class="text-xl font-bold mb-4 border-b pb-2">Investment Compliance Report</h1>
+                             <div class="grid grid-cols-2 gap-4 mb-6">
+                                 <div><strong>Fund:</strong> <span id="prev-fund-name">MORE Tech 100</span></div>
+                                 <div><strong>Date:</strong> <span id="prev-date">2024-10-27</span></div>
+                             </div>
+                             <p class="mb-4">This document certifies compliance with Regulation 12b regarding asset allocation and risk exposure.</p>
+                             <div class="bg-gray-100 p-4 rounded mb-4">
+                                 <h2 class="font-bold mb-2">1. Asset Summary</h2>
+                                 <table class="w-full text-left">
+                                     <tr class="border-b"><th class="py-1">Asset Class</th><th class="py-1">Value</th></tr>
+                                     <tr><td class="py-1">Equities</td><td class="py-1">$12,000,000</td></tr>
+                                     <tr><td class="py-1">Bonds</td><td class="py-1">$4,500,000</td></tr>
+                                     <tr><td class="py-1">Cash</td><td class="py-1">$1,200,000</td></tr>
+                                 </table>
+                             </div>
+                             <p class="text-gray-500 italic text-[10px]">Generated by MORE AI System.</p>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- REPORT EDITOR MODAL -->
+                 <div id="report-edit-modal" class="hidden absolute inset-0 bg-slate-900/95 z-50 flex flex-col fade-in">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center p-4 border-b border-slate-700 bg-slate-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-edit text-blue-400 text-xl"></i>
+                            <h4 class="text-white font-bold text-sm" id="report-editor-title">Report Editor</h4>
+                        </div>
+                        <div class="flex gap-2">
+                             <button onclick="closeReportEditor()" class="text-xs text-slate-300 hover:text-white px-3 py-1 rounded border border-slate-600">Cancel</button>
+                             <button onclick="saveReportChanges()" class="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500 font-bold">Save Changes</button>
+                        </div>
+                    </div>
+                    <!-- Editor Canvas -->
+                    <div class="flex-grow p-8 overflow-y-auto flex justify-center bg-slate-900/50">
+                        <div class="bg-white text-black w-[600px] min-h-[800px] shadow-lg p-10 text-xs relative">
+                            <!-- Simulated Word/Doc Toolbar -->
+                            <div class="absolute top-0 left-0 w-full bg-gray-100 border-b border-gray-300 p-2 flex gap-2">
+                                <i class="fas fa-bold text-gray-500 cursor-pointer hover:text-black"></i>
+                                <i class="fas fa-italic text-gray-500 cursor-pointer hover:text-black"></i>
+                                <i class="fas fa-underline text-gray-500 cursor-pointer hover:text-black"></i>
+                                <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                                <i class="fas fa-align-left text-gray-500 cursor-pointer hover:text-black"></i>
+                                <i class="fas fa-align-center text-gray-500 cursor-pointer hover:text-black"></i>
+                            </div>
+                            
+                            <div class="mt-8"> <!-- Spacer for toolbar -->
+                                <h1 class="text-xl font-bold mb-4 border-b pb-2 outline-none hover:bg-blue-50/50 p-1 rounded" contenteditable="true">Investment Compliance Report</h1>
+                                
+                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div><strong>Fund:</strong> <span id="edit-fund-name" class="p-1 hover:bg-blue-100 cursor-text rounded" contenteditable="true">MORE Tech 100</span></div>
+                                    <div><strong>Date:</strong> <span id="edit-date" class="p-1 hover:bg-blue-100 cursor-text rounded" contenteditable="true">2024-10-27</span></div>
+                                </div>
+                                
+                                <p class="mb-4 p-1 hover:bg-blue-50/50 rounded" contenteditable="true">This document certifies compliance with Regulation 12b regarding asset allocation and risk exposure.</p>
+                                
+                                <div class="bg-gray-50 border border-gray-200 p-4 rounded mb-4 relative group">
+                                    <div class="absolute -top-2 -right-2 bg-blue-500 text-white text-[9px] px-1 rounded opacity-0 group-hover:opacity-100">Table Block</div>
+                                    <h2 class="font-bold mb-2" contenteditable="true">1. Asset Summary</h2>
+                                    <table class="w-full text-left">
+                                        <tr class="border-b"><th class="py-1">Asset Class</th><th class="py-1">Value</th></tr>
+                                        <tr><td class="py-1">Equities</td><td class="py-1"><input type="text" value="$12,000,000" class="border-b border-gray-300 outline-none w-24 bg-transparent focus:border-blue-500 text-blue-700 font-medium"></td></tr>
+                                        <tr><td class="py-1">Bonds</td><td class="py-1"><input type="text" value="$4,500,000" class="border-b border-gray-300 outline-none w-24 bg-transparent focus:border-blue-500 text-blue-700 font-medium"></td></tr>
+                                        <tr><td class="py-1">Cash</td><td class="py-1"><input type="text" value="$1,200,000" class="border-b border-gray-300 outline-none w-24 bg-transparent focus:border-blue-500 text-blue-700 font-medium"></td></tr>
+                                    </table>
+                                </div>
+                                
+                                <div class="border-l-4 border-yellow-400 bg-yellow-50 p-2 mb-4">
+                                    <p class="text-[10px] text-gray-600 italic" contenteditable="true">Note: Cash reserves were adjusted due to recent TASE volatility.</p>
+                                </div>
+
+                                <p class="text-gray-500 italic text-[10px] mt-8" contenteditable="true">Generated by MORE AI System.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- GENERATION PROGRESS MODAL -->
+                 <div id="gen-modal" class="hidden absolute inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center fade-in">
+                     <div class="bg-slate-800 border border-purple-500/50 p-8 rounded-2xl shadow-2xl text-center w-80 relative overflow-hidden">
+                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
+                         <i class="fas fa-circle-notch fa-spin text-4xl text-purple-400 mb-4"></i>
+                         <h4 class="text-white font-bold text-lg mb-1" id="gen-modal-title">Generating Report</h4>
+                         <p class="text-xs text-slate-400 mb-6">Processing Data Sheet mapping...</p>
+                         <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-2">
+                             <div id="gen-progress-bar" class="bg-purple-500 h-full w-0 transition-all ease-out duration-100"></div>
+                         </div>
+                         <div class="flex justify-between text-[10px] text-slate-500">
+                             <span>Reading Excel...</span>
+                             <span>Calculations...</span>
+                         </div>
+                     </div>
+                 </div>
+
                  <div class="app-sidebar">
                      <div class="mb-8 px-2 flex items-center justify-center border-b border-slate-700 pb-6"><img src="logo.png" alt="MORE Investments" class="h-10 w-auto object-contain" onerror="this.style.display='none'"></div>
                      <div class="text-[10px] text-slate-500 uppercase font-bold mb-4 tracking-widest px-2">Navigation</div>
@@ -307,27 +448,169 @@
                  </div>
                  <div class="app-content relative">
                      <!-- PAGE: DASHBOARD -->
-                     <div id="ui-page-dashboard" class="fade-in">
+                     <div id="ui-page-dashboard" class="fade-in" style="display: block;">
                         <div class="flex justify-between items-end mb-6"><div><h3 class="text-2xl font-bold text-white">Welcome back, Admin</h3><p class="text-xs text-slate-400">System Status: <span class="text-green-400">Operational</span></p></div><button class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20" onclick="openUiPage('reports')"><i class="fas fa-plus mr-2"></i> New Report</button></div>
+                        
+                        <!-- 1. KPI CARDS (Restored to Top) -->
                         <div class="grid grid-cols-3 gap-4 mb-8">
                             <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-purple-500 cursor-pointer transition" onclick="openUiPage('templates')"><div class="text-slate-400 text-[10px] uppercase font-bold">Total Templates</div><div class="text-2xl text-white font-bold mt-1">44</div></div>
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-blue-500 cursor-pointer transition" onclick="openUiPage('reports-month')"><div class="text-slate-400 text-[10px] uppercase font-bold">Reports this Month</div><div class="text-2xl text-white font-bold mt-1">12</div></div>
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-yellow-500 cursor-pointer transition" onclick="openUiPage('audit-pending')"><div class="text-slate-400 text-[10px] uppercase font-bold">Pending Audit</div><div class="text-2xl text-yellow-400 font-bold mt-1">3</div></div>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-blue-500 cursor-pointer transition" onclick="openUiPage('reports-month')"><div class="text-slate-400 text-[10px] uppercase font-bold">Active Reports</div><div class="text-2xl text-white font-bold mt-1" id="kpi-reports-count">12</div></div>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-yellow-500 cursor-pointer transition" onclick="openUiPage('audit-pending')"><div class="text-slate-400 text-[10px] uppercase font-bold">Pending Audit</div><div class="text-2xl text-yellow-400 font-bold mt-1" id="kpi-audit-count">3</div></div>
                         </div>
-                        <div class="grid grid-cols-2 gap-6 mb-8"><div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col items-center justify-center"><h4 class="text-xs text-slate-400 mb-4 uppercase font-bold">Reports by Type</h4><div class="pie-chart mb-4"></div><div class="flex gap-4 text-[9px] text-slate-400"><span class="flex items-center gap-1"><div class="w-2 h-2 bg-blue-500 rounded-full"></div> ETF</span><span class="flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full"></div> Mutual</span><span class="flex items-center gap-1"><div class="w-2 h-2 bg-yellow-500 rounded-full"></div> Bond</span></div></div><div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col items-center justify-center"><h4 class="text-xs text-slate-400 mb-4 uppercase font-bold">Submission Volume (Weekly)</h4><div class="flex items-end h-20 gap-2"><div class="chart-bar" style="height: 30%;"></div><div class="chart-bar" style="height: 50%;"></div><div class="chart-bar" style="height: 80%;"></div><div class="chart-bar" style="height: 60%;"></div><div class="chart-bar" style="height: 90%;"></div><div class="chart-bar" style="height: 40%;"></div><div class="chart-bar" style="height: 70%;"></div></div></div></div>
-                        <div class="grid grid-cols-3 gap-6"><div class="col-span-2 bg-slate-800/50 p-4 rounded-xl border border-slate-700"><h4 class="text-xs text-slate-300 font-bold uppercase mb-3">Recent Activity</h4><div class="space-y-3"><div class="flex items-start gap-3"><div class="w-2 h-2 bg-blue-500 rounded-full mt-1.5"></div><div><p class="text-xs text-slate-300"><strong>Analyst A</strong> submitted <em>Oct 2024 ETF Report</em>.</p><p class="text-[10px] text-slate-500">2 hours ago</p></div></div><div class="flex items-start gap-3"><div class="w-2 h-2 bg-purple-500 rounded-full mt-1.5"></div><div><p class="text-xs text-slate-300"><strong>Admin</strong> updated <em>Reg 12b</em> to version 1.2.</p><p class="text-[10px] text-slate-500">5 hours ago</p></div></div><div class="flex items-start gap-3"><div class="w-2 h-2 bg-green-500 rounded-full mt-1.5"></div><div><p class="text-xs text-slate-300"><strong>Analyst B</strong> created new template <em>Bond Yield Summary</em>.</p><p class="text-[10px] text-slate-500">Yesterday</p></div></div></div></div><div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700"><h4 class="text-xs text-slate-300 font-bold uppercase mb-3">System Health</h4><div class="space-y-2"><div class="flex justify-between text-xs text-slate-400"><span>API Status</span><span class="text-green-400 font-bold">Online</span></div><div class="w-full bg-slate-700 h-1 rounded-full"><div class="bg-green-500 h-1 rounded-full w-full"></div></div><div class="flex justify-between text-xs text-slate-400 mt-2"><span>Database Load</span><span class="text-blue-400 font-bold">12%</span></div><div class="w-full bg-slate-700 h-1 rounded-full"><div class="bg-blue-500 h-1 rounded-full w-[12%]"></div></div><div class="flex justify-between text-xs text-slate-400 mt-2"><span>AI Token Usage</span><span class="text-yellow-400 font-bold">65%</span></div><div class="w-full bg-slate-700 h-1 rounded-full"><div class="bg-yellow-500 h-1 rounded-full w-[65%]"></div></div></div></div></div>
+
+                        <!-- 2. UPCOMING DEADLINES SECTION -->
+                        <div class="bg-gradient-to-r from-red-900/40 to-slate-800 border-l-4 border-red-500 p-4 rounded-xl mb-8">
+                            <h4 class="text-white font-bold text-sm mb-3"><i class="fas fa-clock text-red-400 mr-2"></i> Upcoming Submissions (Next 7 Days)</h4>
+                            <table class="w-full text-xs text-left">
+                                <thead class="text-slate-500 border-b border-slate-700/50">
+                                    <tr><th class="pb-2">ETF / Report Name</th><th class="pb-2">Frequency</th><th class="pb-2">Last Submitted</th><th class="pb-2">Next Due</th><th class="pb-2">Action</th></tr>
+                                </thead>
+                                <tbody class="text-slate-300">
+                                    <tr class="border-b border-slate-700/30">
+                                        <td class="py-2 font-semibold">MORE Tech 100 ETF</td>
+                                        <td class="py-2"><span class="bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded text-[10px]">Weekly</span></td>
+                                        <td class="py-2">Oct 20</td>
+                                        <td class="py-2 text-red-300 font-bold">Oct 27 (Tomorrow)</td>
+                                        <td class="py-2"><button onclick="startQuickGenerate('MORE Tech 100 ETF - Oct 27', 'Generated')" class="bg-green-600/20 text-green-400 border border-green-600/50 px-2 py-1 rounded hover:bg-green-600 hover:text-white transition cursor-pointer">Generate</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 font-semibold">Real Estate Bond Fund</td>
+                                        <td class="py-2"><span class="bg-purple-900/50 text-purple-300 px-1.5 py-0.5 rounded text-[10px]">Monthly</span></td>
+                                        <td class="py-2">Sep 30</td>
+                                        <td class="py-2 text-yellow-300">Oct 31</td>
+                                        <td class="py-2"><button onclick="startQuickGenerate('Real Estate Bond Fund - Oct 31', 'Generated')" class="bg-green-600/20 text-green-400 border border-green-600/50 px-2 py-1 rounded hover:bg-green-600 hover:text-white transition cursor-pointer">Generate</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 3. VISUALS ROW (Restored) -->
+                        <div class="grid grid-cols-2 gap-6 mb-8">
+                            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col items-center justify-center">
+                                <h4 class="text-xs text-slate-400 mb-4 uppercase font-bold">Reports by Type</h4>
+                                <div class="pie-chart mb-4"></div>
+                                <div class="flex gap-4 text-[9px] text-slate-400">
+                                    <span class="flex items-center gap-1"><div class="w-2 h-2 bg-blue-500 rounded-full"></div> ETF</span>
+                                    <span class="flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full"></div> Mutual</span>
+                                    <span class="flex items-center gap-1"><div class="w-2 h-2 bg-yellow-500 rounded-full"></div> Bond</span>
+                                </div>
+                            </div>
+                            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col items-center justify-center">
+                                <h4 class="text-xs text-slate-400 mb-4 uppercase font-bold">Submission Volume (Weekly)</h4>
+                                <div class="flex items-end h-20 gap-2">
+                                    <div class="chart-bar" style="height: 30%;"></div>
+                                    <div class="chart-bar" style="height: 50%;"></div>
+                                    <div class="chart-bar" style="height: 80%;"></div>
+                                    <div class="chart-bar" style="height: 60%;"></div>
+                                    <div class="chart-bar" style="height: 90%;"></div>
+                                    <div class="chart-bar" style="height: 40%;"></div>
+                                    <div class="chart-bar" style="height: 70%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. ACTIVITY & HEALTH ROW (Restored) -->
+                        <div class="grid grid-cols-3 gap-6">
+                            <div class="col-span-2 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <h4 class="text-xs text-slate-300 font-bold uppercase mb-3">Recent Activity</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3"><div class="w-2 h-2 bg-blue-500 rounded-full mt-1.5"></div><div><p class="text-xs text-slate-300"><strong>Analyst A</strong> submitted <em>Oct 2024 ETF Report</em>.</p><p class="text-[10px] text-slate-500">2 hours ago</p></div></div>
+                                    <div class="flex items-start gap-3"><div class="w-2 h-2 bg-purple-500 rounded-full mt-1.5"></div><div><p class="text-xs text-slate-300"><strong>Admin</strong> updated <em>Reg 12b</em> to version 1.2.</p><p class="text-[10px] text-slate-500">5 hours ago</p></div></div>
+                                    <div class="flex items-start gap-3"><div class="w-2 h-2 bg-green-500 rounded-full mt-1.5"></div><div><p class="text-xs text-slate-300"><strong>Analyst B</strong> created new template <em>Bond Yield Summary</em>.</p><p class="text-[10px] text-slate-500">Yesterday</p></div></div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <h4 class="text-xs text-slate-300 font-bold uppercase mb-3">System Health</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-xs text-slate-400"><span>API Status</span><span class="text-green-400 font-bold">Online</span></div>
+                                    <div class="w-full bg-slate-700 h-1 rounded-full"><div class="bg-green-500 h-1 rounded-full w-full"></div></div>
+                                    <div class="flex justify-between text-xs text-slate-400 mt-2"><span>Database Load</span><span class="text-blue-400 font-bold">12%</span></div>
+                                    <div class="w-full bg-slate-700 h-1 rounded-full"><div class="bg-blue-500 h-1 rounded-full w-[12%]"></div></div>
+                                    <div class="flex justify-between text-xs text-slate-400 mt-2"><span>AI Token Usage</span><span class="text-yellow-400 font-bold">65%</span></div>
+                                    <div class="w-full bg-slate-700 h-1 rounded-full"><div class="bg-yellow-500 h-1 rounded-full w-[65%]"></div></div>
+                                </div>
+                            </div>
+                        </div>
                      </div>
+                     
                      <!-- PAGE: TEMPLATES -->
                      <div id="ui-page-templates" class="hidden">
-                        <div id="template-step-list"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Template Library</h3><button onclick="startTemplateWizard()" class="bg-purple-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-purple-500 transition shadow-lg shadow-purple-500/20"><i class="fas fa-magic mr-2"></i> + New Template (AI)</button></div><div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Name</th><th>Data Source</th><th>Processed</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white">ETF Monthly V1</td><td>ETF_Data_Master.xlsx</td><td><span class="text-green-400">100%</span></td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="alert('Viewing Document...')">View</span><span class="mock-btn-sm btn-green" onclick="startReportWizard()">Use</span></td></tr><tr id="draft-template-row"><td class="font-bold text-white">TASE Weekly Summary</td><td>TASE_Raw_Export.xlsx</td><td><span class="text-yellow-400">85%</span></td><td id="draft-status"><span class="text-yellow-400">● Draft</span></td><td id="draft-actions"><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="alert('Viewing Document...')">View</span><span class="mock-btn-sm btn-green bg-green-900/50 border-green-800 text-green-200" onclick="activateTemplate(this)">Activate</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Creating a New Template</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. Upload</div><div class="mock-window-sm h-12 w-20"><div class="mock-header-sm"></div><div class="text-[6px] text-slate-500 flex justify-center items-center h-full">PDF + Excel</div></div></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">System Reads</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">2. AI Logic</div><i class="fas fa-cogs fa-spin text-purple-400 text-lg"></i><span class="text-[8px] text-purple-300 mt-1">Mapping Fields...</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Review Map</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card"><div class="flow-card-title">3. Save</div><i class="fas fa-save text-green-400 text-lg"></i><span class="text-[8px] text-slate-400 mt-1">Available in Library</span></div></div></div></div>
-                        <div id="template-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10"><div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelTemplateWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">New Template Wizard</h3><div id="wiz-upload" class="text-center"><div class="grid grid-cols-3 gap-4 mb-6"><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-contract text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Regulation PDF</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-table text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Data Sheet (Excel)</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-pdf text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Final Report PDF</p></div></div><button onclick="runAiAnalysis()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Reverse Engineering</button></div><div id="wiz-processing" class="hidden text-center py-6"><i class="fas fa-circle-notch fa-spin text-4xl text-purple-400 mb-4"></i><h4 class="text-white font-bold">AI Processing...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="ai-progress-bar" class="bg-purple-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Analyzing Structure & Formulas...</p></div><div id="wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-2">Successfully mapped <strong>45 fields</strong>.</p><div class="bg-slate-900 p-3 rounded mb-6 border border-green-500/30"><div class="flex justify-between text-xs mb-1"><span class="text-slate-400">Mapping Confidence:</span><span class="text-green-400 font-bold">85%</span></div><div class="w-full bg-slate-700 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[85%]"></div></div></div><button onclick="finishTemplateWizard()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">Save Template to Library</button></div></div></div>
+                        <div id="template-step-list"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Template Library</h3><button onclick="startTemplateWizard()" class="bg-purple-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-purple-500 transition shadow-lg shadow-purple-500/20"><i class="fas fa-magic mr-2"></i> + New Template (Reverse Engineer)</button></div><div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Name</th><th>Data Source</th><th>Processed</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white">ETF Monthly V1</td><td>ETF_Data_Master.xlsx</td><td><span class="text-green-400">100%</span></td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="showToast('Viewing Template...')">View</span><span class="mock-btn-sm btn-green" onclick="startReportWizard()">Use</span></td></tr><tr id="draft-template-row"><td class="font-bold text-white">TASE Weekly Summary</td><td>TASE_Raw_Export.xlsx</td><td><span class="text-yellow-400">85%</span></td><td id="draft-status"><span class="text-yellow-400">● Draft</span></td><td id="draft-actions"><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="showToast('Viewing Template...')">View</span><span class="mock-btn-sm btn-green bg-green-900/50 border-green-800 text-green-200" onclick="activateTemplate(this)">Activate</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Creating a New Template</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. Upload</div><div class="mock-window-sm h-12 w-20"><div class="mock-header-sm"></div><div class="text-[6px] text-slate-500 flex justify-center items-center h-full">Prev Report + Sheet</div></div></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">System Reads</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">2. AI Logic</div><i class="fas fa-cogs fa-spin text-purple-400 text-lg"></i><span class="text-[8px] text-purple-300 mt-1">Maps Fields to Cells</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Review Map</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card"><div class="flow-card-title">3. Save</div><i class="fas fa-save text-green-400 text-lg"></i><span class="text-[8px] text-slate-400 mt-1">Available in Library</span></div></div></div></div>
+                        <div id="template-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10"><div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelTemplateWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">New Template Wizard</h3><div id="wiz-upload" class="text-center"><div class="grid grid-cols-3 gap-4 mb-6"><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-contract text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Previous Report PDF</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-table text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Data Sheet (Excel)</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-pdf text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Regulation PDF</p></div></div><button onclick="runAiAnalysis()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Reverse Engineering</button></div><div id="wiz-processing" class="hidden text-center py-6"><i class="fas fa-circle-notch fa-spin text-4xl text-purple-400 mb-4"></i><h4 class="text-white font-bold">AI Processing...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="ai-progress-bar" class="bg-purple-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Mapping PDF Values to Excel Cells...</p></div><div id="wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-2">Successfully mapped <strong>45 fields</strong>.</p><div class="bg-slate-900 p-3 rounded mb-6 border border-green-500/30"><div class="flex justify-between text-xs mb-1"><span class="text-slate-400">Mapping Confidence:</span><span class="text-green-400 font-bold">85%</span></div><div class="w-full bg-slate-700 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[85%]"></div></div></div><button onclick="finishTemplateWizard()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">Save Template to Library</button></div></div></div>
                         <div id="template-history-modal" class="hidden absolute top-0 left-0 w-full h-full bg-black/80 flex items-center justify-center z-50"><div class="bg-slate-800 p-6 rounded-xl border border-slate-600 w-96 relative shadow-2xl"><button onclick="toggleTemplateHistory()" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fas fa-times"></i></button><h4 class="text-white font-bold mb-4">Change Log: TASE Weekly</h4><div class="space-y-3 text-xs text-slate-300"><div class="flex justify-between border-b border-slate-700 pb-2"><span><span class="text-green-400">Created</span> by Admin</span><span class="text-slate-500">2024-10-24 09:30</span></div><div class="flex justify-between border-b border-slate-700 pb-2"><span><span class="text-blue-400">Mapping Edit</span> by User B</span><span class="text-slate-500">2024-10-24 11:15</span></div><div class="flex justify-between border-b border-slate-700 pb-2"><span><span class="text-purple-400">Formula Update</span> by Admin</span><span class="text-slate-500">2024-10-25 14:00</span></div></div></div></div>
                      </div>
 
-                     <!-- PAGE: REPORTS -->
+                     <!-- PAGE: REPORTS (UPDATED) -->
                      <div id="ui-page-reports" class="hidden">
-                        <div id="report-step-list"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Generated Reports</h3><div class="flex gap-2"><input type="text" placeholder="Search..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40"><button onclick="startReportWizard()" class="bg-green-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-green-500 transition shadow-lg shadow-green-500/20"><i class="fas fa-plus mr-2"></i> Generate New</button></div></div><div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Report Name</th><th>Status</th><th>Author</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white">Oct 2024 ETF Report</td><td><span class="text-yellow-400 text-[9px] border border-yellow-500 px-1 rounded">Draft</span></td><td>Analyst A</td><td><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-red">Delete</span></td></tr><tr><td class="font-bold text-white">Q3 Summary</td><td><span class="text-green-400 text-[9px] border border-green-500 px-1 rounded">Submitted</span></td><td>Analyst B</td><td><span class="mock-btn-sm btn-green">View</span><span class="mock-btn-sm btn-blue">Diff</span></td></tr></tbody></table></div><div class="border border-green-500/30 bg-green-900/10 rounded-2xl p-6"><h4 class="text-green-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Generating a Report</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. Select</div><div class="text-[8px] text-slate-400">Pick "ETF Monthly"</div></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Load Data Sheet</div><div class="flow-line"><div class="flow-packet green"></div></div></div><div class="flow-card w-40 border-yellow-500/50"><div class="flow-card-title text-yellow-400">2. Data Editor</div><div class="mock-window-sm h-10 w-full border-yellow-500/30 bg-slate-900"><div class="mock-header-sm bg-yellow-900/40"></div><div class="grid grid-cols-3 gap-0.5 p-0.5"><div class="bg-slate-700 h-2"></div><div class="bg-yellow-500/20 h-2"></div><div class="bg-slate-700 h-2"></div></div></div><span class="text-[8px] text-slate-400 mt-1">Manual updates only</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Run & Calc</div><div class="flow-line"><div class="flow-packet green" style="animation-delay: 0.5s"></div></div></div><div class="flow-card"><div class="flow-card-title">3. Audit</div><i class="fas fa-search-dollar text-green-400 text-lg"></i><span class="text-[8px] text-slate-400 mt-1">Verify Output</span></div></div></div></div>
-                        <div id="report-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-4"><div class="bg-slate-800 p-6 rounded-2xl border border-green-500/50 max-w-2xl w-full shadow-2xl relative"><button onclick="cancelReportWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><div class="grid grid-cols-2 gap-6 h-full"><div class="border-r border-slate-700 pr-4"><h3 class="text-lg font-bold text-white mb-4">New Report</h3><div class="space-y-4"><div class="text-xs text-green-400 font-bold">1. Select Template</div><div class="text-xs text-slate-500">2. Data Editor</div><div class="text-xs text-slate-500">3. Review & Audit</div></div></div><div><label class="text-xs text-slate-400 block mb-2">Choose Template:</label><select class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white mb-4"><option>ETF Monthly V1</option><option>TASE Weekly</option></select><label class="text-xs text-slate-400 block mb-2">Select Data Source:</label><select class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white mb-6"><option>ETF_Data_Master.xlsx (Latest)</option><option>ETF_Data_Master_v2.xlsx</option></select><button onclick="finishReportWizard()" class="bg-green-600 text-white w-full py-2 rounded text-xs font-bold">Launch Data Editor</button></div></div></div></div>
+                        <div id="report-step-list">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-bold text-white">Generated Reports</h3>
+                                <div class="flex gap-2">
+                                    <input type="text" placeholder="Search..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40">
+                                    <button onclick="startReportWizard()" class="bg-green-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-green-500 transition shadow-lg shadow-green-500/20"><i class="fas fa-plus mr-2"></i> Generate New</button>
+                                </div>
+                            </div>
+                            <div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700">
+                                <table class="mock-table" id="reports-table">
+                                    <thead>
+                                        <tr class="bg-slate-700/50">
+                                            <th>Report / ETF</th>
+                                            <th>Freq</th>
+                                            <th>Last Submitted</th>
+                                            <th>Next Due</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reports-table-body">
+                                        <!-- Rows added dynamically here -->
+                                        <tr>
+                                            <td class="font-bold text-white">MORE Tech 100 ETF</td>
+                                            <td><span class="text-slate-400">Weekly</span></td>
+                                            <td>Oct 20</td>
+                                            <td class="text-red-400 font-bold">Oct 27</td>
+                                            <td><span class="text-yellow-400 text-[9px] border border-yellow-500 px-1 rounded bg-yellow-900/20">Draft</span></td>
+                                            <td><span class="mock-btn-sm btn-purple" onclick="runGeneration(this)">Generate</span><span class="mock-btn-sm btn-blue" onclick="editReportData('MORE Tech 100 ETF')">Edit</span><span class="mock-btn-sm btn-red" onclick="requestAction('delete', this)">Delete</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-bold text-white">TASE Weekly Update</td>
+                                            <td><span class="text-slate-400">Weekly</span></td>
+                                            <td>Oct 20</td>
+                                            <td class="text-green-400">Today</td>
+                                            <td><span class="text-blue-400 text-[9px] border border-blue-500 px-1 rounded bg-blue-900/20">Generated</span></td>
+                                            <td><span class="mock-btn-sm btn-green" onclick="requestAction('submit', this)">Submit</span><span class="mock-btn-sm btn-green" onclick="viewReport('TASE Weekly Update')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('TASE Weekly Update')">Edit</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-bold text-white">Real Estate Bond Fund</td>
+                                            <td><span class="text-slate-400">Monthly</span></td>
+                                            <td>Sep 30</td>
+                                            <td class="text-yellow-400">Oct 31</td>
+                                            <td><span class="text-green-400 text-[9px] border border-green-500 px-1 rounded">Submitted</span></td>
+                                            <td><span class="mock-btn-sm btn-green" onclick="viewReport('Real Estate Bond Fund')">View</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="border border-green-500/30 bg-green-900/10 rounded-2xl p-6">
+                                <h4 class="text-green-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Generating a Report</h4>
+                                <div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center">
+                                    <div class="flow-card"><div class="flow-card-title">1. Select</div><div class="text-[8px] text-slate-400">Pick "ETF Template"</div></div>
+                                    <div class="flow-arrow-container pt-6"><div class="flow-action-label">Load Data Sheet</div><div class="flow-line"><div class="flow-packet green"></div></div></div>
+                                    <div class="flow-card w-40 border-yellow-500/50"><div class="flow-card-title text-yellow-400">2. Data Editor</div><div class="mock-window-sm h-10 w-full border-yellow-500/30 bg-slate-900"><div class="mock-header-sm bg-yellow-900/40"></div><div class="grid grid-cols-3 gap-0.5 p-0.5"><div class="bg-slate-700 h-2"></div><div class="bg-yellow-500/20 h-2"></div><div class="bg-slate-700 h-2"></div></div></div><span class="text-[8px] text-slate-400 mt-1">Manual updates only</span></div>
+                                    <div class="flow-arrow-container pt-6"><div class="flow-action-label">Run & Calc</div><div class="flow-line"><div class="flow-packet green" style="animation-delay: 0.5s"></div></div></div>
+                                    <div class="flow-card"><div class="flow-card-title">3. Audit</div><i class="fas fa-search-dollar text-green-400 text-lg"></i><span class="text-[8px] text-slate-400 mt-1">Verify Output</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="report-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-4"><div class="bg-slate-800 p-6 rounded-2xl border border-green-500/50 max-w-2xl w-full shadow-2xl relative"><button onclick="cancelReportWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><div class="grid grid-cols-2 gap-6 h-full"><div class="border-r border-slate-700 pr-4"><h3 class="text-lg font-bold text-white mb-4">New Report</h3><div class="space-y-4"><div class="text-xs text-green-400 font-bold">1. Select Template</div><div class="text-xs text-slate-500">2. Data Editor</div><div class="text-xs text-slate-500">3. Review & Audit</div></div></div><div><label class="text-xs text-slate-400 block mb-2">Choose Template:</label><select class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white mb-4"><option>ETF Monthly V1</option><option>TASE Weekly</option></select><label class="text-xs text-slate-400 block mb-2">Select Data Source:</label><select class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white mb-6"><option>ETF_Data_Master.xlsx (Latest)</option><option>ETF_Data_Master_v2.xlsx</option></select>
+                        <div class="bg-slate-900 p-3 rounded mb-6 border border-yellow-500/30 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-yellow-900/30 border border-yellow-500/50 flex items-center justify-center text-yellow-400"><i class="fas fa-magic"></i></div>
+                            <div>
+                                <div class="text-[10px] text-yellow-400 font-bold uppercase">Manual Creation</div>
+                                <div class="text-[9px] text-slate-400">Uses Template + Sheet logic</div>
+                            </div>
+                        </div>
+                        <button onclick="finishReportWizard()" class="bg-yellow-600 text-white w-full py-2 rounded text-xs font-bold hover:bg-yellow-500">Generate First Draft</button></div></div></div></div>
                      </div>
 
                      <!-- PAGE: AUDIT LOGS -->
@@ -338,9 +621,9 @@
                      
                      <!-- PAGE: REGULATIONS -->
                      <div id="ui-page-regulations" class="hidden">
-                        <div id="reg-list-view"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Regulatory Documents</h3><div class="flex gap-2"><input type="text" placeholder="Search Docs..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40"><button onclick="startRegUpload()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-upload mr-2"></i> Upload New</button></div></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Document Name</th><th>Current Version</th><th>Effective Date</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> Capital Adequacy 12b</td><td>v1.0</td><td>2024-01-01</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="alert('Opening PDF Viewer...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('Capital Adequacy 12b')">History</span><span class="mock-btn-sm btn-purple" style="background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); color: #c4b5fd;" onclick="startRegUpload()">Replace</span></td></tr><tr id="reg-row-tase"><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> TASE Listing Rules</td><td>v2.4</td><td>2023-11-15</td><td><span class="text-green-400" id="reg-status-tase">● Active</span></td><td id="reg-actions-tase"><span class="mock-btn-sm btn-blue" onclick="alert('Opening PDF Viewer...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('TASE Listing Rules')">History</span><span class="mock-btn-sm btn-purple" style="background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); color: #c4b5fd;" onclick="startRegUpload()">Replace</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6 mt-8"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Regulation Update Cycle</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. ISA</div><i class="fas fa-university text-slate-400 text-2xl my-2"></i><span class="text-[8px] text-slate-500">Issues New Reg</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Publishes</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card"><div class="flow-card-title">2. Ingest</div><i class="fas fa-cloud-upload-alt text-purple-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">PDF Upload</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">AI Processing</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">3. Diff Engine</div><div class="relative w-8 h-8 mx-auto my-2"><i class="fas fa-arrow-right absolute top-0 left-0 text-green-400 anim-diff-r"></i><i class="fas fa-arrow-left absolute bottom-0 right-0 text-red-400 anim-diff-l"></i></div><span class="text-[8px] text-purple-200">Detects Changes</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Alerts Admin</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 1s"></div></div></div><div class="flow-card"><div class="flow-card-title">4. Impact</div><i class="fas fa-exclamation-triangle text-yellow-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Flags Affected Templates</span></div></div></div></div>
+                        <div id="reg-list-view"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Regulatory Documents</h3><div class="flex gap-2"><input type="text" placeholder="Search Docs..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40"><button onclick="startRegUpload()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-upload mr-2"></i> Upload New</button></div></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Document Name</th><th>Current Version</th><th>Effective Date</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> Capital Adequacy 12b</td><td>v1.0</td><td>2024-01-01</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="showToast('Viewing PDF...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('Capital Adequacy 12b')">History</span><span class="mock-btn-sm btn-purple" style="background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); color: #c4b5fd;" onclick="startRegUpload()">Replace</span></td></tr><tr id="reg-row-tase"><td class="font-bold text-white"><i class="fas fa-file-pdf text-red-500 mr-2"></i> TASE Listing Rules</td><td>v2.4</td><td>2023-11-15</td><td><span class="text-green-400" id="reg-status-tase">● Active</span></td><td id="reg-actions-tase"><span class="mock-btn-sm btn-blue" onclick="showToast('Viewing PDF...')">View</span><span class="mock-btn-sm btn-purple" onclick="openRegHistory('TASE Listing Rules')">History</span><span class="mock-btn-sm btn-purple" style="background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); color: #c4b5fd;" onclick="startRegUpload()">Replace</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6 mt-8"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Regulation Update Cycle</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. ISA</div><i class="fas fa-university text-slate-400 text-2xl my-2"></i><span class="text-[8px] text-slate-500">Issues New Reg</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Publishes</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card"><div class="flow-card-title">2. Ingest</div><i class="fas fa-cloud-upload-alt text-purple-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">PDF Upload</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">AI Processing</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">3. Diff Engine</div><div class="relative w-8 h-8 mx-auto my-2"><i class="fas fa-arrow-right absolute top-0 left-0 text-green-400 anim-diff-r"></i><i class="fas fa-arrow-left absolute bottom-0 right-0 text-red-400 anim-diff-l"></i></div><span class="text-[8px] text-purple-200">Detects Changes</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Alerts Admin</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 1s"></div></div></div><div class="flow-card"><div class="flow-card-title">4. Impact</div><i class="fas fa-exclamation-triangle text-yellow-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Flags Affected Templates</span></div></div></div></div>
                         <div id="reg-upload-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10 absolute top-0 left-0 w-full bg-slate-900/95 z-50"><div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelRegUpload()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">Replacing: TASE Listing Rules (v2.4)</h3><div id="reg-wiz-upload" class="text-center"><div class="border-2 border-dashed border-slate-600 rounded-xl p-8 mb-6 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-pdf text-4xl text-slate-500 mb-2"></i><p class="text-xs text-slate-400">Drag & Drop <strong>New Regulation PDF</strong> here</p></div><button onclick="runRegProcessing()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Processing</button></div><div id="reg-wiz-processing" class="hidden text-center py-6"><i class="fas fa-microchip fa-spin text-4xl text-purple-400 mb-4"></i><h4 class="text-white font-bold">AI Analyzing Changes...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="reg-progress-bar" class="bg-purple-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Comparing against previous version...</p></div><div id="reg-wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-6">Detected <strong>2 modifications</strong> in formulas.</p><button onclick="finishRegUpload()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">View Diff & Confirm</button></div></div></div>
-                        <div id="reg-history-view" class="hidden h-full flex flex-col"><div class="flex justify-between items-center mb-6"><div class="flex items-center gap-3"><button onclick="closeRegHistory()" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i> Back to History</button><div><h3 class="text-xl font-bold text-white" id="reg-history-title">Capital Adequacy 12b</h3><p class="text-xs text-slate-400">Version History & Management</p></div></div><button onclick="startRegUpload()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-cloud-upload-alt mr-2"></i> Upload New Version</button></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 mb-6"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th class="w-10 text-center"><input type="checkbox"></th><th>Version</th><th>Uploaded Date</th><th>By</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr class="bg-slate-700/30"><td class="text-center"><input type="checkbox" checked disabled></td><td class="font-bold text-white">v1.2</td><td>2024-02-15</td><td>Admin</td><td><span class="text-green-400 border border-green-500/50 px-1 rounded text-[9px]">Active</span></td><td><span class="mock-btn-sm btn-blue">View</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.1</td><td>2024-01-20</td><td>User B</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="alert('v1.1 is now Active')">Activate</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.0</td><td>2024-01-01</td><td>Admin</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="alert('v1.0 is now Active')">Activate</span></td></tr></tbody></table></div><div class="bg-slate-900 border border-slate-700 p-4 rounded-xl flex justify-between items-center"><div class="text-xs text-slate-400"><i class="fas fa-info-circle mr-2 text-blue-400"></i> Select exactly two versions to compare changes.</div><button onclick="openRegDiff()" class="bg-purple-600 text-white text-xs px-6 py-2 rounded-lg hover:bg-purple-500 transition border border-purple-400">Compare Selected (2)</button></div></div>
+                        <div id="reg-history-view" class="hidden h-full flex flex-col"><div class="flex justify-between items-center mb-6"><div class="flex items-center gap-3"><button onclick="closeRegHistory()" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i> Back to History</button><div><h3 class="text-xl font-bold text-white" id="reg-history-title">Capital Adequacy 12b</h3><p class="text-xs text-slate-400">Version History & Management</p></div></div><button onclick="startRegUpload()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-cloud-upload-alt mr-2"></i> Upload New Version</button></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 mb-6"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th class="w-10 text-center"><input type="checkbox"></th><th>Version</th><th>Uploaded Date</th><th>By</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr class="bg-slate-700/30"><td class="text-center"><input type="checkbox" checked disabled></td><td class="font-bold text-white">v1.2</td><td>2024-02-15</td><td>Admin</td><td><span class="text-green-400 border border-green-500/50 px-1 rounded text-[9px]">Active</span></td><td><span class="mock-btn-sm btn-blue">View</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.1</td><td>2024-01-20</td><td>User B</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="showToast('Version Activated')">Activate</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.0</td><td>2024-01-01</td><td>Admin</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="showToast('Version Activated')">Activate</span></td></tr></tbody></table></div><div class="bg-slate-900 border border-slate-700 p-4 rounded-xl flex justify-between items-center"><div class="text-xs text-slate-400"><i class="fas fa-info-circle mr-2 text-blue-400"></i> Select exactly two versions to compare changes.</div><button onclick="openRegDiff()" class="bg-purple-600 text-white text-xs px-6 py-2 rounded-lg hover:bg-purple-500 transition border border-purple-400">Compare Selected (2)</button></div></div>
                         <div id="reg-diff-view" class="hidden h-full flex flex-col">
                             <div class="flex justify-between items-center mb-4">
                                 <div class="flex items-center gap-3">
@@ -412,8 +695,8 @@
                                 <!-- Footer Actions -->
                                 <div class="p-4 border-t border-slate-700 flex justify-end gap-3">
                                     <button onclick="closeTemplateImpact()" class="bg-transparent border border-slate-500 text-slate-300 px-4 py-2 rounded text-xs">Cancel</button>
-                                    <button onclick="alert('Change Rejected. Keeping v2.4 logic for this template.'); closeTemplateImpact();" class="bg-red-900/50 border border-red-500 text-red-300 px-4 py-2 rounded text-xs hover:bg-red-900">Reject Change</button>
-                                    <button onclick="alert('Change Approved. Template updated to v2.5 logic.'); closeTemplateImpact();" class="bg-green-600 text-white px-6 py-2 rounded text-xs font-bold hover:bg-green-500">Approve & Update</button>
+                                    <button onclick="showToast('Change Rejected.'); closeTemplateImpact();" class="bg-red-900/50 border border-red-500 text-red-300 px-4 py-2 rounded text-xs hover:bg-red-900">Reject Change</button>
+                                    <button onclick="showToast('Change Approved!'); closeTemplateImpact();" class="bg-green-600 text-white px-6 py-2 rounded text-xs font-bold hover:bg-green-500">Approve & Update</button>
                                 </div>
                             </div>
                         </div>
@@ -435,399 +718,499 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- TECH VIEW (RESTORED WITH TABLE)            -->
+        <!-- REPORT LIFECYCLE VIEW (NEW)                -->
         <!-- ========================================== -->
-        <div id="view-tech" class="hidden">
-            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-cyan-500">Technical Deep Dive: Comparison</h2>
-            
-            <!-- Side-by-Side Diagrams -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                <!-- Option A: Python -->
-                <div>
-                     <div class="flex items-center gap-3 mb-4 bg-blue-900/20 p-3 rounded-lg border border-blue-500/30">
-                        <div class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">Option A</div>
-                        <h3 class="text-lg font-bold text-white">Enterprise Scale (Python)</h3>
-                     </div>
-                     <!-- Diagram -->
-                     <div class="bg-slate-800/40 p-6 rounded-xl border border-slate-700/50 mb-4 h-[420px] flex flex-col relative overflow-hidden">
-                         
-                         <!-- Layer 1: Client -->
-                         <div class="flex justify-center mb-4 relative z-10">
-                             <div class="bg-slate-900 border border-slate-600 rounded px-3 py-1 flex items-center gap-2 shadow-lg">
-                                 <i class="fas fa-laptop text-blue-400"></i>
-                                 <div class="text-center">
-                                     <div class="text-[9px] text-slate-400 uppercase font-bold">Client</div>
-                                     <div class="text-[10px] text-white">React / Vue</div>
-                                 </div>
-                             </div>
-                         </div>
+        <div id="view-lifecycle" class="hidden">
+             <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-purple-500">Report Lifecycle & State Machine</h2>
+             <p class="text-slate-400 mb-8 max-w-3xl">Visualizing the transition of a report from creation to final archive, and the triggers for each state.</p>
 
-                         <!-- Connector -->
-                         <div class="h-4 w-0.5 bg-blue-500/50 mx-auto mb-1"></div>
+             <div class="bg-slate-900/50 border border-slate-700 rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
+                <!-- Background dashed line -->
+                <div class="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-slate-700 border-t-2 border-dashed border-slate-600 z-0"></div>
 
-                         <!-- Layer 2: Compute Cluster -->
-                         <div class="border-2 border-dashed border-blue-500/30 rounded-xl p-3 bg-blue-900/5 relative flex-grow mb-4">
-                             <div class="absolute -top-2.5 left-4 bg-slate-800 text-[9px] px-2 text-blue-300 border border-blue-500/30 rounded">Backend Cluster (Docker)</div>
-                             
-                             <div class="flex flex-col gap-3 h-full justify-center">
-                                 <!-- Gateway -->
-                                 <div class="bg-slate-800 border border-blue-500 rounded p-2 text-center shadow-md">
-                                     <div class="text-[10px] font-bold text-blue-200">FastAPI Gateway</div>
-                                     <div class="flex justify-center gap-1 mt-1">
-                                         <span class="text-[8px] bg-slate-700 px-1 rounded text-slate-300">Auth</span>
-                                         <span class="text-[8px] bg-slate-700 px-1 rounded text-slate-300">Rate Limit</span>
-                                     </div>
-                                 </div>
-                                 
-                                 <div class="flex justify-center"><i class="fas fa-arrow-down text-slate-600 text-xs"></i></div>
-                                 
-                                 <!-- Workers -->
-                                 <div class="flex gap-2">
-                                     <div class="flex-1 bg-slate-800 border border-purple-500 rounded p-2 text-center relative">
-                                         <div class="text-[9px] font-bold text-purple-300">AI Worker</div>
-                                         <div class="text-[8px] text-slate-400 mt-1">LangChain</div>
-                                         <div class="text-[8px] text-slate-400">ChromaDB</div>
-                                     </div>
-                                     <div class="flex-1 bg-slate-800 border border-green-500 rounded p-2 text-center relative">
-                                         <div class="text-[9px] font-bold text-green-300">Calc Worker</div>
-                                         <div class="text-[8px] text-slate-400 mt-1">R Script</div>
-                                         <div class="text-[8px] text-slate-400">Pandas</div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-
-                         <!-- Connector -->
-                         <div class="h-4 w-0.5 bg-blue-500/50 mx-auto mb-1"></div>
-
-                         <!-- Layer 3: Persistence & External -->
-                         <div class="flex justify-between items-end gap-2 relative z-10">
-                             <div class="bg-orange-900/20 border border-orange-500/50 rounded p-2 flex-1 text-center">
-                                 <i class="fas fa-database text-orange-400 text-sm mb-1"></i>
-                                 <div class="text-[9px] font-bold text-white">PostgreSQL</div>
-                             </div>
-                             <div class="bg-slate-900 border border-slate-600 rounded p-2 flex-1 text-center opacity-70">
-                                 <i class="fas fa-network-wired text-slate-400 text-sm mb-1"></i>
-                                 <div class="text-[9px] font-bold text-white">Maya API</div>
-                             </div>
-                         </div>
-
-                     </div>
-                     
-                     <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-                        <strong class="text-blue-400 text-xs block mb-2">PROS & CONS</strong>
-                        <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
-                             <li>Separate scaling for AI vs. Math.</li>
-                             <li>Complex state management (Redis required).</li>
-                             <li>High "Context Switching" for one developer.</li>
-                        </ul>
-                     </div>
+                <!-- STATE 1: DRAFT -->
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="bg-yellow-900/20 border-2 border-yellow-500 p-6 rounded-2xl w-56 text-center shadow-lg shadow-yellow-500/10 backdrop-blur-sm">
+                        <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-900">
+                            <i class="fas fa-file-pen text-xl"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg mb-1">Draft</h3>
+                        <p class="text-[10px] text-slate-400 mb-3">Created via Wizard OR Schedule.</p>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-600">
+                            <div class="text-[9px] text-yellow-400 font-bold uppercase mb-1">Inputs</div>
+                            <div class="flex justify-center gap-2 text-[8px] text-slate-400">
+                                <span class="bg-slate-700 px-1 rounded">Template</span>
+                                <span class="bg-slate-700 px-1 rounded">Data Sheet</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:absolute md:top-1/2 md:left-[22%] md:-translate-y-1/2 bg-purple-600/90 text-white text-[10px] font-bold px-3 py-1 rounded-full z-20 shadow-lg">
+                        ACTION: GENERATE
+                    </div>
                 </div>
 
-                <!-- Option B: R Native -->
-                <div>
-                     <div class="flex items-center gap-3 mb-4 bg-green-900/20 p-3 rounded-lg border border-green-500/30">
-                        <div class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">Option B</div>
-                        <h3 class="text-lg font-bold text-white">Rapid MVP (R-Native)</h3>
-                     </div>
-                     
-                     <!-- Rich Diagram B -->
-                     <div class="bg-slate-800/40 p-6 rounded-xl border border-slate-700/50 mb-4 h-[420px] flex flex-col relative overflow-hidden">
-                         
-                         <!-- Layer 1: Client -->
-                         <div class="flex justify-center mb-4 relative z-10">
-                             <div class="bg-slate-900 border border-slate-600 rounded px-3 py-1 flex items-center gap-2 shadow-lg">
-                                 <i class="fas fa-laptop text-green-400"></i>
-                                 <div class="text-center">
-                                     <div class="text-[9px] text-slate-400 uppercase font-bold">Client</div>
-                                     <div class="text-[10px] text-white">R Shiny UI</div>
-                                 </div>
-                             </div>
-                         </div>
-
-                         <!-- Connector -->
-                         <div class="h-4 w-0.5 bg-green-500/50 mx-auto mb-1"></div>
-
-                         <!-- Layer 2: Compute Monolith -->
-                         <div class="border-2 border-dashed border-green-500/30 rounded-xl p-3 bg-green-900/5 relative flex-grow mb-4">
-                             <div class="absolute -top-2.5 left-4 bg-slate-800 text-[9px] px-2 text-green-300 border border-green-500/30 rounded">R Session (Monolith)</div>
-                             
-                             <div class="flex flex-col gap-3 h-full justify-center items-center">
-                                 <!-- API & Logic Combined -->
-                                 <div class="w-full bg-slate-800 border border-green-500 rounded p-3 text-center shadow-md">
-                                     <div class="text-[10px] font-bold text-green-200 mb-2">Application Core</div>
-                                     <div class="grid grid-cols-2 gap-2">
-                                         <div class="bg-slate-700/50 p-1 rounded border border-slate-600">
-                                             <div class="text-[8px] text-slate-300 font-bold">Plumber</div>
-                                             <div class="text-[7px] text-slate-500">API</div>
-                                         </div>
-                                         <div class="bg-slate-700/50 p-1 rounded border border-slate-600">
-                                             <div class="text-[8px] text-slate-300 font-bold">Future</div>
-                                             <div class="text-[7px] text-slate-500">Async</div>
-                                         </div>
-                                         <div class="bg-slate-700/50 p-1 rounded border border-slate-600">
-                                             <div class="text-[8px] text-slate-300 font-bold">httr2</div>
-                                             <div class="text-[7px] text-slate-500">Requests</div>
-                                         </div>
-                                         <div class="bg-slate-700/50 p-1 rounded border border-slate-600">
-                                             <div class="text-[8px] text-slate-300 font-bold">Targets</div>
-                                             <div class="text-[7px] text-slate-500">Pipeline</div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-
-                         <!-- Connector -->
-                         <div class="h-4 w-0.5 bg-green-500/50 mx-auto mb-1"></div>
-
-                         <!-- Layer 3: Persistence & External -->
-                         <div class="grid grid-cols-3 gap-2 relative z-10">
-                             <!-- DB ICON -->
-                             <div class="bg-orange-900/20 border border-orange-500/50 rounded p-2 text-center">
-                                 <i class="fas fa-database text-orange-400 text-sm mb-1"></i>
-                                 <div class="text-[8px] font-bold text-white">Supabase</div>
-                             </div>
-                             <!-- EXT API 1 -->
-                             <div class="bg-purple-900/20 border border-purple-500/50 rounded p-2 text-center">
-                                 <i class="fas fa-brain text-purple-400 text-sm mb-1"></i>
-                                 <div class="text-[8px] font-bold text-white">OpenAI</div>
-                             </div>
-                             <!-- EXT API 2 -->
-                             <div class="bg-slate-900 border border-slate-600 rounded p-2 text-center opacity-70">
-                                 <i class="fas fa-network-wired text-slate-400 text-sm mb-1"></i>
-                                 <div class="text-[8px] font-bold text-white">Maya API</div>
-                             </div>
-                         </div>
-
-                     </div>
-
-                     <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-                        <strong class="text-green-400 text-xs block mb-2">PROS & CONS</strong>
-                        <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
-                             <li>Unified Codebase (R for everything).</li>
-                             <li>Deployment is a single container.</li>
-                             <li>Limited concurrency (Single threaded).</li>
-                        </ul>
-                     </div>
+                <!-- STATE 2: GENERATED -->
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="bg-blue-900/20 border-2 border-blue-500 p-6 rounded-2xl w-56 text-center shadow-lg shadow-blue-500/10 backdrop-blur-sm">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white">
+                            <i class="fas fa-cog fa-spin text-xl"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg mb-1">Generated</h3>
+                        <p class="text-[10px] text-slate-400 mb-3">Calculated & Filled.</p>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-600">
+                            <div class="text-[9px] text-blue-400 font-bold uppercase mb-1">Capabilities</div>
+                            <div class="flex justify-center gap-2 text-[8px] text-slate-400">
+                                <span class="bg-slate-700 px-1 rounded">Edit (Docs)</span>
+                                <span class="bg-slate-700 px-1 rounded">Review</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:absolute md:top-1/2 md:right-[22%] md:-translate-y-1/2 bg-green-600/90 text-white text-[10px] font-bold px-3 py-1 rounded-full z-20 shadow-lg">
+                        ACTION: SUBMIT
+                    </div>
                 </div>
-            </div>
 
-            <!-- Comparison Table -->
-            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700">
-                <table class="w-full text-sm text-left text-slate-400">
-                    <thead class="text-xs text-slate-200 uppercase bg-slate-900">
-                        <tr>
-                            <th class="px-6 py-4">Metric</th>
-                            <th class="px-6 py-4 text-blue-400">Option A (Python Enterprise)</th>
-                            <th class="px-6 py-4 text-green-400">Option B (R-Native MVP)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Time to Market</td><td class="px-6 py-4">3 - 6 Months</td><td class="px-6 py-4 font-bold text-green-400">6 - 8 Weeks</td></tr>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Cost (Dev)</td><td class="px-6 py-4">High (Need Backend Dev)</td><td class="px-6 py-4 font-bold text-green-400">Low (Solo Founder)</td></tr>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Cursor / AI Synergy</td><td class="px-6 py-4 text-green-400">High (Pydantic/React generation is flawless)</td><td class="px-6 py-4 text-yellow-400">Medium (R Shiny logic is harder for AI)</td></tr>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Talent Availability</td><td class="px-6 py-4">High (Python is common)</td><td class="px-6 py-4">Niche (R Shiny Experts)</td></tr>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">AI Ecosystem</td><td class="px-6 py-4">Native (First-class support)</td><td class="px-6 py-4">Wrapper (API based)</td></tr>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Concurrency</td><td class="px-6 py-4 font-bold text-blue-400">High (Async Native)</td><td class="px-6 py-4">Medium (Needs `future` lib)</td></tr>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Maintenance Overhead</td><td class="px-6 py-4">High (Multiple services)</td><td class="px-6 py-4 font-bold text-green-400">Low (Monolith)</td></tr>
-                        <tr class="border-b border-slate-700"><td class="px-6 py-4 font-bold text-white">Infrastructure Cost</td><td class="px-6 py-4">Higher (More containers)</td><td class="px-6 py-4 font-bold text-green-400">Lower (Single container)</td></tr>
-                        <tr class="bg-slate-700/30"><td class="px-6 py-4 font-bold text-white">VERDICT</td><td class="px-6 py-4">Build for Scale (Series A)</td><td class="px-6 py-4 font-bold text-white border-l-4 border-green-500">Build for MVP (First Client)</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                <!-- STATE 3: SUBMITTED -->
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="bg-green-900/20 border-2 border-green-500 p-6 rounded-2xl w-56 text-center shadow-lg shadow-green-500/10 backdrop-blur-sm">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white">
+                            <i class="fas fa-check-circle text-xl"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg mb-1">Submitted</h3>
+                        <p class="text-[10px] text-slate-400 mb-3">Locked & Archived.</p>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-600">
+                            <div class="text-[9px] text-green-400 font-bold uppercase mb-1">Output</div>
+                            <div class="flex justify-center gap-2 text-[8px] text-slate-400">
+                                <span class="bg-slate-700 px-1 rounded">Repository</span>
+                                <span class="bg-slate-700 px-1 rounded">Audit Log</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- ========================================== -->
-        <!-- DEPLOYMENT VIEW (NEW)                      -->
-        <!-- ========================================== -->
-        <div id="view-deployment" class="hidden">
-            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-pink-500">Deployment Strategy Comparison</h2>
-            <div class="grid md:grid-cols-2 gap-8 mb-8">
-                <!-- Option A Deployment -->
-                <div class="card p-6 rounded-xl border-t-2 border-blue-500 bg-slate-900/50">
-                    <div class="flex items-center gap-3 mb-3"><i class="fas fa-server text-blue-400 text-xl"></i><h4 class="font-bold text-white">Option A: Container Orchestration</h4></div>
-                    <div class="text-xs text-slate-400 mb-4">For Python Microservices. Requires managing multiple interconnected containers.</div>
-                    <ul class="space-y-2 text-xs text-slate-300"><li class="flex gap-2"><i class="fas fa-check text-blue-500"></i> AWS ECS / Google Cloud Run</li><li class="flex gap-2"><i class="fas fa-check text-blue-500"></i> Docker Compose (Local) -> K8s (Prod)</li><li class="flex gap-2"><i class="fas fa-check text-blue-500"></i> CI/CD Pipeline (GitHub Actions) - Cursor writes these easily.</li></ul>
-                </div>
-                <!-- Option B Deployment -->
-                <div class="card p-6 rounded-xl border-t-2 border-green-500 bg-slate-900/50">
-                    <div class="flex items-center gap-3 mb-3"><i class="fas fa-box text-green-400 text-xl"></i><h4 class="font-bold text-white">Option B: Single Container PaaS</h4></div>
-                    <div class="text-xs text-slate-400 mb-4">For R-Native Monolith. Simple "Git Push" deployment.</div>
-                    <ul class="space-y-2 text-xs text-slate-300"><li class="flex gap-2"><i class="fas fa-check text-green-500"></i> Railway.app / Render / DigitalOcean App Platform</li><li class="flex gap-2"><i class="fas fa-check text-green-500"></i> Single `Dockerfile` defines environment</li><li class="flex gap-2"><i class="fas fa-check text-green-500"></i> Zero-downtime deploys built-in</li></ul>
-                </div>
-            </div>
-        </div>
+             </div>
 
-        <!-- ========================================== -->
-        <!-- RISK & TIMELINE VIEW (Interactive)         -->
-        <!-- ========================================== -->
-        <div id="view-risk" class="hidden">
-            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-blue-500">Risk Profile Comparison</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Option A Risk -->
-                <div class="card p-6 rounded-xl border-t-2 border-blue-500">
-                    <h3 class="text-lg font-bold text-white mb-2">Option A Risks (Python)</h3>
-                    <div class="space-y-4"><div><h4 class="text-xs font-bold text-red-400 uppercase">Complexity Overload</h4><p class="text-xs text-slate-400">Managing state between React, FastAPI, Redis, and Celery creates many failure points. Debugging async issues is hard.</p></div><div><h4 class="text-xs font-bold text-orange-400 uppercase">Developer Burnout</h4><p class="text-xs text-slate-400">As a solo dev, maintaining 3 separate codebases (Frontend, Backend, Infrastructure) drastically slows feature delivery.</p></div></div>
-                </div>
-                <!-- Option B Risk -->
-                 <div class="card p-6 rounded-xl border-t-2 border-green-500">
-                    <h3 class="text-lg font-bold text-white mb-2">Option B Risks (R-Native)</h3>
-                    <div class="space-y-4"><div><h4 class="text-xs font-bold text-red-400 uppercase">Bus Factor (Hiring)</h4><p class="text-xs text-slate-400">Finding R Shiny experts is much harder than finding Python/React devs. You are the single point of failure.</p></div><div><h4 class="text-xs font-bold text-orange-400 uppercase">AI Hallucination (Code)</h4><p class="text-xs text-slate-400">LLMs (like Cursor) are slightly worse at generating complex, bug-free R Shiny reactivity graphs compared to React state logic.</p></div></div>
-                </div>
-            </div>
-        </div>
-        
-         <!-- ========================================== -->
-        <!-- SECURITY VIEW (New)                        -->
-        <!-- ========================================== -->
-        <div id="view-security" class="hidden">
-             <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-teal-500">Security Implementation Strategy</h2>
-             <div class="grid md:grid-cols-2 gap-8">
-                 <!-- Option A Security -->
-                 <div class="space-y-4">
-                    <div class="flex items-center gap-2 mb-2"><i class="fas fa-shield-alt text-blue-400"></i><h3 class="text-lg font-bold text-white">Option A: Middleware Security</h3></div>
-                    <div class="card p-5 rounded-xl border-l-4 border-blue-500 bg-slate-900/50"><h4 class="text-sm font-bold text-blue-300 uppercase mb-2">Auth & Access</h4><p class="text-xs text-slate-400 mb-2">Handled by FastAPI Middleware (Before code runs).</p><ul class="text-xs text-slate-300 list-disc list-inside"><li><strong>Auth0 / Cognito:</strong> Enterprise-grade identity providers.</li><li><strong>OAuth2 Proxy:</strong> Standard protocol support.</li></ul></div>
+             <div class="grid grid-cols-2 gap-6 mt-8">
+                 <div class="card p-6 bg-slate-800/50">
+                     <h4 class="text-sm font-bold text-white mb-2"><i class="fas fa-random text-purple-400 mr-2"></i> Triggers</h4>
+                     <ul class="text-xs text-slate-400 space-y-2">
+                         <li><span class="text-yellow-400 font-bold">Manual:</span> "New Report" Wizard (First Time).</li>
+                         <li><span class="text-yellow-400 font-bold">Scheduled:</span> System cron job creates Draft based on Frequency.</li>
+                         <li><span class="text-blue-400 font-bold">Generation:</span> Runs Calc Engine, mapping Excel cells to PDF fields.</li>
+                     </ul>
                  </div>
-                 <!-- Option B Security -->
-                 <div class="space-y-4">
-                    <div class="flex items-center gap-2 mb-2"><i class="fas fa-lock text-green-400"></i><h3 class="text-lg font-bold text-white">Option B: Integrated Security</h3></div>
-                    <div class="card p-5 rounded-xl border-l-4 border-green-500 bg-slate-900/50"><h4 class="text-sm font-bold text-green-300 uppercase mb-2">Auth & Access</h4><p class="text-xs text-slate-400 mb-2">Handled by R Application Logic (Inside the code).</p><ul class="text-xs text-slate-300 list-disc list-inside"><li><strong>Supabase Auth:</strong> User management via API calls.</li><li><strong>Session Token:</strong> Stored in encrypted browser cookie.</li></ul></div>
+                 <div class="card p-6 bg-slate-800/50">
+                     <h4 class="text-sm font-bold text-white mb-2"><i class="fas fa-lock text-green-400 mr-2"></i> Constraints</h4>
+                     <ul class="text-xs text-slate-400 space-y-2">
+                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Cannot <strong>Edit</strong> a Submitted report.</li>
+                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Cannot <strong>Submit</strong> a Draft (must Generate first).</li>
+                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Deleting a Submitted report requires <strong>Admin</strong> privs.</li>
+                     </ul>
                  </div>
              </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- COST ANALYSIS VIEW (NEW)                   -->
+        <!-- TECH VIEW (UPDATED - OPTION A ONLY)        -->
         <!-- ========================================== -->
-        <div id="view-cost" class="hidden">
-            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-yellow-500">Cost & Resource Analysis</h2>
-            <p class="text-slate-400 mb-8 max-w-3xl">Estimated monthly burn rate and development effort for a solo founder using AI assistants.</p>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                
-                <!-- Option A: Python Enterprise -->
-                <div class="card p-0 rounded-xl overflow-hidden border border-blue-500/30">
-                    <div class="bg-blue-900/30 p-4 border-b border-blue-500/30">
-                        <h3 class="text-lg font-bold text-white">Option A: Python/React</h3>
-                        <div class="text-xs text-blue-300">High Complexity, High Scale</div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-6">
-                            <div class="flex justify-between text-sm text-slate-300 mb-2">
-                                <span>Infrastructure (Monthly)</span>
-                                <span class="font-bold text-white">$150 - $250</span>
-                            </div>
-                            <div class="w-full bg-slate-700 h-2 rounded-full"><div class="bg-blue-500 h-2 rounded-full w-3/4"></div></div>
-                            <p class="text-[10px] text-slate-500 mt-1">AWS/GCP (Multiple Containers + Managed DB + Redis)</p>
-                        </div>
-                        <div class="mb-6">
-                            <div class="flex justify-between text-sm text-slate-300 mb-2">
-                                <span>Development Effort</span>
-                                <span class="font-bold text-white">400+ Hours</span>
-                            </div>
-                            <div class="w-full bg-slate-700 h-2 rounded-full"><div class="bg-blue-500 h-2 rounded-full w-full"></div></div>
-                            <p class="text-[10px] text-slate-500 mt-1">High context switching. Cursor helps, but integrating 3 stacks is hard.</p>
-                        </div>
-                         <div class="bg-slate-800 p-3 rounded border border-slate-700">
-                             <strong class="text-xs text-white block mb-1">Hidden Costs</strong>
-                             <p class="text-[10px] text-slate-400">DevOps time (fixing CI/CD pipelines), dependency management across 3 repos.</p>
+        <div id="view-tech" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-cyan-500">Technical Deep Dive: Python Enterprise Stack</h2>
+            
+            <div class="bg-slate-800/40 p-8 rounded-xl border border-slate-700/50 mb-12 relative overflow-hidden">
+                 
+                 <!-- Layer 1: Frontend -->
+                 <div class="flex justify-center mb-8 relative z-10">
+                     <div class="bg-slate-900 border border-slate-600 rounded-xl px-6 py-3 flex flex-col items-center gap-2 shadow-lg w-64">
+                         <i class="fas fa-laptop text-cyan-400 text-3xl"></i>
+                         <div class="text-center">
+                             <div class="text-xs text-slate-400 uppercase font-bold">Frontend Application</div>
+                             <div class="text-sm text-white font-bold">React + Tailwind</div>
+                             <div class="text-[10px] text-slate-500 mt-1">Axios • Recharts • Handsontable</div>
                          </div>
+                     </div>
+                 </div>
+
+                 <!-- Connector -->
+                 <div class="absolute left-1/2 top-24 bottom-24 w-0.5 bg-gradient-to-b from-cyan-500/50 via-blue-500/50 to-purple-500/50 -translate-x-1/2 z-0"></div>
+
+                 <!-- Layer 2: API Gateway & Logic -->
+                 <div class="flex justify-center gap-8 mb-8 relative z-10">
+                     <!-- API Gateway -->
+                     <div class="bg-slate-900 border border-blue-500 rounded-xl p-4 w-64 text-center shadow-lg shadow-blue-500/10">
+                         <div class="text-xs font-bold text-blue-300 uppercase mb-2">API Gateway</div>
+                         <h4 class="text-white font-bold text-lg mb-1">FastAPI</h4>
+                         <p class="text-[10px] text-slate-400 mb-3">Python 3.11+ • Pydantic • Async</p>
+                         <div class="flex flex-wrap justify-center gap-1">
+                             <span class="text-[9px] bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Auth Middleware</span>
+                             <span class="text-[9px] bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Rate Limiting</span>
+                         </div>
+                     </div>
+                 </div>
+                 
+                 <!-- Layer 3: Async Workers (SPLIT) -->
+                 <div class="flex justify-center gap-6 mb-8 relative z-10">
+                      <!-- Worker: AI -->
+                     <div class="bg-slate-900 border-2 border-dashed border-purple-500/30 rounded-xl p-4 w-48 text-center relative">
+                         <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-800 text-[10px] px-2 text-purple-300 border border-purple-500/30 rounded uppercase font-bold">AI Engine</div>
+                         <i class="fas fa-brain text-purple-400 text-2xl mb-1"></i>
+                         <div class="text-xs font-bold text-white mb-2">LangChain + ChromaDB</div>
+                         <p class="text-[9px] text-slate-400 leading-tight">Orchestrates Regulation Diffing & Template Mapping.</p>
+                     </div>
+
+                     <!-- Queue -->
+                     <div class="flex flex-col justify-center items-center w-24">
+                         <div class="bg-slate-800 border border-red-500 rounded p-2 text-center w-full shadow-lg shadow-red-500/10">
+                             <i class="fas fa-layer-group text-red-400 text-xl mb-1"></i>
+                             <div class="text-[10px] font-bold text-white">Redis / Celery</div>
+                             <div class="text-[8px] text-slate-400">Message Broker</div>
+                         </div>
+                     </div>
+
+                     <!-- Worker: Calc -->
+                     <div class="bg-slate-900 border-2 border-dashed border-green-500/30 rounded-xl p-4 w-48 text-center relative">
+                         <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-800 text-[10px] px-2 text-green-300 border border-green-500/30 rounded uppercase font-bold">Calc Engine</div>
+                         <i class="fas fa-calculator text-green-400 text-2xl mb-1"></i>
+                         <div class="text-xs font-bold text-white mb-2">Pandas / Numpy</div>
+                         <p class="text-[9px] text-slate-400 leading-tight">Executes Excel Logic & Financial Formulas.</p>
+                     </div>
+                 </div>
+
+                 <!-- Layer 4: Data Persistence -->
+                 <div class="flex justify-center gap-4 relative z-10">
+                     <div class="bg-orange-900/20 border border-orange-500/50 rounded-xl p-4 w-48 text-center">
+                         <i class="fas fa-database text-orange-400 text-2xl mb-2"></i>
+                         <div class="text-sm font-bold text-white">PostgreSQL</div>
+                         <div class="text-[10px] text-slate-400">Supabase Managed</div>
+                     </div>
+                     <div class="bg-green-900/20 border border-green-500/50 rounded-xl p-4 w-48 text-center">
+                         <i class="fas fa-hdd text-green-400 text-2xl mb-2"></i>
+                         <div class="text-sm font-bold text-white">S3 Storage</div>
+                         <div class="text-[10px] text-slate-400">PDFs & Excel Files</div>
+                     </div>
+                 </div>
+
+             </div>
+        </div>
+        
+        <!-- ========================================== -->
+        <!-- DEPLOYMENT VIEW (UPDATED)                  -->
+        <!-- ========================================== -->
+        <div id="view-deployment" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-pink-500">Deployment Strategy: CI/CD & Orchestration</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <!-- Stage 1: Build -->
+                <div class="card p-6 bg-slate-900/50 border-t-4 border-blue-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-white font-bold">1. Build & Test</h3>
+                        <i class="fab fa-github text-2xl text-white"></i>
                     </div>
+                    <ul class="text-xs text-slate-400 space-y-3">
+                        <li class="flex items-center gap-2"><i class="fas fa-code-branch text-blue-400"></i> <strong>Trigger:</strong> Push to `main`</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-vial text-blue-400"></i> <strong>Test:</strong> `pytest` suite runs (Unit + Integ)</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-box text-blue-400"></i> <strong>Artifact:</strong> Build Docker Image</li>
+                    </ul>
                 </div>
 
-                <!-- Option B: R Native -->
-                <div class="card p-0 rounded-xl overflow-hidden border border-green-500/30">
-                    <div class="bg-green-900/30 p-4 border-b border-green-500/30">
-                        <h3 class="text-lg font-bold text-white">Option B: R-Native</h3>
-                        <div class="text-xs text-green-300">Low Complexity, Medium Scale</div>
+                <!-- Stage 2: Registry -->
+                <div class="card p-6 bg-slate-900/50 border-t-4 border-purple-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-white font-bold">2. Registry</h3>
+                        <i class="fab fa-docker text-2xl text-blue-400"></i>
                     </div>
-                    <div class="p-6">
-                        <div class="mb-6">
-                            <div class="flex justify-between text-sm text-slate-300 mb-2">
-                                <span>Infrastructure (Monthly)</span>
-                                <span class="font-bold text-white">$40 - $80</span>
-                            </div>
-                            <div class="w-full bg-slate-700 h-2 rounded-full"><div class="bg-green-500 h-2 rounded-full w-1/4"></div></div>
-                            <p class="text-[10px] text-slate-500 mt-1">Railway (Single Container) + Supabase (Free/Pro)</p>
-                        </div>
-                        <div class="mb-6">
-                            <div class="flex justify-between text-sm text-slate-300 mb-2">
-                                <span>Development Effort</span>
-                                <span class="font-bold text-white">150 Hours</span>
-                            </div>
-                            <div class="w-full bg-slate-700 h-2 rounded-full"><div class="bg-green-500 h-2 rounded-full w-1/3"></div></div>
-                            <p class="text-[10px] text-slate-500 mt-1">Unified language. You already know R. Fast iteration.</p>
-                        </div>
-                         <div class="bg-slate-800 p-3 rounded border border-slate-700">
-                             <strong class="text-xs text-white block mb-1">Hidden Costs</strong>
-                             <p class="text-[10px] text-slate-400">Technical Debt. As user count grows >50, you might need to rewrite in Python later.</p>
+                    <ul class="text-xs text-slate-400 space-y-3">
+                        <li class="flex items-center gap-2"><i class="fas fa-shield-alt text-purple-400"></i> <strong>Scan:</strong> Security vuln check</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-tag text-purple-400"></i> <strong>Tag:</strong> Versioning (SHA-1)</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-cloud-upload-alt text-purple-400"></i> <strong>Push:</strong> GCR / ECR</li>
+                    </ul>
+                </div>
+
+                <!-- Stage 3: Deploy -->
+                <div class="card p-6 bg-slate-900/50 border-t-4 border-green-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-white font-bold">3. Runtime</h3>
+                        <i class="fas fa-server text-2xl text-green-400"></i>
+                    </div>
+                     <ul class="text-xs text-slate-400 space-y-3">
+                        <li class="flex items-center gap-2"><i class="fas fa-sync text-green-400"></i> <strong>Provider:</strong> Railway / AWS ECS</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-network-wired text-green-400"></i> <strong>Routing:</strong> Load Balancer update</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check-double text-green-400"></i> <strong>Health:</strong> `/healthz` probe</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                <h4 class="text-sm font-bold text-white mb-4 uppercase tracking-widest">Environment Strategy</h4>
+                <div class="grid grid-cols-2 gap-8 text-xs">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2 text-yellow-400 font-bold"><i class="fas fa-flask"></i> Staging</div>
+                        <p class="text-slate-400 mb-2">Mirror of production. Deploys on PR merge.</p>
+                        <div class="bg-slate-900 p-2 rounded border border-slate-600 text-slate-500 font-mono">DB: db_staging (Anonymized)</div>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-2 text-green-400 font-bold"><i class="fas fa-rocket"></i> Production</div>
+                        <p class="text-slate-400 mb-2">Live traffic. Deploys on Release Tag.</p>
+                        <div class="bg-slate-900 p-2 rounded border border-slate-600 text-slate-500 font-mono">DB: db_prod (Encrypted)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECURITY VIEW (UPDATED)                    -->
+        <!-- ========================================== -->
+        <div id="view-security" class="hidden">
+             <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-teal-500">Security Architecture: Defense in Depth</h2>
+             
+             <div class="space-y-6">
+                 <!-- Layer 1 -->
+                 <div class="flex gap-4 items-start">
+                     <div class="bg-slate-800 p-3 rounded-lg border border-teal-500/30 min-w-[120px] text-center">
+                         <i class="fas fa-id-card text-teal-400 text-2xl mb-2"></i>
+                         <div class="text-xs font-bold text-white">Identity</div>
+                     </div>
+                     <div class="flex-grow pt-2">
+                         <h4 class="text-white font-bold text-sm">Authentication & Access Control</h4>
+                         <p class="text-xs text-slate-400 mt-1">Using <strong>Supabase Auth</strong> (wrapping GoTrue) for handling JWTs.</p>
+                         <div class="grid grid-cols-2 gap-4 mt-3">
+                             <div class="bg-slate-900 p-2 rounded border-l-2 border-teal-500 text-xs text-slate-300"><strong>MFA:</strong> Enforced for Admin roles.</div>
+                             <div class="bg-slate-900 p-2 rounded border-l-2 border-teal-500 text-xs text-slate-300"><strong>Session:</strong> Short-lived Access Tokens (1h).</div>
                          </div>
+                     </div>
+                 </div>
+
+                 <!-- Layer 2 -->
+                 <div class="flex gap-4 items-start">
+                     <div class="bg-slate-800 p-3 rounded-lg border border-blue-500/30 min-w-[120px] text-center">
+                         <i class="fas fa-code text-blue-400 text-2xl mb-2"></i>
+                         <div class="text-xs font-bold text-white">Application</div>
+                     </div>
+                     <div class="flex-grow pt-2">
+                         <h4 class="text-white font-bold text-sm">FastAPI Security Middleware</h4>
+                         <p class="text-xs text-slate-400 mt-1">Python-level enforcement of business rules.</p>
+                         <ul class="text-xs text-slate-400 list-disc list-inside mt-2 space-y-1">
+                             <li><strong>Input Validation:</strong> Pydantic models strictly type-check all incoming JSON.</li>
+                             <li><strong>RBAC:</strong> Custom dependency `@requires_role(['admin', 'auditor'])`.</li>
+                             <li><strong>Audit Logging:</strong> Middleware captures `User`, `Action`, `Resource` for every write op.</li>
+                         </ul>
+                     </div>
+                 </div>
+
+                 <!-- Layer 3 -->
+                 <div class="flex gap-4 items-start">
+                     <div class="bg-slate-800 p-3 rounded-lg border border-purple-500/30 min-w-[120px] text-center">
+                         <i class="fas fa-server text-purple-400 text-2xl mb-2"></i>
+                         <div class="text-xs font-bold text-white">Infrastructure</div>
+                     </div>
+                     <div class="flex-grow pt-2">
+                         <h4 class="text-white font-bold text-sm">Data Protection</h4>
+                         <p class="text-xs text-slate-400 mt-1">Encryption at rest and in transit.</p>
+                         <ul class="text-xs text-slate-400 list-disc list-inside mt-2 space-y-1">
+                             <li><strong>SSL/TLS:</strong> 100% HTTPS via Railway/Cloudflare edge.</li>
+                             <li><strong>DB Encryption:</strong> Postgres encryption at rest.</li>
+                             <li><strong>Backups:</strong> PITR (Point-in-Time Recovery) enabled for 7 days.</li>
+                         </ul>
+                     </div>
+                 </div>
+             </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- COST ANALYSIS VIEW (UPDATED)               -->
+        <!-- ========================================== -->
+        <div id="view-cost" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-yellow-500">Estimated Monthly Infrastructure Cost</h2>
+            <p class="text-slate-400 mb-8 max-w-3xl">Projected operational costs for the Python Enterprise stack (Option A) at MVP scale (~50 Users).</p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Breakdown Table -->
+                <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700">
+                    <table class="w-full text-sm text-left text-slate-400">
+                        <thead class="text-xs text-slate-200 uppercase bg-slate-900">
+                            <tr>
+                                <th class="px-6 py-3">Service</th>
+                                <th class="px-6 py-3">Tier / Spec</th>
+                                <th class="px-6 py-3 text-right">Est. Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-700">
+                                <td class="px-6 py-4 font-bold text-white">Compute (Railway)</td>
+                                <td class="px-6 py-4 text-xs">8GB RAM, 4 vCPU (Shared)</td>
+                                <td class="px-6 py-4 text-right text-white font-mono">$40.00</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="px-6 py-4 font-bold text-white">Database (Supabase)</td>
+                                <td class="px-6 py-4 text-xs">Pro Plan (8GB Disk)</td>
+                                <td class="px-6 py-4 text-right text-white font-mono">$25.00</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="px-6 py-4 font-bold text-white">Redis (Cache)</td>
+                                <td class="px-6 py-4 text-xs">Managed Instance</td>
+                                <td class="px-6 py-4 text-right text-white font-mono">$10.00</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="px-6 py-4 font-bold text-white">AI API (OpenAI)</td>
+                                <td class="px-6 py-4 text-xs">GPT-4o (Usage Based)</td>
+                                <td class="px-6 py-4 text-right text-white font-mono">~$50.00</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="px-6 py-4 font-bold text-white">Gemini Advanced</td>
+                                <td class="px-6 py-4 text-xs">AI Architect Assistant</td>
+                                <td class="px-6 py-4 text-right text-white font-mono">$20.00</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="px-6 py-4 font-bold text-white">Cursor Pro</td>
+                                <td class="px-6 py-4 text-xs">AI Code Editor</td>
+                                <td class="px-6 py-4 text-right text-white font-mono">$20.00</td>
+                            </tr>
+                            <tr class="bg-slate-700/30">
+                                <td class="px-6 py-4 font-bold text-yellow-400 uppercase">Total Monthly</td>
+                                <td class="px-6 py-4"></td>
+                                <td class="px-6 py-4 text-right text-yellow-400 font-bold font-mono text-lg">$165.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Context -->
+                <div class="space-y-6">
+                    <div class="card p-6 border-l-4 border-blue-500">
+                        <h4 class="text-sm font-bold text-white mb-2">Scaling Triggers</h4>
+                        <p class="text-xs text-slate-400 mb-4">When do we pay more?</p>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li><i class="fas fa-arrow-up text-red-400 mr-2"></i> <strong>AI Usage:</strong> Heavy PDF parsing volume will increase OpenAI bill linearly.</li>
+                            <li><i class="fas fa-arrow-up text-red-400 mr-2"></i> <strong>Storage:</strong> Archiving years of PDFs (>50GB) adds ~$0.02/GB.</li>
+                        </ul>
+                    </div>
+                    <div class="card p-6 border-l-4 border-green-500">
+                        <h4 class="text-sm font-bold text-white mb-2">Optimization Opportunities</h4>
+                        <p class="text-xs text-slate-400 mb-4">How to save money later.</p>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> <strong>Local LLMs:</strong> Switch PDF parsing to local Llama 3 on GPU instance (Fixed cost vs API).</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> <strong>Reserved Instances:</strong> Commit to 1-year compute for 30% discount.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
         
         <!-- ========================================== -->
-        <!-- MVP PLAN VIEW (NEW TAB)                    -->
+        <!-- MVP PLAN VIEW (UPDATED 8 MONTHS)           -->
         <!-- ========================================== -->
         <div id="view-infographic" class="hidden">
-            <!-- Content will be merged from the infographic file here -->
-             <div class="glass-card p-10 relative overflow-hidden mb-12">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500"></div>
-                <h3 class="text-xl font-bold text-white mb-6 text-center">The "Golden Loop" Workflow</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
-                    <!-- Step 1 -->
-                    <div class="flow-step text-center relative group">
-                        <div class="w-16 h-16 mx-auto bg-blue-900 rounded-full border-4 border-blue-500 flex items-center justify-center text-2xl shadow-lg shadow-blue-500/20 mb-4 group-hover:scale-110 transition-transform">
-                            📐
+            
+            <!-- 1. THE GOLDEN LOOP ROLES -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-white mb-6 text-center">The "Golden Loop" Team</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- User -->
+                    <div class="bg-slate-800/80 p-6 rounded-xl border-t-4 border-blue-500 text-center shadow-lg relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-full h-full bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-16 h-16 mx-auto bg-blue-900/50 rounded-full flex items-center justify-center mb-4 border border-blue-500/30">
+                            <i class="fas fa-user-tie text-2xl text-blue-400"></i>
                         </div>
-                        <h4 class="font-bold text-blue-400 mb-2">1. Blueprint</h4>
-                        <p class="text-xs text-slate-400">You ask Gemini for the Schema & Cursor Prompt.</p>
-                        <div class="hidden md:block absolute top-8 left-1/2 w-full h-1 bg-slate-700 -z-10 transform translate-x-1/2"></div>
+                        <h4 class="text-lg font-bold text-white">Product Owner</h4>
+                        <div class="text-xs text-blue-400 font-bold uppercase tracking-wider mb-2">You</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Defines the <strong>Business Logic</strong> and validates the results. You provide the domain expertise (Day Trading/Options) and approve the features.
+                        </p>
                     </div>
 
-                    <!-- Step 2 -->
-                    <div class="flow-step text-center relative group">
-                        <div class="w-16 h-16 mx-auto bg-purple-900 rounded-full border-4 border-purple-500 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/20 mb-4 group-hover:scale-110 transition-transform">
-                            ⚙️
+                    <!-- Gemini -->
+                    <div class="bg-slate-800/80 p-6 rounded-xl border-t-4 border-purple-500 text-center shadow-lg relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-full h-full bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-16 h-16 mx-auto bg-purple-900/50 rounded-full flex items-center justify-center mb-4 border border-purple-500/30">
+                            <i class="fas fa-brain text-2xl text-purple-400"></i>
                         </div>
-                        <h4 class="font-bold text-purple-400 mb-2">2. Backend</h4>
-                        <p class="text-xs text-slate-400">Paste Prompt into Cursor. Gen API & DB.</p>
-                        <div class="hidden md:block absolute top-8 left-1/2 w-full h-1 bg-slate-700 -z-10 transform translate-x-1/2"></div>
+                        <h4 class="text-lg font-bold text-white">Architect</h4>
+                        <div class="text-xs text-purple-400 font-bold uppercase tracking-wider mb-2">Gemini</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Designs the <strong>System Architecture</strong> and writes the "Master Prompts". I remember the context, plan the DB schema, and guide Cursor.
+                        </p>
                     </div>
 
-                    <!-- Step 3 -->
-                    <div class="flow-step text-center relative group">
-                        <div class="w-16 h-16 mx-auto bg-cyan-900 rounded-full border-4 border-cyan-400 flex items-center justify-center text-2xl shadow-lg shadow-cyan-400/20 mb-4 group-hover:scale-110 transition-transform">
-                            🎨
+                    <!-- Cursor -->
+                    <div class="bg-slate-800/80 p-6 rounded-xl border-t-4 border-green-500 text-center shadow-lg relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-full h-full bg-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-16 h-16 mx-auto bg-green-900/50 rounded-full flex items-center justify-center mb-4 border border-green-500/30">
+                            <i class="fas fa-code text-2xl text-green-400"></i>
                         </div>
-                        <h4 class="font-bold text-cyan-400 mb-2">3. Frontend</h4>
-                        <p class="text-xs text-slate-400">Ask Cursor to style React using HTML reference.</p>
-                        <div class="hidden md:block absolute top-8 left-1/2 w-full h-1 bg-slate-700 -z-10 transform translate-x-1/2"></div>
-                    </div>
-
-                    <!-- Step 4 -->
-                    <div class="flow-step text-center relative group">
-                        <div class="w-16 h-16 mx-auto bg-green-900 rounded-full border-4 border-green-500 flex items-center justify-center text-2xl shadow-lg shadow-green-500/20 mb-4 group-hover:scale-110 transition-transform">
-                            ✅
-                        </div>
-                        <h4 class="font-bold text-green-400 mb-2">4. Review</h4>
-                        <p class="text-xs text-slate-400">You verify against the HTML prototype.</p>
+                        <h4 class="text-lg font-bold text-white">Senior Dev</h4>
+                        <div class="text-xs text-green-400 font-bold uppercase tracking-wider mb-2">Cursor (AI)</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Executes the <strong>Coding</strong>. Takes my prompts and generates the React/Python/R code, fixes bugs, and handles boilerplates instantly.
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-card p-8">
-                <h3 class="text-xl font-bold text-white mb-6 text-center">Project Complexity & Timeline</h3>
-                <div class="chart-container md:h-96">
+            <!-- 2. 8-MONTH TIMELINE -->
+            <div class="glass-card p-8 mb-8">
+                <h3 class="text-xl font-bold text-white mb-6 text-center">8-Month Roadmap Execution</h3>
+                <div class="chart-container md:h-80 mb-8">
                     <canvas id="timelineChart"></canvas>
+                </div>
+
+                <!-- Detailed Text Breakdown -->
+                <div class="grid md:grid-cols-2 gap-6 mt-8">
+                    <div class="space-y-4">
+                        <div class="flex gap-4">
+                            <div class="w-12 text-right font-bold text-slate-500 text-xs pt-1">M 1-2</div>
+                            <div class="border-l-2 border-slate-700 pl-4 pb-2">
+                                <h5 class="text-white font-bold text-sm">Foundation & Architecture</h5>
+                                <ul class="text-[10px] text-slate-400 list-disc pl-4 mt-1 space-y-1">
+                                    <li><strong>Setup:</strong> Repo, Supabase Auth, Railway PaaS.</li>
+                                    <li><strong>Schema:</strong> Define DB for `Users`, `Regulations`, `Reports`, and `DataSheets`.</li>
+                                    <li><strong>Ingestion:</strong> Build script to upload previous PDFs and matching Excel Sheets.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 text-right font-bold text-blue-500 text-xs pt-1">M 3-4</div>
+                            <div class="border-l-2 border-blue-500 pl-4 pb-2">
+                                <h5 class="text-white font-bold text-sm">Core Backend (The Engine)</h5>
+                                <ul class="text-[10px] text-slate-400 list-disc pl-4 mt-1 space-y-1">
+                                    <li><strong>Reverse Engineering:</strong> Logic to map PDF fields -> Excel Cells (First-Time Setup).</li>
+                                    <li><strong>Diff Engine:</strong> Compare new uploaded regulations vs old.</li>
+                                    <li><strong>Overwrite Logic:</strong> Auto-fill new templates with Excel data (Recurring).</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 text-right font-bold text-purple-500 text-xs pt-1">M 5-6</div>
+                            <div class="border-l-2 border-purple-500 pl-4 pb-2">
+                                <h5 class="text-white font-bold text-sm">Interactive Frontend</h5>
+                                <ul class="text-[10px] text-slate-400 list-disc pl-4 mt-1 space-y-1">
+                                    <li><strong>Quick Generate:</strong> Build the "One-Click" dashboard widget.</li>
+                                    <li><strong>Data Editor:</strong> Handsontable integration for editing data before signing.</li>
+                                    <li><strong>Review Portal:</strong> UI for Auditors to approve reports.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex gap-4">
+                            <div class="w-12 text-right font-bold text-green-500 text-xs pt-1">M 7</div>
+                            <div class="border-l-2 border-green-500 pl-4 pb-2">
+                                <h5 class="text-white font-bold text-sm">Security & Audit</h5>
+                                <p class="text-xs text-slate-400">Implement Audit Logs (Who changed what?), Role-Based Access Control (Analyst vs Manager), and input validation.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 text-right font-bold text-yellow-500 text-xs pt-1">M 8</div>
+                            <div class="border-l-2 border-yellow-500 pl-4 pb-2">
+                                <h5 class="text-white font-bold text-sm">Polish & Beta</h5>
+                                <p class="text-xs text-slate-400">User Acceptance Testing (UAT), bug crushing, documentation, and deploying the production environment.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="glass-card p-8 mt-8">
-                <h3 class="text-xl font-bold text-white mb-6 text-center">Database Structure</h3>
-                <div class="chart-container md:h-96">
+            <div class="glass-card p-8">
+                <h3 class="text-xl font-bold text-white mb-6 text-center">Data Complexity</h3>
+                <div class="chart-container md:h-64">
                     <canvas id="dbChart"></canvas>
                 </div>
             </div>
@@ -853,13 +1236,13 @@
             Chart.defaults.color = '#94a3b8';
             Chart.defaults.font.family = 'Inter';
 
+            // UPDATED: 8 Month Timeline Labels
             const phaseLabels = [
-                ['Phase 1', 'Init'], 
-                ['Phase 2', 'DB/Auth'], 
-                ['Phase 3', 'Backend'], 
-                ['Phase 4', 'Frontend'], 
-                ['Phase 5', 'Magic UI'], 
-                ['Phase 6', 'Polish']
+                ['Months 1-2', 'Foundation'], 
+                ['Months 3-4', 'Backend Core'], 
+                ['Months 5-6', 'UI/Frontend'], 
+                ['Month 7', 'Security/Audit'], 
+                ['Month 8', 'Polish & Launch']
             ];
 
             timelineChart = new Chart(ctxTimeline, {
@@ -867,15 +1250,14 @@
                 data: {
                     labels: phaseLabels,
                     datasets: [{
-                        label: 'Complexity & Effort Score',
-                        data: [20, 35, 85, 50, 95, 30],
+                        label: 'Workload Intensity (%)',
+                        data: [40, 85, 90, 60, 45], // Intensity curve
                         backgroundColor: [
-                            'rgba(148, 163, 184, 0.5)', 
-                            'rgba(148, 163, 184, 0.5)', 
-                            'rgba(59, 130, 246, 0.8)',  
-                            'rgba(34, 211, 238, 0.8)',  
-                            'rgba(168, 85, 247, 0.8)',  
-                            'rgba(34, 197, 94, 0.8)'    
+                            'rgba(148, 163, 184, 0.5)', // Gray (Foundation)
+                            'rgba(59, 130, 246, 0.8)',  // Blue (Backend)
+                            'rgba(168, 85, 247, 0.8)',  // Purple (Frontend)
+                            'rgba(34, 197, 94, 0.8)',   // Green (Security)
+                            'rgba(234, 179, 8, 0.8)'    // Yellow (Launch)
                         ],
                         borderRadius: 6
                     }]
@@ -884,10 +1266,11 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true, grid: { color: '#1e293b' } },
+                        y: { beginAtZero: true, grid: { color: '#1e293b' }, title: {display: true, text: 'Dev Intensity'} },
                         x: { grid: { display: false } }
                     },
                     plugins: {
+                        legend: { display: false },
                         tooltip: {
                             callbacks: {
                                 title: function(tooltipItems) {
@@ -931,7 +1314,7 @@
         }
 
         function switchView(viewName) {
-            const views = ['biz-process', 'ui-journey', 'tech', 'deployment', 'risk', 'security', 'cost', 'infographic'];
+            const views = ['biz-process', 'ui-journey', 'tech', 'deployment', 'risk', 'security', 'cost', 'infographic', 'lifecycle'];
             
             views.forEach(v => {
                 const el = document.getElementById('view-' + v);
@@ -945,10 +1328,19 @@
                             btn.classList.remove('inactive');
                             btn.classList.add('active');
                         }
-                        // Lazy load charts for infographic
                         if (v === 'infographic') {
-                            // Small delay to ensure container has width
                             setTimeout(initInfographicCharts, 100);
+                        }
+                        // SAFEGUARD: If UI Journey is clicked, force Dashboard open to prevent empty screen
+                        if (v === 'ui-journey') {
+                             setTimeout(() => {
+                                 // Check if any sub-page is visible. If not, open dashboard.
+                                 const anyVisible = ['dashboard', 'templates', 'reports', 'audit', 'datasheet', 'regulations'].some(p => {
+                                     const pEl = document.getElementById('ui-page-' + p);
+                                     return pEl && pEl.style.display === 'block';
+                                 });
+                                 if(!anyVisible) openUiPage('dashboard');
+                             }, 50);
                         }
                     } else {
                         el.style.display = 'none';
@@ -965,35 +1357,26 @@
         function openUiPage(pageName) {
             const pages = ['dashboard', 'templates', 'reports', 'audit', 'datasheet', 'regulations', 'reports-month', 'audit-pending'];
             
-            // Hide all sub-pages first
             pages.forEach(p => {
                 const el = document.getElementById('ui-page-' + p);
                 if (el) el.style.display = 'none';
                 
-                // Remove active class from nav, if exists
                 const nav = document.getElementById('nav-' + p);
                 if (nav) nav.classList.remove('active');
             });
 
-            // Show selected page
             const targetEl = document.getElementById('ui-page-' + pageName);
             if (targetEl) {
                 targetEl.style.display = 'block';
                 targetEl.classList.add('fade-in');
             }
             
-            // Activate specific navigation item or parent based on pageName
-            // Handle sub-pages mapped to parent nav items
-            if (pageName === 'reports-month') {
-                 // No specific nav to highlight, or highlight dashboard if desired
-            } else if (pageName === 'audit-pending') {
-                 // No specific nav
-            } else {
+            if (pageName !== 'reports-month' && pageName !== 'audit-pending') {
                  const targetNav = document.getElementById('nav-' + pageName);
                  if (targetNav) targetNav.classList.add('active');
             }
             
-            // Reset wizard states when navigating
+            // Cleanup Logic
             const tList = document.getElementById('template-step-list');
             if(tList) tList.classList.remove('hidden');
             const tWiz = document.getElementById('template-step-wizard');
@@ -1004,11 +1387,9 @@
             const rWiz = document.getElementById('report-step-wizard');
             if(rWiz) rWiz.classList.add('hidden');
             
-            // Reset modal
             const tHist = document.getElementById('template-history-modal');
             if(tHist) tHist.classList.add('hidden');
             
-            // Reset reg diff
             const regList = document.getElementById('reg-list-view');
             const regHistory = document.getElementById('reg-history-view');
             const regDiff = document.getElementById('reg-diff-view');
@@ -1017,13 +1398,14 @@
             if(regHistory) regHistory.classList.add('hidden');
             if(regDiff) regDiff.classList.add('hidden');
             
-            // Reset Reg Wizard
             const regWiz = document.getElementById('reg-upload-wizard');
             if(regWiz) regWiz.classList.add('hidden');
             
-            // Reset Template Impact Modal
             const tImpact = document.getElementById('template-impact-modal');
             if(tImpact) tImpact.classList.add('hidden');
+            
+            const rEdit = document.getElementById('report-edit-modal');
+            if(rEdit) rEdit.classList.add('hidden');
         }
         
         // Data Sheet Functions
@@ -1107,12 +1489,10 @@
             document.getElementById('reg-wiz-upload').classList.add('hidden');
             document.getElementById('reg-wiz-processing').classList.remove('hidden');
             
-            // Animate progress bar
             setTimeout(() => { document.getElementById('reg-progress-bar').style.width = '40%'; }, 500);
             setTimeout(() => { document.getElementById('reg-progress-bar').style.width = '75%'; }, 1500);
             setTimeout(() => { document.getElementById('reg-progress-bar').style.width = '100%'; }, 2500);
             
-            // Fake delay for completion
             setTimeout(() => {
                 document.getElementById('reg-wiz-processing').classList.add('hidden');
                 document.getElementById('reg-wiz-success').classList.remove('hidden');
@@ -1121,7 +1501,6 @@
 
         function finishRegUpload() {
             cancelRegUpload();
-            // In a real app, this would refresh the list. Here we jump to diff to show the result.
             openRegDiff();
         }
 
@@ -1153,7 +1532,6 @@
             document.getElementById('wiz-processing').classList.add('hidden');
             document.getElementById('wiz-success').classList.add('hidden');
             
-            // Reset Progress Bar
             document.getElementById('ai-progress-bar').style.width = '0%';
         }
 
@@ -1161,12 +1539,10 @@
             document.getElementById('wiz-upload').classList.add('hidden');
             document.getElementById('wiz-processing').classList.remove('hidden');
             
-            // Animate progress bar
             setTimeout(() => { document.getElementById('ai-progress-bar').style.width = '40%'; }, 500);
             setTimeout(() => { document.getElementById('ai-progress-bar').style.width = '75%'; }, 1500);
             setTimeout(() => { document.getElementById('ai-progress-bar').style.width = '100%'; }, 2500);
             
-            // Fake delay for completion
             setTimeout(() => {
                 document.getElementById('wiz-processing').classList.add('hidden');
                 document.getElementById('wiz-success').classList.remove('hidden');
@@ -1174,7 +1550,7 @@
         }
 
         function finishTemplateWizard() {
-             cancelTemplateWizard(); // Just go back to list
+             cancelTemplateWizard(); 
         }
 
         function cancelTemplateWizard() {
@@ -1193,26 +1569,20 @@
         }
         
         function activateTemplate(btn) {
-            // Find parent row to update status
             const row = document.getElementById('draft-template-row');
             const statusCell = document.getElementById('draft-status');
             const actionsCell = document.getElementById('draft-actions');
             
-            // Update UI to Active State
             statusCell.innerHTML = '<span class="text-green-400">● Active</span>';
-            
-            // Remove Activate button, keep others
-            // Ideally re-render the cell content
             btn.remove();
             
-            // Add "Use" button
             const useBtn = document.createElement('span');
             useBtn.className = 'mock-btn-sm btn-green';
             useBtn.onclick = function() { startReportWizard(); };
             useBtn.innerText = 'Use';
             actionsCell.appendChild(useBtn);
             
-            alert("Template Activated Successfully!");
+            showToast("Template Activated Successfully!");
         }
 
         // New Report Wizard Functions
@@ -1221,8 +1591,14 @@
             document.getElementById('report-step-wizard').classList.remove('hidden');
         }
         
+        // MODIFIED: Finish Report Wizard to trigger generation instead of opening Data Sheet
         function finishReportWizard() {
-            openUiPage('datasheet');
+            // Hide wizard
+            document.getElementById('report-step-wizard').classList.add('hidden');
+            document.getElementById('report-step-list').classList.remove('hidden'); // Show list underneath
+            
+            // Trigger generation simulation for FIRST TIME report (Draft Status)
+            startQuickGenerate('New ETF Report - First Draft', 'Draft'); 
         }
 
         function cancelReportWizard() {
@@ -1230,8 +1606,254 @@
              document.getElementById('report-step-list').classList.remove('hidden');
         }
 
-        // Init with Solo Mode because the user asked
-        if(document.getElementById('mode-solo')) setMode('solo');
+        // --- NEW: QUICK GENERATE FUNCTIONS ---
+        // Added status parameter to handle 'Draft' vs 'Generated'
+        function startQuickGenerate(reportName, status = 'Generated') {
+            // 1. Show Modal
+            const modal = document.getElementById('gen-modal');
+            const title = document.getElementById('gen-modal-title');
+            modal.classList.remove('hidden');
+            
+            if(status === 'Draft') {
+                title.innerText = "Creating Draft...";
+            } else {
+                title.innerText = "Generating Report...";
+            }
+            
+            // 2. Animate Bar
+            let width = 0;
+            const bar = document.getElementById('gen-progress-bar');
+            bar.style.width = '0%'; // Reset
+            
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Add slight delay before finishing for visual comfort
+                    setTimeout(() => {
+                        finishQuickGenerate(reportName, status);
+                    }, 300);
+                } else {
+                    width += 2; // Speed of progress
+                    bar.style.width = width + '%';
+                }
+            }, 30); // Update every 30ms
+        }
+
+        function finishQuickGenerate(reportName, status) {
+            // Hide Modal
+            document.getElementById('gen-modal').classList.add('hidden');
+            
+            // Navigate to Reports Page
+            openUiPage('reports');
+            
+            // Add new row to the table
+            const tableBody = document.getElementById('reports-table-body');
+            const newRow = document.createElement('tr');
+            
+            // Get clean name without date if needed
+            const displayName = reportName.split(' - ')[0];
+            
+            // Determine status badge style
+            let statusBadge = '';
+            let actions = '';
+            
+            if (status === 'Draft') {
+                newRow.classList.add('bg-yellow-900/10', 'border-l-4', 'border-yellow-500', 'fade-in'); 
+                statusBadge = `<span class="text-yellow-400 text-[9px] border border-yellow-500 px-1 rounded bg-yellow-900/20">Draft</span>`;
+                actions = `<span class="mock-btn-sm btn-purple" onclick="runGeneration(this)">Generate</span><span class="mock-btn-sm btn-blue" onclick="editReportData('${displayName}')">Edit</span><span class="mock-btn-sm btn-red" onclick="requestAction('delete', this)">Delete</span>`;
+            } else {
+                newRow.classList.add('bg-blue-900/10', 'border-l-4', 'border-blue-500', 'fade-in'); 
+                statusBadge = `<span class="text-blue-400 text-[9px] border border-blue-500 px-1 rounded bg-blue-900/20">Generated</span>`;
+                actions = `<span class="mock-btn-sm btn-green" onclick="requestAction('submit', this)">Submit</span><span class="mock-btn-sm btn-green" onclick="viewReport('${displayName}')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('${displayName}')">Edit</span>`;
+            }
+            
+            newRow.innerHTML = `
+                <td class="font-bold text-white py-3">${displayName}</td>
+                <td><span class="text-slate-400">Weekly</span></td>
+                <td>Today</td>
+                <td class="text-green-400">Next Cycle</td>
+                <td>${statusBadge}</td>
+                <td>${actions}</td>
+            `;
+            
+            // Insert at top
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+            
+            // Increment Total Reports Count
+            updateKpi('kpi-reports-count', 1);
+        }
+        
+        // --- STATUS TRANSITIONS ---
+        
+        function runGeneration(btnElement) {
+            const row = btnElement.closest('tr');
+            const reportName = row.cells[0].innerText;
+            
+            // Re-use modal logic but specifically for existing row update
+            const modal = document.getElementById('gen-modal');
+            document.getElementById('gen-modal-title').innerText = "Processing Logic...";
+            modal.classList.remove('hidden');
+            
+            let width = 0;
+            const bar = document.getElementById('gen-progress-bar');
+            bar.style.width = '0%'; 
+            
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        
+                        // Update Row to GENERATED State
+                        row.classList.remove('bg-yellow-900/10', 'border-yellow-500');
+                        row.classList.add('bg-blue-900/10', 'border-blue-500');
+                        row.cells[4].innerHTML = `<span class="text-blue-400 text-[9px] border border-blue-500 px-1 rounded bg-blue-900/20">Generated</span>`;
+                        row.cells[5].innerHTML = `<span class="mock-btn-sm btn-green" onclick="requestAction('submit', this)">Submit</span><span class="mock-btn-sm btn-green" onclick="viewReport('${reportName}')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('${reportName}')">Edit</span>`;
+                        
+                        showToast("Report Generated Successfully");
+                    }, 300);
+                } else {
+                    width += 4; 
+                    bar.style.width = width + '%';
+                }
+            }, 30);
+        }
+        
+        // UNIFIED ACTION REQUEST HANDLER
+        let pendingAction = null;
+        let pendingElement = null;
+
+        function requestAction(actionType, btnElement) {
+            pendingAction = actionType;
+            pendingElement = btnElement;
+            
+            const modal = document.getElementById('custom-confirm-modal');
+            const icon = document.getElementById('confirm-icon');
+            const title = document.getElementById('confirm-title');
+            const msg = document.getElementById('confirm-msg');
+            const btn = document.getElementById('confirm-btn-action');
+            
+            if (actionType === 'delete') {
+                icon.className = "fas fa-exclamation-triangle text-red-500 text-2xl mb-3";
+                title.innerText = "Delete Report?";
+                msg.innerText = "This action cannot be undone.";
+                btn.className = "px-4 py-2 rounded text-xs bg-red-600 text-white hover:bg-red-500 transition";
+                btn.innerText = "Delete";
+            } else if (actionType === 'submit') {
+                icon.className = "fas fa-check-circle text-green-500 text-2xl mb-3";
+                title.innerText = "Submit to Repository?";
+                msg.innerText = "This will lock the report for editing.";
+                btn.className = "px-4 py-2 rounded text-xs bg-green-600 text-white hover:bg-green-500 transition";
+                btn.innerText = "Submit";
+            }
+            
+            modal.classList.remove('hidden');
+            
+            // Set up onclick for the confirm button
+            btn.onclick = function() {
+                executeAction();
+            };
+        }
+
+        function executeAction() {
+            if (!pendingAction || !pendingElement) return;
+            
+            const row = pendingElement.closest('tr');
+            
+            if (pendingAction === 'delete') {
+                row.remove();
+                // Decrement Total Reports Count
+                updateKpi('kpi-reports-count', -1);
+                showToast("Report Deleted.");
+            } else if (pendingAction === 'submit') {
+                const reportName = row.cells[0].innerText;
+                
+                // Update visuals
+                row.classList.remove('bg-blue-900/10', 'border-blue-500');
+                row.classList.add('bg-slate-800'); // Neutral submitted state
+                row.cells[4].innerHTML = `<span class="text-green-400 text-[9px] border border-green-500 px-1 rounded bg-green-900/20">Submitted</span>`;
+                row.cells[5].innerHTML = `<span class="mock-btn-sm btn-green" onclick="viewReport('${reportName}')">View</span>`;
+                
+                // Increment Pending Audit Count
+                updateKpi('kpi-audit-count', 1);
+                
+                showToast("Report Submitted Successfully");
+            }
+            
+            closeConfirmModal();
+        }
+        
+        function closeConfirmModal() {
+            document.getElementById('custom-confirm-modal').classList.add('hidden');
+            pendingAction = null;
+            pendingElement = null;
+        }
+        
+        // --- NEW: UI INTERACTION FUNCTIONS (No Alerts) ---
+        
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            
+            // Fade In
+            setTimeout(() => { toast.style.opacity = '1'; }, 10);
+            
+            // Fade Out & Hide
+            setTimeout(() => { 
+                toast.style.opacity = '0'; 
+                setTimeout(() => { toast.style.display = 'none'; }, 300);
+            }, 3000);
+        }
+        
+        function editReportData(reportName) {
+            showToast(`Opening Document Editor: ${reportName}`);
+            
+            // Setup Editor
+            const modal = document.getElementById('report-edit-modal');
+            const titleEl = document.getElementById('edit-fund-name');
+            if(titleEl) titleEl.innerText = reportName;
+            
+            modal.classList.remove('hidden');
+        }
+        
+        function saveReportChanges() {
+            showToast("Changes Saved to Document.");
+            closeReportEditor();
+        }
+        
+        function closeReportEditor() {
+            const modal = document.getElementById('report-edit-modal');
+            modal.classList.add('hidden');
+        }
+        
+        function viewReport(reportName) {
+            const modal = document.getElementById('report-view-modal');
+            const titleEl = document.getElementById('report-preview-title');
+            const fundEl = document.getElementById('prev-fund-name');
+            
+            titleEl.innerText = `Preview: ${reportName}`;
+            fundEl.innerText = reportName;
+            
+            modal.classList.remove('hidden');
+        }
+        
+        // Helper to update KPI with animation
+        function updateKpi(elementId, change) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                let currentVal = parseInt(el.innerText);
+                el.innerText = currentVal + change;
+                
+                // Trigger animation
+                el.classList.remove('kpi-update');
+                void el.offsetWidth; // Trigger reflow
+                el.classList.add('kpi-update');
+            }
+        }
+
+        // Init view
+        switchView('biz-process');
     </script>
 </body>
 </html>
