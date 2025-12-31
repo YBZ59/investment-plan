@@ -109,6 +109,7 @@
         .btn-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
         .btn-purple { background: rgba(147, 51, 234, 0.2); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.4); }
         .btn-gray { background: rgba(148, 163, 184, 0.1); color: #94a3b8; border: 1px solid #475569; cursor: not-allowed; }
+        .btn-orange { background: rgba(249, 115, 22, 0.2); color: #fdba74; border: 1px solid rgba(249, 115, 22, 0.4); }
 
         /* Charts & Data Sheet */
         .pie-chart { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#3b82f6 0% 70%, #10b981 70% 90%, #f59e0b 90% 100%); }
@@ -312,11 +313,11 @@
         </div>
         
         <!-- ========================================== -->
-        <!-- REPORT LIFECYCLE VIEW                      -->
+        <!-- REPORT LIFECYCLE VIEW (UPDATED 4-STAGE)    -->
         <!-- ========================================== -->
         <div id="view-lifecycle" class="hidden">
              <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-purple-500">Report Lifecycle & State Machine</h2>
-             <p class="text-slate-400 mb-8 max-w-3xl">Visualizing the transition of a report from creation to final archive, and the triggers for each state.</p>
+             <p class="text-slate-400 mb-8 max-w-3xl">Visualizing the transition of a report: Draft → Generated → Approved → Submitted.</p>
 
              <div class="bg-slate-900/50 border border-slate-700 rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
                 <!-- Background dashed line -->
@@ -324,61 +325,54 @@
 
                 <!-- STATE 1: DRAFT -->
                 <div class="relative z-10 flex flex-col items-center">
-                    <div class="bg-yellow-900/20 border-2 border-yellow-500 p-6 rounded-2xl w-56 text-center shadow-lg shadow-yellow-500/10 backdrop-blur-sm">
-                        <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-900">
-                            <i class="fas fa-file-pen text-xl"></i>
+                    <div class="bg-yellow-900/20 border-2 border-yellow-500 p-4 rounded-xl w-40 text-center shadow-lg shadow-yellow-500/10 backdrop-blur-sm">
+                        <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-900">
+                            <i class="fas fa-file-pen text-lg"></i>
                         </div>
-                        <h3 class="text-white font-bold text-lg mb-1">Draft</h3>
-                        <p class="text-[10px] text-slate-400 mb-3">Created via Wizard OR Schedule.</p>
-                        <div class="bg-slate-800 p-2 rounded border border-slate-600">
-                            <div class="text-[9px] text-yellow-400 font-bold uppercase mb-1">Inputs</div>
-                            <div class="flex justify-center gap-2 text-[8px] text-slate-400">
-                                <span class="bg-slate-700 px-1 rounded">Template</span>
-                                <span class="bg-slate-700 px-1 rounded">Data Sheet</span>
-                            </div>
-                        </div>
+                        <h3 class="text-white font-bold text-sm mb-1">Draft</h3>
+                        <p class="text-[8px] text-slate-400">Created via Wizard/Cron.</p>
                     </div>
-                    <div class="mt-4 md:absolute md:top-1/2 md:left-[22%] md:-translate-y-1/2 bg-purple-600/90 text-white text-[10px] font-bold px-3 py-1 rounded-full z-20 shadow-lg">
-                        ACTION: GENERATE
+                    <div class="mt-2 md:absolute md:top-1/2 md:left-[18%] md:-translate-y-1/2 bg-purple-600/90 text-white text-[8px] font-bold px-2 py-0.5 rounded-full z-20 shadow-lg">
+                        GENERATE
                     </div>
                 </div>
 
                 <!-- STATE 2: GENERATED -->
                 <div class="relative z-10 flex flex-col items-center">
-                    <div class="bg-blue-900/20 border-2 border-blue-500 p-6 rounded-2xl w-56 text-center shadow-lg shadow-blue-500/10 backdrop-blur-sm">
-                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white">
-                            <i class="fas fa-cog fa-spin text-xl"></i>
+                    <div class="bg-blue-900/20 border-2 border-blue-500 p-4 rounded-xl w-40 text-center shadow-lg shadow-blue-500/10 backdrop-blur-sm">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white">
+                            <i class="fas fa-cog fa-spin text-lg"></i>
                         </div>
-                        <h3 class="text-white font-bold text-lg mb-1">Generated</h3>
-                        <p class="text-[10px] text-slate-400 mb-3">Calculated & Filled.</p>
-                        <div class="bg-slate-800 p-2 rounded border border-slate-600">
-                            <div class="text-[9px] text-blue-400 font-bold uppercase mb-1">Capabilities</div>
-                            <div class="flex justify-center gap-2 text-[8px] text-slate-400">
-                                <span class="bg-slate-700 px-1 rounded">Edit (Docs)</span>
-                                <span class="bg-slate-700 px-1 rounded">Review</span>
-                            </div>
-                        </div>
+                        <h3 class="text-white font-bold text-sm mb-1">Generated</h3>
+                        <p class="text-[8px] text-slate-400">Calculated & Filled.</p>
                     </div>
-                    <div class="mt-4 md:absolute md:top-1/2 md:right-[22%] md:-translate-y-1/2 bg-green-600/90 text-white text-[10px] font-bold px-3 py-1 rounded-full z-20 shadow-lg">
-                        ACTION: SUBMIT
+                    <div class="mt-2 md:absolute md:top-1/2 md:left-[42%] md:-translate-y-1/2 bg-orange-500/90 text-white text-[8px] font-bold px-2 py-0.5 rounded-full z-20 shadow-lg">
+                        REVIEW
                     </div>
                 </div>
 
-                <!-- STATE 3: SUBMITTED -->
+                <!-- STATE 3: APPROVED (NEW) -->
                 <div class="relative z-10 flex flex-col items-center">
-                    <div class="bg-green-900/20 border-2 border-green-500 p-6 rounded-2xl w-56 text-center shadow-lg shadow-green-500/10 backdrop-blur-sm">
-                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white">
-                            <i class="fas fa-check-circle text-xl"></i>
+                    <div class="bg-teal-900/20 border-2 border-teal-500 p-4 rounded-xl w-40 text-center shadow-lg shadow-teal-500/10 backdrop-blur-sm">
+                        <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white">
+                            <i class="fas fa-thumbs-up text-lg"></i>
                         </div>
-                        <h3 class="text-white font-bold text-lg mb-1">Submitted</h3>
-                        <p class="text-[10px] text-slate-400 mb-3">Locked & Archived.</p>
-                        <div class="bg-slate-800 p-2 rounded border border-slate-600">
-                            <div class="text-[9px] text-green-400 font-bold uppercase mb-1">Output</div>
-                            <div class="flex justify-center gap-2 text-[8px] text-slate-400">
-                                <span class="bg-slate-700 px-1 rounded">Repository</span>
-                                <span class="bg-slate-700 px-1 rounded">Audit Log</span>
-                            </div>
+                        <h3 class="text-white font-bold text-sm mb-1">Approved</h3>
+                        <p class="text-[8px] text-slate-400">Validated by Manager.</p>
+                    </div>
+                     <div class="mt-2 md:absolute md:top-1/2 md:right-[18%] md:-translate-y-1/2 bg-green-600/90 text-white text-[8px] font-bold px-2 py-0.5 rounded-full z-20 shadow-lg">
+                        SUBMIT
+                    </div>
+                </div>
+
+                <!-- STATE 4: SUBMITTED -->
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="bg-green-900/20 border-2 border-green-500 p-4 rounded-xl w-40 text-center shadow-lg shadow-green-500/10 backdrop-blur-sm">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white">
+                            <i class="fas fa-check-circle text-lg"></i>
                         </div>
+                        <h3 class="text-white font-bold text-sm mb-1">Submitted</h3>
+                        <p class="text-[8px] text-slate-400">Locked & Archived.</p>
                     </div>
                 </div>
 
@@ -388,24 +382,24 @@
                  <div class="card p-6 bg-slate-800/50">
                      <h4 class="text-sm font-bold text-white mb-2"><i class="fas fa-random text-purple-400 mr-2"></i> Triggers</h4>
                      <ul class="text-xs text-slate-400 space-y-2">
-                         <li><span class="text-yellow-400 font-bold">Manual:</span> "New Report" Wizard (First Time).</li>
-                         <li><span class="text-yellow-400 font-bold">Scheduled:</span> System cron job creates Draft based on Frequency.</li>
-                         <li><span class="text-blue-400 font-bold">Generation:</span> Runs Calc Engine, mapping Excel cells to PDF fields.</li>
+                         <li><span class="text-blue-400 font-bold">Generate:</span> Runs Calc Engine, maps Excel cells.</li>
+                         <li><span class="text-orange-400 font-bold">Review:</span> Manager locks values for submission.</li>
+                         <li><span class="text-green-400 font-bold">Submit:</span> Pushes to repository, updates Audit Log.</li>
                      </ul>
                  </div>
                  <div class="card p-6 bg-slate-800/50">
                      <h4 class="text-sm font-bold text-white mb-2"><i class="fas fa-lock text-green-400 mr-2"></i> Constraints</h4>
                      <ul class="text-xs text-slate-400 space-y-2">
-                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Cannot <strong>Edit</strong> a Submitted report.</li>
-                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Cannot <strong>Submit</strong> a Draft (must Generate first).</li>
-                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Deleting a Submitted report requires <strong>Admin</strong> privs.</li>
+                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Cannot <strong>Submit</strong> until <strong>Approved</strong>.</li>
+                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Cannot <strong>Review</strong> until <strong>Generated</strong>.</li>
+                         <li><i class="fas fa-times-circle text-red-400 mr-1"></i> Submitted reports are <strong>Read-Only</strong>.</li>
                      </ul>
                  </div>
              </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- DATABASE SCHEMA VIEW (NEW)                 -->
+        <!-- DATABASE SCHEMA VIEW (UPDATED)             -->
         <!-- ========================================== -->
         <div id="view-database" class="hidden">
             <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-orange-500">PostgreSQL Schema & Data Model</h2>
@@ -447,6 +441,22 @@
                     <!-- Link -->
                     <div class="self-center w-8 h-0.5 bg-slate-600"></div>
 
+                    <!-- Table: Funds (NEW) -->
+                     <div class="bg-slate-900 border border-teal-500/50 rounded-lg w-48 shadow-lg">
+                        <div class="bg-teal-900/30 p-2 border-b border-teal-500/30 font-bold text-xs text-teal-300">
+                            <i class="fas fa-money-bill-wave mr-1"></i> funds
+                        </div>
+                        <ul class="p-2 text-[10px] text-slate-300 font-mono space-y-1">
+                            <li class="flex justify-between"><span>id</span> <span class="text-slate-500">PK</span></li>
+                            <li>fund_name</li>
+                            <li>fund_number</li>
+                            <li>inception_date</li>
+                        </ul>
+                    </div>
+
+                    <!-- Link -->
+                    <div class="self-center w-8 h-0.5 bg-slate-600"></div>
+
                     <!-- Table: Reports -->
                     <div class="bg-slate-900 border border-green-500/50 rounded-lg w-48 shadow-lg">
                         <div class="bg-green-900/30 p-2 border-b border-green-500/30 font-bold text-xs text-green-300">
@@ -455,6 +465,7 @@
                         <ul class="p-2 text-[10px] text-slate-300 font-mono space-y-1">
                             <li class="flex justify-between"><span>id</span> <span class="text-slate-500">PK</span></li>
                             <li class="flex justify-between"><span>template_id</span> <span class="text-slate-500">FK</span></li>
+                            <li class="flex justify-between text-teal-400"><span>fund_id</span> <span class="text-slate-500">FK</span></li>
                             <li class="flex justify-between"><span>data_sheet_id</span> <span class="text-slate-500">FK</span></li>
                             <li>status</li>
                             <li class="text-green-400 font-bold">frequency (Enum)</li>
@@ -464,15 +475,18 @@
                 </div>
                 
                 <div class="flex flex-nowrap gap-8 min-w-[800px] justify-center items-start mt-8">
-                     <!-- Table: Data Sheets -->
+                     <!-- Table: Data Sheets (UPDATED) -->
                     <div class="bg-slate-900 border border-yellow-500/50 rounded-lg w-48 shadow-lg relative left-12">
                         <div class="bg-yellow-900/30 p-2 border-b border-yellow-500/30 font-bold text-xs text-yellow-300">
                             <i class="fas fa-table mr-1"></i> data_sheets
                         </div>
                         <ul class="p-2 text-[10px] text-slate-300 font-mono space-y-1">
                             <li class="flex justify-between"><span>id</span> <span class="text-slate-500">PK</span></li>
+                            <li class="flex justify-between text-teal-400"><span>fund_id</span> <span class="text-slate-500">FK</span></li>
                             <li>filename</li>
                             <li>s3_key</li>
+                            <li class="text-yellow-400 font-bold">version</li>
+                            <li class="text-yellow-400 font-bold">status (Enum)</li>
                             <li class="text-yellow-400">parsed_data (JSON)</li>
                         </ul>
                     </div>
@@ -502,16 +516,16 @@
                     <h3 class="text-lg font-bold text-white mb-4">Core Tables</h3>
                     <div class="space-y-4">
                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
-                            <div class="text-sm font-bold text-purple-400 mb-2">regulations</div>
-                            <p class="text-xs text-slate-400 mb-2">Stores the raw and processed regulatory text. `extraction_json` holds the AI-parsed rules and formulas.</p>
+                            <div class="text-sm font-bold text-teal-400 mb-2">funds</div>
+                            <p class="text-xs text-slate-400 mb-2">Stores static information about each investment fund (Name, Number, Dates). Referenced by Reports and Data Sheets.</p>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
+                            <div class="text-sm font-bold text-green-400 mb-2">reports</div>
+                            <p class="text-xs text-slate-400 mb-2">The central entity. Tracks lifecycle. Now includes `fund_id` to link specific reports to the correct fund entity.</p>
                         </div>
                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
                             <div class="text-sm font-bold text-blue-400 mb-2">templates</div>
                             <p class="text-xs text-slate-400 mb-2">Defines the structure of the output PDF. `mapping_logic` is a JSONB object linking Excel Cell Coordinates (e.g., "Sheet1!A1") to Report Fields.</p>
-                        </div>
-                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
-                            <div class="text-sm font-bold text-green-400 mb-2">reports</div>
-                            <p class="text-xs text-slate-400 mb-2">The central entity. Tracks lifecycle (Draft/Generated/Submitted). `frequency` column determines scheduling (e.g. 'Monthly').</p>
                         </div>
                     </div>
                 </div>
@@ -520,15 +534,15 @@
                      <div class="space-y-4">
                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
                             <div class="text-sm font-bold text-yellow-400 mb-2">data_sheets</div>
-                            <p class="text-xs text-slate-400 mb-2">Stores metadata about uploaded Excel files. `parsed_data` caches the raw values extracted from the sheet to avoid re-parsing.</p>
+                            <p class="text-xs text-slate-400 mb-2">Stores uploaded Excel files. Includes <strong>Version Control</strong> (v1.0, v1.1) and <strong>Status</strong> (Active/Archived) for auditing.</p>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
+                            <div class="text-sm font-bold text-purple-400 mb-2">regulations</div>
+                            <p class="text-xs text-slate-400 mb-2">Stores the raw and processed regulatory text. `extraction_json` holds the AI-parsed rules and formulas.</p>
                         </div>
                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
                             <div class="text-sm font-bold text-slate-300 mb-2">audit_logs</div>
                             <p class="text-xs text-slate-400 mb-2">Immutable record of all write actions. Critical for compliance. Tracks "Who changed What and When".</p>
-                        </div>
-                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
-                            <div class="text-sm font-bold text-slate-300 mb-2">users</div>
-                            <p class="text-xs text-slate-400 mb-2">Managed via Supabase Auth, but mirrored here for Role-Based Access Control (RBAC) assignments.</p>
                         </div>
                     </div>
                 </div>
@@ -586,6 +600,46 @@
                                  </table>
                              </div>
                              <p class="text-gray-500 italic text-[10px]">Generated by MORE AI System.</p>
+                         </div>
+                     </div>
+                 </div>
+                 
+                 <!-- REPORT REVIEW MODAL (NEW) -->
+                 <div id="report-review-modal" class="hidden absolute inset-0 bg-slate-900/95 z-50 flex flex-col fade-in">
+                     <div class="flex justify-between items-center p-4 border-b border-slate-700 bg-slate-800">
+                         <div class="flex items-center gap-2">
+                             <i class="fas fa-clipboard-check text-orange-400 text-xl"></i>
+                             <h4 class="text-white font-bold text-sm" id="report-review-title">Review & Approve Report</h4>
+                         </div>
+                         <button onclick="closeReviewModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+                     </div>
+                     <div class="flex-grow p-8 overflow-y-auto flex justify-center bg-slate-900/50">
+                         <div class="bg-white text-black w-[600px] min-h-[800px] shadow-lg p-10 text-xs relative">
+                             <!-- Dummy Report Content (Same as View) -->
+                             <h1 class="text-xl font-bold mb-4 border-b pb-2">Investment Compliance Report (Review Mode)</h1>
+                             <div class="grid grid-cols-2 gap-4 mb-6">
+                                 <div><strong>Fund:</strong> <span>MORE Tech 100</span></div>
+                                 <div><strong>Date:</strong> <span>2024-10-27</span></div>
+                             </div>
+                             <p class="mb-4">This document certifies compliance with Regulation 12b regarding asset allocation and risk exposure.</p>
+                             <div class="bg-gray-100 p-4 rounded mb-4 border border-orange-200">
+                                 <h2 class="font-bold mb-2">1. Asset Summary</h2>
+                                 <table class="w-full text-left">
+                                     <tr class="border-b"><th class="py-1">Asset Class</th><th class="py-1">Value</th></tr>
+                                     <tr><td class="py-1">Equities</td><td class="py-1">$12,000,000</td></tr>
+                                     <tr><td class="py-1">Bonds</td><td class="py-1">$4,500,000</td></tr>
+                                     <tr><td class="py-1">Cash</td><td class="py-1">$1,200,000</td></tr>
+                                 </table>
+                             </div>
+                             <p class="text-gray-500 italic text-[10px]">Generated by MORE AI System.</p>
+                         </div>
+                     </div>
+                     <!-- Review Footer -->
+                     <div class="p-4 border-t border-slate-700 bg-slate-800 flex justify-between items-center">
+                         <div class="text-xs text-slate-400"><i class="fas fa-info-circle mr-2"></i>Approving will lock this report for submission.</div>
+                         <div class="flex gap-3">
+                             <button onclick="closeReviewModal()" class="px-4 py-2 rounded text-xs bg-slate-700 text-white hover:bg-slate-600">Cancel</button>
+                             <button onclick="confirmApproval()" class="px-4 py-2 rounded text-xs bg-teal-600 text-white hover:bg-teal-500 font-bold"><i class="fas fa-check mr-2"></i>Approve & Lock</button>
                          </div>
                      </div>
                  </div>
@@ -763,8 +817,19 @@
                      
                      <!-- PAGE: TEMPLATES -->
                      <div id="ui-page-templates" class="hidden">
-                        <div id="template-step-list"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Template Library</h3><button onclick="startTemplateWizard()" class="bg-purple-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-purple-500 transition shadow-lg shadow-purple-500/20"><i class="fas fa-magic mr-2"></i> + New Template (Reverse Engineer)</button></div><div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>Name</th><th>Data Source</th><th>Processed</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white">ETF Monthly V1</td><td>ETF_Data_Master.xlsx</td><td><span class="text-green-400">100%</span></td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="showToast('Viewing Template...')">View</span><span class="mock-btn-sm btn-green" onclick="startReportWizard()">Use</span></td></tr><tr id="draft-template-row"><td class="font-bold text-white">TASE Weekly Summary</td><td>TASE_Raw_Export.xlsx</td><td><span class="text-yellow-400">85%</span></td><td id="draft-status"><span class="text-yellow-400">● Draft</span></td><td id="draft-actions"><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="showToast('Viewing Template...')">View</span><span class="mock-btn-sm btn-green bg-green-900/50 border-green-800 text-green-200" onclick="activateTemplate(this)">Activate</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Creating a New Template</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. Upload</div><div class="mock-window-sm h-12 w-20"><div class="mock-header-sm"></div><div class="text-[6px] text-slate-500 flex justify-center items-center h-full">Prev Report + Sheet</div></div></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">System Reads</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">2. AI Logic</div><i class="fas fa-cogs fa-spin text-purple-400 text-lg"></i><span class="text-[8px] text-purple-300 mt-1">Maps Fields to Cells</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Review Map</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card"><div class="flow-card-title">3. Save</div><i class="fas fa-save text-green-400 text-lg"></i><span class="text-[8px] text-slate-400 mt-1">Available in Library</span></div></div></div></div>
-                        <div id="template-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10"><div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelTemplateWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">New Template Wizard</h3><div id="wiz-upload" class="text-center"><div class="grid grid-cols-3 gap-4 mb-6"><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-contract text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Previous Report PDF</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-table text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Data Sheet (Excel)</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-pdf text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Regulation PDF</p></div></div><button onclick="runAiAnalysis()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Reverse Engineering</button></div><div id="wiz-processing" class="hidden text-center py-6"><i class="fas fa-circle-notch fa-spin text-4xl text-purple-400 mb-4"></i><h4 class="text-white font-bold">AI Processing...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="ai-progress-bar" class="bg-purple-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Mapping PDF Values to Excel Cells...</p></div><div id="wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-2">Successfully mapped <strong>45 fields</strong>.</p><div class="bg-slate-900 p-3 rounded mb-6 border border-green-500/30"><div class="flex justify-between text-xs mb-1"><span class="text-slate-400">Mapping Confidence:</span><span class="text-green-400 font-bold">85%</span></div><div class="w-full bg-slate-700 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[85%]"></div></div></div><button onclick="finishTemplateWizard()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">Save Template to Library</button></div></div></div>
+                        <div id="template-step-list"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Template Library</h3><button onclick="startTemplateWizard()" class="bg-purple-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-purple-500 transition shadow-lg shadow-purple-500/20"><i class="fas fa-magic mr-2"></i> + New Template (Reverse Engineer)</button></div><div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-slate-700"><table class="mock-table" id="templates-table"><thead><tr class="bg-slate-700/50"><th>Name</th><th>Data Source</th><th>Processed</th><th>Status</th><th>Actions</th></tr></thead><tbody id="templates-table-body"><tr><td class="font-bold text-white">ETF Monthly V1</td><td>ETF_Data_Master.xlsx</td><td><span class="text-green-400">100%</span></td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="showToast('Viewing Template...')">View</span><span class="mock-btn-sm btn-green" onclick="startReportWizard()">Use</span></td></tr><tr id="draft-template-row"><td class="font-bold text-white">TASE Weekly Summary</td><td>TASE_Raw_Export.xlsx</td><td><span class="text-yellow-400">85%</span></td><td id="draft-status"><span class="text-yellow-400">● Draft</span></td><td id="draft-actions"><span class="mock-btn-sm btn-blue">Edit</span><span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span><span class="mock-btn-sm btn-green" onclick="showToast('Viewing Template...')">View</span><span class="mock-btn-sm btn-green bg-green-900/50 border-green-800 text-green-200" onclick="activateTemplate(this)">Activate</span></td></tr></tbody></table></div><div class="border border-purple-500/30 bg-purple-900/10 rounded-2xl p-6"><h4 class="text-purple-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Creating a New Template</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. Upload</div><div class="mock-window-sm h-12 w-20"><div class="mock-header-sm"></div><div class="text-[6px] text-slate-500 flex justify-center items-center h-full">Prev Report + Sheet</div></div></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">System Reads</div><div class="flow-line"><div class="flow-packet purple"></div></div></div><div class="flow-card border-dashed border-purple-500/50 bg-purple-900/20"><div class="flow-card-title">2. AI Logic</div><i class="fas fa-cogs fa-spin text-purple-400 text-lg"></i><span class="text-[8px] text-purple-300 mt-1">Maps Fields to Cells</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Review Map</div><div class="flow-line"><div class="flow-packet purple" style="animation-delay: 0.5s"></div></div></div><div class="flow-card"><div class="flow-card-title">3. Save</div><i class="fas fa-save text-green-400 text-lg"></i><span class="text-[8px] text-slate-400 mt-1">Available in Library</span></div></div></div></div>
+                        <div id="template-step-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10"><div class="bg-slate-800 p-8 rounded-2xl border border-purple-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelTemplateWizard()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">New Template Wizard</h3><div id="wiz-upload" class="text-center">
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-left">
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1">Fund Name</label>
+                                <input type="text" id="template-name-input" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white focus:border-purple-500 outline-none" placeholder="e.g. MORE Tech 100">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1">Fund ID</label>
+                                <input type="text" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-xs text-white focus:border-purple-500 outline-none" placeholder="e.g. 510023">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mb-6"><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-contract text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Previous Report PDF</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-table text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Data Sheet (Excel)</p></div><div class="border-2 border-dashed border-slate-600 rounded-xl p-4 hover:border-purple-500 transition cursor-pointer"><i class="fas fa-file-pdf text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-400">Regulation PDF</p></div></div><button onclick="runAiAnalysis()" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Reverse Engineering</button></div><div id="wiz-processing" class="hidden text-center py-6"><i class="fas fa-circle-notch fa-spin text-4xl text-purple-400 mb-4"></i><h4 class="text-white font-bold">AI Processing...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="ai-progress-bar" class="bg-purple-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Mapping PDF Values to Excel Cells...</p></div><div id="wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-2">Successfully mapped <strong>45 fields</strong>.</p><div class="bg-slate-900 p-3 rounded mb-6 border border-green-500/30"><div class="flex justify-between text-xs mb-1"><span class="text-slate-400">Mapping Confidence:</span><span class="text-green-400 font-bold">85%</span></div><div class="w-full bg-slate-700 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[85%]"></div></div></div><button onclick="finishTemplateWizard()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">Save Template to Library</button></div></div></div>
                         <div id="template-history-modal" class="hidden absolute top-0 left-0 w-full h-full bg-black/80 flex items-center justify-center z-50"><div class="bg-slate-800 p-6 rounded-xl border border-slate-600 w-96 relative shadow-2xl"><button onclick="toggleTemplateHistory()" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fas fa-times"></i></button><h4 class="text-white font-bold mb-4">Change Log: TASE Weekly</h4><div class="space-y-3 text-xs text-slate-300"><div class="flex justify-between border-b border-slate-700 pb-2"><span><span class="text-green-400">Created</span> by Admin</span><span class="text-slate-500">2024-10-24 09:30</span></div><div class="flex justify-between border-b border-slate-700 pb-2"><span><span class="text-blue-400">Mapping Edit</span> by User B</span><span class="text-slate-500">2024-10-24 11:15</span></div><div class="flex justify-between border-b border-slate-700 pb-2"><span><span class="text-purple-400">Formula Update</span> by Admin</span><span class="text-slate-500">2024-10-25 14:00</span></div></div></div></div>
                      </div>
 
@@ -806,7 +871,7 @@
                                             <td>Oct 20</td>
                                             <td class="text-green-400">Today</td>
                                             <td><span class="text-blue-400 text-[9px] border border-blue-500 px-1 rounded bg-blue-900/20">Generated</span></td>
-                                            <td><span class="mock-btn-sm btn-green" onclick="requestAction('submit', this)">Submit</span><span class="mock-btn-sm btn-green" onclick="viewReport('TASE Weekly Update')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('TASE Weekly Update')">Edit</span></td>
+                                            <td><span class="mock-btn-sm btn-orange" onclick="reviewReport(this)">Review</span><span class="mock-btn-sm btn-green" onclick="viewReport('TASE Weekly Update')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('TASE Weekly Update')">Edit</span></td>
                                         </tr>
                                         <tr>
                                             <td class="font-bold text-white">Real Estate Bond Fund</td>
@@ -933,8 +998,64 @@
 
                      <!-- PAGE: DATA SHEET -->
                      <div id="ui-page-datasheet" class="hidden">
-                        <div id="ds-view-list"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Available Data Sheets</h3><div class="flex gap-2"><input type="text" placeholder="Search..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40"><button class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-upload mr-2"></i> Upload New</button></div></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>File Name</th><th>Linked Template</th><th>Last Updated</th><th>Updated By</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white"><i class="fas fa-file-excel text-green-500 mr-2"></i> ETF_Data_Master.xlsx</td><td>ETF Monthly V1</td><td>2024-10-25</td><td>Analyst A</td><td><span class="mock-btn-sm btn-blue" onclick="openDataSheet('ETF_Data_Master.xlsx')">View Data</span></td></tr><tr><td class="font-bold text-white"><i class="fas fa-file-excel text-green-500 mr-2"></i> Bond_Yields_Q3.xlsx</td><td>Bond Summary V2</td><td>2024-10-20</td><td>Admin</td><td><span class="mock-btn-sm btn-blue" onclick="openDataSheet('Bond_Yields_Q3.xlsx')">View Data</span></td></tr><tr><td class="font-bold text-white"><i class="fas fa-file-excel text-green-500 mr-2"></i> TASE_Raw_Export.xlsx</td><td>TASE Weekly</td><td>2024-10-18</td><td>Analyst B</td><td><span class="mock-btn-sm btn-blue" onclick="openDataSheet('TASE_Raw_Export.xlsx')">View Data</span></td></tr></tbody></table></div><div class="border border-green-500/30 bg-green-900/10 rounded-2xl p-6 mt-8"><h4 class="text-green-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Data Integration</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. Source</div><i class="fas fa-file-csv text-slate-400 text-2xl my-2"></i><span class="text-[8px] text-slate-500">Excel / Bloomberg</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Ingest</div><div class="flow-line"><div class="flow-packet green"></div></div></div><div class="flow-card"><div class="flow-card-title">2. Validate</div><i class="fas fa-shield-alt text-green-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Type Check</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Apply Rules</div><div class="flow-line"><div class="flow-packet green" style="animation-delay: 0.5s"></div></div></div><div class="flow-card border-dashed border-green-500/50 bg-green-900/20"><div class="flow-card-title">3. Calc Engine</div><i class="fas fa-cog fa-spin text-green-300 text-2xl my-2"></i><span class="text-[8px] text-green-200">Reg Formulas</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Update Grid</div><div class="flow-line"><div class="flow-packet green" style="animation-delay: 1s"></div></div></div><div class="flow-card"><div class="flow-card-title">4. Master</div><i class="fas fa-table text-blue-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Live Sheet</span></div></div></div></div>
+                        <div id="ds-view-list"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Available Data Sheets</h3><div class="flex gap-2"><input type="text" placeholder="Search..." class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-xs text-white w-40"><button class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-upload mr-2"></i> Upload New</button></div></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th>File Name</th><th>Version</th><th>Linked Template</th><th>Last Updated</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td class="font-bold text-white"><i class="fas fa-file-excel text-green-500 mr-2"></i> ETF_Data_Master.xlsx</td><td class="text-slate-300">v1.2</td><td>ETF Monthly V1</td><td>2024-10-25</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="openDataSheet('ETF_Data_Master.xlsx')">View Data</span><span class="mock-btn-sm btn-purple" onclick="openDsHistory('ETF_Data_Master.xlsx')">History</span><span class="mock-btn-sm btn-orange" onclick="startDsUpload('ETF_Data_Master.xlsx')">Replace</span></td></tr><tr><td class="font-bold text-white"><i class="fas fa-file-excel text-green-500 mr-2"></i> Bond_Yields_Q3.xlsx</td><td class="text-slate-300">v2.0</td><td>Bond Summary V2</td><td>2024-10-20</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="openDataSheet('Bond_Yields_Q3.xlsx')">View Data</span><span class="mock-btn-sm btn-purple" onclick="openDsHistory('Bond_Yields_Q3.xlsx')">History</span><span class="mock-btn-sm btn-orange" onclick="startDsUpload('Bond_Yields_Q3.xlsx')">Replace</span></td></tr><tr><td class="font-bold text-white"><i class="fas fa-file-excel text-green-500 mr-2"></i> TASE_Raw_Export.xlsx</td><td class="text-slate-300">v1.0</td><td>TASE Weekly</td><td>2024-10-18</td><td><span class="text-green-400">● Active</span></td><td><span class="mock-btn-sm btn-blue" onclick="openDataSheet('TASE_Raw_Export.xlsx')">View Data</span><span class="mock-btn-sm btn-purple" onclick="openDsHistory('TASE_Raw_Export.xlsx')">History</span><span class="mock-btn-sm btn-orange" onclick="startDsUpload('TASE_Raw_Export.xlsx')">Replace</span></td></tr></tbody></table></div><div class="border border-green-500/30 bg-green-900/10 rounded-2xl p-6 mt-8"><h4 class="text-green-400 font-bold text-xs uppercase mb-4 tracking-widest text-center">Flow: Data Integration</h4><div class="flex items-start gap-0 overflow-x-auto pb-4 justify-center"><div class="flow-card"><div class="flow-card-title">1. Source</div><i class="fas fa-file-csv text-slate-400 text-2xl my-2"></i><span class="text-[8px] text-slate-500">Excel / Bloomberg</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Ingest</div><div class="flow-line"><div class="flow-packet green"></div></div></div><div class="flow-card"><div class="flow-card-title">2. Validate</div><i class="fas fa-shield-alt text-green-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Type Check</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Apply Rules</div><div class="flow-line"><div class="flow-packet green" style="animation-delay: 0.5s"></div></div></div><div class="flow-card border-dashed border-green-500/50 bg-green-900/20"><div class="flow-card-title">3. Calc Engine</div><i class="fas fa-cog fa-spin text-green-300 text-2xl my-2"></i><span class="text-[8px] text-green-200">Reg Formulas</span></div><div class="flow-arrow-container pt-6"><div class="flow-action-label">Update Grid</div><div class="flow-line"><div class="flow-packet green" style="animation-delay: 1s"></div></div></div><div class="flow-card"><div class="flow-card-title">4. Master</div><i class="fas fa-table text-blue-400 text-2xl my-2"></i><span class="text-[8px] text-slate-400">Live Sheet</span></div></div></div></div>
                         <div id="ds-view-detail" class="hidden"><div class="flex justify-between items-center mb-4"><div><button onclick="closeDataSheet()" class="text-xs text-slate-400 hover:text-white mb-1"><i class="fas fa-arrow-left mr-1"></i> Back to List</button><h3 class="text-xl font-bold text-white" id="ds-title-display">ETF_Data_Master.xlsx</h3><p class="text-xs text-slate-400">Linked Regulation: <strong>Reg 12b</strong></p></div><button onclick="toggleDataEdit()" id="btn-data-edit" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition border border-blue-400"><i class="fas fa-pencil-alt mr-2"></i> Edit Data</button></div><div class="bg-slate-900 border border-slate-700 rounded-lg overflow-hidden relative"><table class="ds-table"><thead><tr><th>ID</th><th>Field Name</th><th>Value (Current)</th><th>Type</th><th>Source</th></tr></thead><tbody><tr><td>001</td><td>Total Assets</td><td><input type="text" value="1,500,000" class="ds-input" readonly></td><td><span class="text-slate-400">Manual</span></td><td>User Input</td></tr><tr><td>002</td><td>Cash Flow</td><td><input type="text" value="200,000" class="ds-input" readonly></td><td><span class="text-slate-400">Manual</span></td><td>User Input</td></tr><tr class="bg-blue-900/10"><td>003</td><td>Risk Weight</td><td class="ds-cell-calc" onclick="showFormula('(Total Assets - Liabilities) * 0.15', 'Reg 12b, Section 4.2')">0.15</td><td><span class="text-blue-400"><i class="fas fa-calculator mr-1"></i> Calculated</span></td><td>Reg 12b (pg. 4)</td></tr><tr class="bg-blue-900/10"><td>004</td><td>Tax Liability</td><td class="ds-cell-calc" onclick="showFormula('(Assets * 0.20)', 'Treasury Tax Code 2024')">300,000</td><td><span class="text-blue-400"><i class="fas fa-calculator mr-1"></i> Calculated</span></td><td>(Assets * 0.2)</td></tr><tr><td>005</td><td>Fund Manager</td><td><input type="text" value="John Doe" class="ds-input" readonly></td><td><span class="text-slate-400">Manual</span></td><td>User Input</td></tr></tbody></table><div id="formula-modal" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-800 border border-blue-500 rounded-lg p-4 shadow-2xl w-64 z-20"><div class="flex justify-between items-start mb-2"><h5 class="text-xs font-bold text-blue-400 uppercase">Formula Logic</h5><button onclick="document.getElementById('formula-modal').classList.add('hidden')" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button></div><div class="bg-black/30 p-2 rounded text-xs font-mono text-green-400 mb-2" id="formula-text">= (A1 * 0.5)</div><div class="text-[10px] text-slate-400"><i class="fas fa-book mr-1"></i> Source: <span class="text-slate-200" id="formula-source">Regulation Doc</span></div></div></div></div>
+                     
+                        <!-- DS Upload Wizard -->
+                        <div id="ds-upload-wizard" class="hidden flex flex-col items-center justify-center h-full pt-10 absolute top-0 left-0 w-full bg-slate-900/95 z-50"><div class="bg-slate-800 p-8 rounded-2xl border border-yellow-500/50 max-w-lg w-full shadow-2xl relative"><button onclick="cancelDsUpload()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fas fa-times"></i></button><h3 class="text-xl font-bold text-white mb-6 text-center">Replacing: ETF_Data_Master.xlsx (v1.2)</h3><div id="ds-wiz-upload" class="text-center"><div class="border-2 border-dashed border-slate-600 rounded-xl p-8 mb-6 hover:border-yellow-500 transition cursor-pointer"><i class="fas fa-file-excel text-4xl text-slate-500 mb-2"></i><p class="text-xs text-slate-400">Drag & Drop <strong>New Data Sheet (Excel)</strong> here</p></div><button onclick="runDsProcessing()" class="bg-yellow-600 text-white px-6 py-2 rounded-lg text-sm w-full">Start Processing</button></div><div id="ds-wiz-processing" class="hidden text-center py-6"><i class="fas fa-microchip fa-spin text-4xl text-yellow-400 mb-4"></i><h4 class="text-white font-bold">AI Analyzing Changes...</h4><div class="w-full bg-slate-700 h-2 rounded-full mt-4 mb-2 overflow-hidden"><div id="ds-progress-bar" class="bg-yellow-500 h-full w-0 transition-all duration-[2000ms] ease-out"></div></div><p class="text-xs text-slate-400">Comparing cell values against previous version...</p></div><div id="ds-wiz-success" class="hidden text-center"><div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-green-400 text-3xl"></i></div><h4 class="text-white font-bold text-lg">Analysis Complete</h4><p class="text-xs text-slate-400 mt-1 mb-6">Detected <strong>5 value changes</strong>.</p><button onclick="finishDsUpload()" class="bg-green-600 text-white px-6 py-2 rounded-lg text-sm w-full">View Diff & Confirm</button></div></div></div>
+
+                        <!-- DS Diff View -->
+                        <div id="ds-diff-view" class="hidden h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center gap-3">
+                                    <button onclick="closeDsDiff()" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i> Back to List (Pending)</button>
+                                    <h3 class="text-lg font-bold text-white">Data Sheet Change Detection</h3>
+                                </div>
+                                <div class="text-xs text-slate-400">Comparing: <strong>v1.2</strong> vs <strong>v1.3 (New)</strong></div>
+                            </div>
+                            <div class="flex-grow flex gap-4 overflow-hidden">
+                                <!-- Old Version -->
+                                <div class="w-1/2 bg-slate-900 rounded-lg border border-slate-700 p-4 overflow-y-auto">
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mb-2 border-b border-slate-700 pb-1">Current Version (v1.2)</div>
+                                    <table class="ds-table w-full text-xs">
+                                        <thead><tr class="text-slate-500"><th>Cell</th><th>Value</th></tr></thead>
+                                        <tbody>
+                                            <tr><td>C12</td><td>12%</td></tr>
+                                            <tr><td>D15</td><td>$1,200,000</td></tr>
+                                            <tr><td>E20</td><td>$500,000</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- New Version -->
+                                <div class="w-1/2 bg-slate-900 rounded-lg border border-slate-700 p-4 overflow-y-auto">
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mb-2 border-b border-slate-700 pb-1">New Upload (v1.3)</div>
+                                    <table class="ds-table w-full text-xs">
+                                        <thead><tr class="text-slate-500"><th>Cell</th><th>Value</th></tr></thead>
+                                        <tbody>
+                                            <tr><td>C12</td><td class="bg-yellow-900/30 text-yellow-400 border border-yellow-500">15%</td></tr>
+                                            <tr><td>D15</td><td class="bg-yellow-900/30 text-yellow-400 border border-yellow-500">$1,500,000</td></tr>
+                                            <tr><td>E20</td><td>$500,000</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 bg-purple-900/20 border border-purple-600/50 p-3 rounded flex flex-col justify-between items-start gap-2">
+                                <div class="text-xs text-purple-200"><i class="fas fa-exclamation-triangle mr-2"></i><strong>Impact Analysis:</strong> This change affects <strong>2 Templates</strong> (Click to Review):</div>
+                                <div class="flex gap-2 mt-1">
+                                    <button onclick="openTemplateImpact('ETF Monthly V1')" class="text-[10px] bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-300 px-2 py-1 rounded transition">ETF Monthly V1</button>
+                                    <button onclick="openTemplateImpact('Risk Report Q3')" class="text-[10px] bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-300 px-2 py-1 rounded transition">Risk Report Q3</button>
+                                </div>
+                                <div class="w-full flex justify-end gap-2 mt-2">
+                                    <button onclick="closeDsDiff()" class="bg-transparent border border-slate-500 text-slate-300 px-4 py-1 rounded text-xs">Cancel</button>
+                                    <button onclick="showToast('Data Sheet Updated (v1.3)'); closeDsDiff();" class="bg-green-600 text-white px-4 py-1 rounded text-xs font-bold hover:bg-green-500">Approve & Replace</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DS History View -->
+                         <div id="ds-history-view" class="hidden h-full flex flex-col"><div class="flex justify-between items-center mb-6"><div class="flex items-center gap-3"><button onclick="closeDsHistory()" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i> Back to List</button><div><h3 class="text-xl font-bold text-white" id="ds-history-title">ETF_Data_Master.xlsx</h3><p class="text-xs text-slate-400">Version History & Management</p></div></div><button onclick="startDsUpload('ETF_Data_Master.xlsx')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-500/20"><i class="fas fa-cloud-upload-alt mr-2"></i> Upload New Version</button></div><div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 mb-6"><table class="mock-table"><thead><tr class="bg-slate-700/50"><th class="w-10 text-center"><input type="checkbox"></th><th>Version</th><th>Uploaded Date</th><th>By</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr class="bg-slate-700/30"><td class="text-center"><input type="checkbox" checked disabled></td><td class="font-bold text-white">v1.2</td><td>2024-10-25</td><td>Analyst A</td><td><span class="text-green-400 border border-green-500/50 px-1 rounded text-[9px]">Active</span></td><td><span class="mock-btn-sm btn-blue">View</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.1</td><td>2024-09-20</td><td>Analyst A</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="showToast('Version Activated')">Activate</span></td></tr><tr><td class="text-center"><input type="checkbox"></td><td class="font-bold text-slate-400">v1.0</td><td>2024-08-20</td><td>Admin</td><td><span class="text-slate-500 text-[9px]">Archived</span></td><td><span class="mock-btn-sm btn-blue">View</span><span class="mock-btn-sm btn-green" onclick="showToast('Version Activated')">Activate</span></td></tr></tbody></table></div></div>
+
                      </div>
                      
                      <!-- HIDDEN SUB-PAGES -->
@@ -1536,11 +1657,26 @@
             const regWiz = document.getElementById('reg-upload-wizard');
             if(regWiz) regWiz.classList.add('hidden');
             
+            const dsWiz = document.getElementById('ds-upload-wizard');
+            if(dsWiz) dsWiz.classList.add('hidden');
+            
+            const dsList = document.getElementById('ds-view-list');
+            if(dsList) dsList.classList.remove('hidden');
+
+            const dsDiff = document.getElementById('ds-diff-view');
+            if(dsDiff) dsDiff.classList.add('hidden');
+            
+             const dsHistory = document.getElementById('ds-history-view');
+            if(dsHistory) dsHistory.classList.add('hidden');
+            
             const tImpact = document.getElementById('template-impact-modal');
             if(tImpact) tImpact.classList.add('hidden');
             
             const rEdit = document.getElementById('report-edit-modal');
             if(rEdit) rEdit.classList.add('hidden');
+            
+            const rReview = document.getElementById('report-review-modal');
+            if(rReview) rReview.classList.add('hidden');
         }
         
         // Data Sheet Functions
@@ -1685,7 +1821,30 @@
         }
 
         function finishTemplateWizard() {
-             cancelTemplateWizard(); 
+            const nameInput = document.getElementById('template-name-input');
+            const templateName = nameInput.value || "New AI Template";
+            
+            cancelTemplateWizard(); 
+            
+            // Add new row to template list
+            const tableBody = document.getElementById('templates-table').querySelector('tbody');
+            const newRow = document.createElement('tr');
+            newRow.classList.add('fade-in');
+            newRow.innerHTML = `
+                <td class="font-bold text-white">${templateName}</td>
+                <td>Pending Source</td>
+                <td><span class="text-yellow-400">0%</span></td>
+                <td><span class="text-yellow-400">● Draft</span></td>
+                <td>
+                    <span class="mock-btn-sm btn-blue">Edit</span>
+                    <span class="mock-btn-sm btn-green bg-green-900/50 border-green-800 text-green-200" onclick="activateTemplate(this)">Activate</span>
+                </td>
+            `;
+            
+            // Insert after the header (first element) or simply prepend
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+            
+            showToast("Draft Template Created");
         }
 
         function cancelTemplateWizard() {
@@ -1704,18 +1863,26 @@
         }
         
         function activateTemplate(btn) {
-            const row = document.getElementById('draft-template-row');
-            const statusCell = document.getElementById('draft-status');
-            const actionsCell = document.getElementById('draft-actions');
+            // This function handles activation for both the hardcoded Draft row AND dynamically added rows
+            const row = btn.closest('tr');
             
+            // Update status cell (4th column, index 3)
+            const statusCell = row.cells[3]; 
             statusCell.innerHTML = '<span class="text-green-400">● Active</span>';
-            btn.remove();
             
-            const useBtn = document.createElement('span');
-            useBtn.className = 'mock-btn-sm btn-green';
-            useBtn.onclick = function() { startReportWizard(); };
-            useBtn.innerText = 'Use';
-            actionsCell.appendChild(useBtn);
+            // Update actions cell (5th column, index 4)
+            const actionsCell = row.cells[4];
+            
+            // Clear existing buttons
+            actionsCell.innerHTML = '';
+            
+            // Rebuild Active buttons
+            actionsCell.innerHTML = `
+                <span class="mock-btn-sm btn-blue">Edit</span>
+                <span class="mock-btn-sm btn-purple" onclick="toggleTemplateHistory()">History</span>
+                <span class="mock-btn-sm btn-green" onclick="showToast('Viewing Template...')">View</span>
+                <span class="mock-btn-sm btn-green" onclick="startReportWizard()">Use</span>
+            `;
             
             showToast("Template Activated Successfully!");
         }
@@ -1739,6 +1906,59 @@
         function cancelReportWizard() {
              document.getElementById('report-step-wizard').classList.add('hidden');
              document.getElementById('report-step-list').classList.remove('hidden');
+        }
+        
+        // --- NEW: DS REPLACEMENT FUNCTIONS ---
+        function startDsUpload(fileName) {
+            document.getElementById('ds-upload-wizard').classList.remove('hidden');
+            document.getElementById('ds-wiz-upload').classList.remove('hidden');
+            document.getElementById('ds-wiz-processing').classList.add('hidden');
+            document.getElementById('ds-wiz-success').classList.add('hidden');
+            document.getElementById('ds-progress-bar').style.width = '0%';
+        }
+        
+        function runDsProcessing() {
+            document.getElementById('ds-wiz-upload').classList.add('hidden');
+            document.getElementById('ds-wiz-processing').classList.remove('hidden');
+            
+             setTimeout(() => { document.getElementById('ds-progress-bar').style.width = '40%'; }, 500);
+            setTimeout(() => { document.getElementById('ds-progress-bar').style.width = '75%'; }, 1500);
+            setTimeout(() => { document.getElementById('ds-progress-bar').style.width = '100%'; }, 2500);
+            
+            setTimeout(() => {
+                document.getElementById('ds-wiz-processing').classList.add('hidden');
+                document.getElementById('ds-wiz-success').classList.remove('hidden');
+            }, 3000);
+        }
+        
+        function finishDsUpload() {
+            cancelDsUpload();
+            openDsDiff();
+        }
+        
+        function cancelDsUpload() {
+            document.getElementById('ds-upload-wizard').classList.add('hidden');
+        }
+        
+        function openDsDiff() {
+             document.getElementById('ds-view-list').classList.add('hidden');
+             document.getElementById('ds-diff-view').classList.remove('hidden');
+        }
+        
+        function closeDsDiff() {
+            document.getElementById('ds-diff-view').classList.add('hidden');
+            document.getElementById('ds-view-list').classList.remove('hidden');
+        }
+        
+        function openDsHistory(fileName) {
+             document.getElementById('ds-view-list').classList.add('hidden');
+             document.getElementById('ds-history-view').classList.remove('hidden');
+             document.getElementById('ds-history-title').innerText = fileName;
+        }
+        
+        function closeDsHistory() {
+             document.getElementById('ds-history-view').classList.add('hidden');
+             document.getElementById('ds-view-list').classList.remove('hidden');
         }
 
         // --- NEW: QUICK GENERATE FUNCTIONS ---
@@ -1799,7 +2019,7 @@
             } else {
                 newRow.classList.add('bg-blue-900/10', 'border-l-4', 'border-blue-500', 'fade-in'); 
                 statusBadge = `<span class="text-blue-400 text-[9px] border border-blue-500 px-1 rounded bg-blue-900/20">Generated</span>`;
-                actions = `<span class="mock-btn-sm btn-green" onclick="requestAction('submit', this)">Submit</span><span class="mock-btn-sm btn-green" onclick="viewReport('${displayName}')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('${displayName}')">Edit</span>`;
+                actions = `<span class="mock-btn-sm btn-orange" onclick="reviewReport(this)">Review</span><span class="mock-btn-sm btn-green" onclick="viewReport('${displayName}')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('${displayName}')">Edit</span>`;
             }
             
             newRow.innerHTML = `
@@ -1843,7 +2063,7 @@
                         row.classList.remove('bg-yellow-900/10', 'border-yellow-500');
                         row.classList.add('bg-blue-900/10', 'border-blue-500');
                         row.cells[4].innerHTML = `<span class="text-blue-400 text-[9px] border border-blue-500 px-1 rounded bg-blue-900/20">Generated</span>`;
-                        row.cells[5].innerHTML = `<span class="mock-btn-sm btn-green" onclick="requestAction('submit', this)">Submit</span><span class="mock-btn-sm btn-green" onclick="viewReport('${reportName}')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('${reportName}')">Edit</span>`;
+                        row.cells[5].innerHTML = `<span class="mock-btn-sm btn-orange" onclick="reviewReport(this)">Review</span><span class="mock-btn-sm btn-green" onclick="viewReport('${reportName}')">View</span><span class="mock-btn-sm btn-blue" onclick="editReportData('${reportName}')">Edit</span>`;
                         
                         showToast("Report Generated Successfully");
                     }, 300);
@@ -1852,6 +2072,46 @@
                     bar.style.width = width + '%';
                 }
             }, 30);
+        }
+        
+        function reviewReport(btnElement) {
+            const row = btnElement.closest('tr');
+            const reportName = row.cells[0].innerText;
+
+            // Open the Review Modal
+            const modal = document.getElementById('report-review-modal');
+            if(modal) {
+                // Set the pending element so the modal knows which row to update
+                pendingReviewElement = btnElement; 
+                modal.classList.remove('hidden');
+            } else {
+                // Fallback if modal missing (shouldn't happen)
+                showToast("Review Modal Loading...");
+            }
+        }
+
+        let pendingReviewElement = null; // To track which row is being reviewed
+
+        function confirmApproval() {
+             if(pendingReviewElement) {
+                const row = pendingReviewElement.closest('tr');
+                const reportName = row.cells[0].innerText;
+                
+                // Update Row to APPROVED State
+                row.classList.remove('bg-blue-900/10', 'border-blue-500');
+                row.classList.add('bg-teal-900/10', 'border-teal-500');
+                
+                row.cells[4].innerHTML = `<span class="text-teal-400 text-[9px] border border-teal-500 px-1 rounded bg-teal-900/20">Approved</span>`;
+                row.cells[5].innerHTML = `<span class="mock-btn-sm btn-green" onclick="requestAction('submit', this)">Submit</span><span class="mock-btn-sm btn-green" onclick="viewReport('${reportName}')">View</span>`;
+                
+                showToast("Report Approved by Manager");
+                closeReviewModal();
+             }
+        }
+
+        function closeReviewModal() {
+            document.getElementById('report-review-modal').classList.add('hidden');
+            pendingReviewElement = null;
         }
         
         // UNIFIED ACTION REQUEST HANDLER
@@ -1904,7 +2164,7 @@
                 const reportName = row.cells[0].innerText;
                 
                 // Update visuals
-                row.classList.remove('bg-blue-900/10', 'border-blue-500');
+                row.classList.remove('bg-teal-900/10', 'border-teal-500');
                 row.classList.add('bg-slate-800'); // Neutral submitted state
                 row.cells[4].innerHTML = `<span class="text-green-400 text-[9px] border border-green-500 px-1 rounded bg-green-900/20">Submitted</span>`;
                 row.cells[5].innerHTML = `<span class="mock-btn-sm btn-green" onclick="viewReport('${reportName}')">View</span>`;
