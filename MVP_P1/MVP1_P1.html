@@ -209,18 +209,29 @@
                 <div class="flow-node z-20">
                     <div class="node-label">Ingestion Channels</div>
                     <div class="flex flex-col gap-4">
-                        <div class="glass-card p-5 w-52 flex items-center gap-4 border-l-4 border-green-500 bg-slate-800/80">
-                            <div class="w-12 h-12 rounded-lg bg-green-900/40 flex items-center justify-center text-green-400 text-2xl shadow-inner"><i class="fas fa-file-excel"></i></div>
+                        <!-- Datasheets Card - MODIFIED for 2x Pair -->
+                        <div class="glass-card p-5 w-56 flex items-center gap-4 border-l-4 border-green-500 bg-slate-800/80 relative">
+                             <!-- Pair Badge -->
+                             <div class="absolute -top-3 -right-3 bg-green-500 text-slate-900 text-[11px] font-bold px-3 py-1 rounded-full shadow-lg border border-slate-700 animate-bounce" style="animation-duration: 3s;">x2 Files</div>
+                            <div class="relative">
+                                <!-- Stacked Icon Effect -->
+                                 <i class="fas fa-file-excel text-green-700 text-3xl absolute -top-1.5 -left-1.5 opacity-60"></i>
+                                <div class="w-12 h-12 rounded-lg bg-green-900/40 flex items-center justify-center text-green-400 text-2xl shadow-inner relative z-10"><i class="fas fa-file-excel"></i></div>
+                            </div>
                             <div>
                                 <h4 class="text-sm font-bold text-white">/Datasheets</h4>
-                                <div class="text-[10px] text-slate-400 font-mono mt-1">openpyxl</div>
+                                <div class="text-[9px] text-green-300 font-bold mt-1 uppercase tracking-wider">Matched Pair</div>
+                                <div class="text-[10px] text-slate-400 font-mono">openpyxl</div>
                             </div>
                         </div>
-                        <div class="glass-card p-5 w-52 flex items-center gap-4 border-l-4 border-red-500 bg-slate-800/80">
+
+                        <!-- Reports Card -->
+                        <div class="glass-card p-5 w-56 flex items-center gap-4 border-l-4 border-red-500 bg-slate-800/80">
                             <div class="w-12 h-12 rounded-lg bg-red-900/40 flex items-center justify-center text-red-400 text-2xl shadow-inner"><i class="fas fa-file-pdf"></i></div>
                             <div>
                                 <h4 class="text-sm font-bold text-white">/Reports</h4>
-                                <div class="text-[10px] text-slate-400 font-mono mt-1">pdfplumber</div>
+                                <div class="text-[9px] text-red-300 font-bold mt-1 uppercase tracking-wider">Single Report</div>
+                                <div class="text-[10px] text-slate-400 font-mono">pdfplumber</div>
                             </div>
                         </div>
                     </div>
@@ -228,7 +239,7 @@
 
                 <!-- CONNECTOR 1 -->
                 <div class="pipeline-connector mx-6 w-32 flex items-center justify-center">
-                    <div class="absolute -top-8 text-xs font-bold text-slate-500 uppercase tracking-widest">Process Pair</div>
+                    <div class="absolute -top-8 text-xs font-bold text-slate-500 uppercase tracking-widest text-center w-full">Ingest Pair<br>(1 PDF + 2 XLS)</div>
                     <div class="data-packet"></div>
                 </div>
 
@@ -328,12 +339,14 @@
 
                             <i class="fas fa-arrow-right text-slate-600 text-xl"></i>
 
-                            <!-- FINAL OUTPUT -->
+                            <!-- FINAL OUTPUT - MODIFIED with LOG -->
                             <div class="glass-card p-4 w-52 bg-green-900/10 border-l-4 border-green-500 flex flex-col gap-2">
                                 <div class="text-sm font-bold text-white uppercase"><i class="fas fa-folder-open mr-2 text-green-500"></i>/Processed</div>
                                 <div class="text-xs text-slate-400 flex flex-col gap-1.5 pl-1">
                                     <span class="flex items-center"><i class="fas fa-check text-green-400 mr-2 w-4"></i>Template_{ID}.json</span>
                                     <span class="flex items-center"><i class="fas fa-highlighter text-yellow-400 mr-2 w-4"></i>{ID}_HIGHLIGHTED.pdf</span>
+                                    <!-- NEW LOG ENTRY -->
+                                    <span class="flex items-center"><i class="fas fa-list-alt text-blue-400 mr-2 w-4"></i>{ID}_log.txt</span>
                                 </div>
                             </div>
                         </div>
