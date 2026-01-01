@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Phase 1: Reverse Engineering Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b1121;
+            color: #e2e8f0;
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b1121 70%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            transition: all 0.3s ease;
+            border-radius: 1.25rem;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.6);
+            transform: translateY(-4px);
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+        }
+
+        /* Tech Pills - Presentation Size */
+        .tech-pill {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem; /* Larger */
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        /* =========================================
+           FLOW PIPELINE STYLES
+           ========================================= */
+        
+        .pipeline-connector {
+            height: 3px; /* Thicker */
+            background: #475569;
+            flex-grow: 1;
+            position: relative;
+            min-width: 60px;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        /* Animated Packets */
+        .data-packet {
+            position: absolute;
+            top: -5px; /* Centered on thicker line */
+            left: 0;
+            width: 12px; /* Bigger */
+            height: 12px;
+            background: #60a5fa;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #3b82f6;
+            animation: flowRight 2.5s infinite linear;
+        }
+        
+        .data-packet.packet-green { background: #4ade80; box-shadow: 0 0 15px #22c55e; animation-delay: 0.5s; }
+        .data-packet.packet-red { background: #f87171; box-shadow: 0 0 15px #ef4444; animation-delay: 0.8s; }
+
+        @keyframes flowRight {
+            0% { left: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .node-label {
+            position: absolute;
+            top: -30px;
+            font-size: 0.85rem; /* Bigger */
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Branching Lines (SVG) */
+        .branch-lines {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 160px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .branch-path {
+            fill: none;
+            stroke: #475569;
+            stroke-width: 3;
+        }
+        
+        .branch-path.active-success { stroke: #22c55e; stroke-dasharray: 8; animation: dash 30s linear infinite; }
+        .branch-path.active-failure { stroke: #ef4444; stroke-dasharray: 8; animation: dash 30s linear infinite; }
+
+        @keyframes dash { to { stroke-dashoffset: -1000; } }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .pulse-engine {
+            animation: enginePulse 3s infinite ease-in-out;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+        }
+        @keyframes enginePulse {
+            0% { border-color: rgba(139, 92, 246, 0.4); }
+            50% { border-color: rgba(139, 92, 246, 0.9); box-shadow: 0 0 40px rgba(139, 92, 246, 0.3); }
+            100% { border-color: rgba(139, 92, 246, 0.4); }
+        }
+
+        /* JSON Icon Styling */
+        .json-icon {
+            font-family: 'Courier New', monospace;
+            font-weight: 800;
+            font-size: 12px;
+            background: #0f172a;
+            border: 2px solid #eab308;
+            color: #eab308;
+            padding: 3px 6px;
+            border-radius: 6px;
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: float 2s ease-in-out infinite;
+            box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2);
+            z-index: 20;
+        }
+        @keyframes float { 0% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } 100% { transform: translateX(-50%) translateY(0); } }
+
+        /* Step Arrow */
+        .step-arrow {
+            color: #64748b;
+            font-size: 1.2rem;
+            margin: 0 10px;
+        }
+
+    </style>
+</head>
+<body class="p-4 md:p-12 min-h-screen flex flex-col items-center justify-center">
+
+    <!-- Header -->
+    <header class="w-full max-w-7xl mx-auto mb-16 text-center relative fade-in">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-sm font-bold mb-6 tracking-widest uppercase shadow-lg shadow-purple-900/20">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse"></span>
+            Project Phase 1
+        </div>
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 gradient-text tracking-tight">Reverse Engineering Engine</h1>
+        <p class="text-slate-400 max-w-3xl mx-auto text-lg md:text-xl font-light">
+            Automated Semantic Mapping: <span class="text-white font-medium">PDF Reports</span> <i class="fas fa-arrow-right mx-2 text-sm"></i> <span class="text-white font-medium">Excel Sources</span>
+        </p>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center space-y-16 w-full max-w-[1600px] mx-auto">
+
+        <!-- ============================================= -->
+        <!-- MAIN PIPELINE VISUALIZATION (SCALED UP) -->
+        <!-- ============================================= -->
+        <section class="w-full overflow-x-auto pb-16 pt-4 fade-in" style="animation-delay: 0.2s;">
+            
+            <div class="min-w-[1400px] flex items-center justify-center px-12 relative">
+                
+                <!-- 1. INPUT NODE GROUP -->
+                <div class="flow-node z-20">
+                    <div class="node-label">Ingestion Channels</div>
+                    <div class="flex flex-col gap-4">
+                        <div class="glass-card p-5 w-52 flex items-center gap-4 border-l-4 border-green-500 bg-slate-800/80">
+                            <div class="w-12 h-12 rounded-lg bg-green-900/40 flex items-center justify-center text-green-400 text-2xl shadow-inner"><i class="fas fa-file-excel"></i></div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">/Datasheets</h4>
+                                <div class="text-[10px] text-slate-400 font-mono mt-1">openpyxl</div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-5 w-52 flex items-center gap-4 border-l-4 border-red-500 bg-slate-800/80">
+                            <div class="w-12 h-12 rounded-lg bg-red-900/40 flex items-center justify-center text-red-400 text-2xl shadow-inner"><i class="fas fa-file-pdf"></i></div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">/Reports</h4>
+                                <div class="text-[10px] text-slate-400 font-mono mt-1">pdfplumber</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONNECTOR 1 -->
+                <div class="pipeline-connector mx-6 w-32 flex items-center justify-center">
+                    <div class="absolute -top-8 text-xs font-bold text-slate-500 uppercase tracking-widest">Process Pair</div>
+                    <div class="data-packet"></div>
+                </div>
+
+                <!-- 2. THE ENGINE (Expanded based on engine.py) -->
+                <div class="flow-node z-20">
+                    <div class="node-label text-purple-400" style="top: -40px;">Core Logic (engine.py)</div>
+                    <div class="glass-card w-[520px] bg-slate-900/90 border-2 border-purple-500/50 pulse-engine p-0 relative overflow-hidden">
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-purple-900/40 to-slate-900 p-3 border-b border-purple-500/30 flex justify-between items-center">
+                            <span class="text-sm font-bold text-white"><i class="fas fa-cogs mr-2 text-purple-400"></i>ReverseEngineeringEngine</span>
+                            <span class="tech-pill border-purple-500/50 text-purple-200">Label-Based Match</span>
+                        </div>
+                        
+                        <!-- Internal Steps -->
+                        <div class="p-6 flex justify-between items-stretch relative">
+                            <!-- Connection Line Background -->
+                            <div class="absolute top-1/2 left-8 right-8 h-1 bg-slate-800 z-0 transform -translate-y-1/2"></div>
+
+                            <!-- Step 1: Extract -->
+                            <div class="relative z-10 flex flex-col items-center gap-2 w-32">
+                                <div class="bg-slate-800 p-3 rounded-xl border border-blue-500/50 shadow-lg shadow-blue-900/20 w-full text-center h-full flex flex-col justify-center">
+                                    <i class="fas fa-table text-blue-400 text-xl mb-2"></i>
+                                    <div class="text-xs font-bold text-white uppercase">1. Extract</div>
+                                    <div class="text-[10px] text-slate-400 leading-tight mt-1">Table Pairs &<br>Header Rows</div>
+                                </div>
+                                <span class="tech-pill text-[10px]">pdfplumber</span>
+                            </div>
+
+                            <i class="fas fa-chevron-right step-arrow pt-8"></i>
+
+                            <!-- Step 2: Fuzzy Match -->
+                            <div class="relative z-10 flex flex-col items-center gap-2 w-32">
+                                <div class="bg-slate-800 p-3 rounded-xl border border-yellow-500/50 shadow-lg shadow-yellow-900/20 w-full text-center h-full flex flex-col justify-center">
+                                    <i class="fas fa-search-location text-yellow-400 text-xl mb-2"></i>
+                                    <div class="text-xs font-bold text-white uppercase">2. Label Match</div>
+                                    <div class="text-[10px] text-slate-400 leading-tight mt-1">Fuzzy Logic &<br>Hebrew Reversal</div>
+                                </div>
+                                <span class="tech-pill text-[10px]">thefuzz</span>
+                            </div>
+
+                            <i class="fas fa-chevron-right step-arrow pt-8"></i>
+
+                            <!-- Step 3: Adjacency -->
+                            <div class="relative z-10 flex flex-col items-center gap-2 w-32">
+                                <div class="bg-slate-800 p-3 rounded-xl border border-purple-500/50 shadow-lg shadow-purple-900/20 w-full text-center h-full flex flex-col justify-center">
+                                    <i class="fas fa-ruler-combined text-purple-400 text-xl mb-2"></i>
+                                    <div class="text-xs font-bold text-white uppercase">3. Verify</div>
+                                    <div class="text-[10px] text-slate-400 leading-tight mt-1">Value Adjacency<br>& Ranges</div>
+                                </div>
+                                <span class="tech-pill text-[10px]">Geometry</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SVG Branching -->
+                    <svg class="branch-lines" viewBox="0 0 80 160" style="right: -80px;">
+                        <path d="M0,80 C40,80 40,25 80,25" class="branch-path active-success" id="line-success"></path>
+                        <path d="M0,80 C40,80 40,135 80,135" class="branch-path" id="line-failure"></path>
+                    </svg>
+                </div>
+
+                <!-- GAP FOR BRANCHING -->
+                <div class="w-24"></div> 
+
+                <!-- 3. VERIFICATION & OUTPUT -->
+                <div class="flow-node z-20 ml-8">
+                    <div class="flex flex-col gap-12">
+                        
+                        <!-- SUCCESS BRANCH: VISUALIZER -->
+                        <div class="flex items-center gap-6 transition-opacity duration-500" id="node-success">
+                            
+                            <!-- JSON PACKET VISUALIZATION -->
+                            <div class="pipeline-connector w-20 border-t-2 border-green-500 border-dashed relative">
+                                <div class="json-icon shadow-2xl">{ Template.json }</div>
+                            </div>
+
+                            <!-- NEW VISUALIZER NODE -->
+                            <div class="glass-card p-5 w-72 bg-slate-800 border border-blue-400/50 relative overflow-hidden group">
+                                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-400 to-yellow-400"></div>
+                                <div class="flex items-start gap-4">
+                                    <div class="relative mt-1">
+                                        <i class="fas fa-file-pdf text-slate-200 text-4xl drop-shadow-lg"></i>
+                                        <!-- Highlights based on script -->
+                                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-slate-900 shadow-lg animate-pulse" title="Label Highlight"></div>
+                                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-yellow-400 rounded-full border-2 border-slate-900 shadow-lg animate-pulse" title="Value Highlight" style="animation-delay: 0.5s;"></div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-bold text-blue-300 uppercase tracking-wide mb-1">Visual QA</div>
+                                        <div class="text-[10px] text-slate-400 font-mono mb-3 bg-slate-900/50 p-1 rounded inline-block">visualize_mapping.py</div>
+                                        <div class="flex gap-2">
+                                            <span class="text-[9px] font-bold bg-green-900/40 text-green-300 px-2 py-0.5 rounded border border-green-500/30">Labels</span>
+                                            <span class="text-[9px] font-bold bg-yellow-900/40 text-yellow-300 px-2 py-0.5 rounded border border-yellow-500/30">Values</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <i class="fas fa-arrow-right text-slate-600 text-xl"></i>
+
+                            <!-- FINAL OUTPUT -->
+                            <div class="glass-card p-4 w-52 bg-green-900/10 border-l-4 border-green-500 flex flex-col gap-2">
+                                <div class="text-sm font-bold text-white uppercase"><i class="fas fa-folder-open mr-2 text-green-500"></i>/Processed</div>
+                                <div class="text-xs text-slate-400 flex flex-col gap-1.5 pl-1">
+                                    <span class="flex items-center"><i class="fas fa-check text-green-400 mr-2 w-4"></i>Template_{ID}.json</span>
+                                    <span class="flex items-center"><i class="fas fa-highlighter text-yellow-400 mr-2 w-4"></i>{ID}_HIGHLIGHTED.pdf</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAILURE BRANCH -->
+                        <div class="flex items-center gap-6 opacity-40 transition-opacity duration-500" id="node-failure">
+                            <div class="w-20"></div> <!-- Spacer -->
+                            <div class="glass-card p-4 w-60 border-l-4 border-red-500 bg-red-900/10">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-times-circle text-red-400 text-2xl"></i>
+                                    <span class="text-sm font-bold text-white uppercase">/Rejected</span>
+                                </div>
+                                <div class="text-xs text-slate-400 font-mono bg-slate-900/50 p-2 rounded border border-red-500/20">
+                                    {ID}_error.txt
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================= -->
+        <!-- TECH STACK (Cards Below Flow) -->
+        <!-- ============================================= -->
+        <section class="w-full max-w-6xl px-4 fade-in" style="animation-delay: 0.4s;">
+            <div class="flex items-center gap-6 mb-8">
+                <div class="h-px bg-slate-700 flex-grow opacity-50"></div>
+                <h3 class="text-lg font-bold text-slate-400 uppercase tracking-[0.2em]">Technology Stack</h3>
+                <div class="h-px bg-slate-700 flex-grow opacity-50"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- Ingestion -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-slate-800/80 transition group">
+                    <div class="w-12 h-12 bg-blue-900/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-python text-blue-400 text-3xl"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-white mb-2">Ingestion</h4>
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">Monitors S3/Folders. Pairs PDFs with 2 Excel sources.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill">watchdog</span>
+                        <span class="tech-pill">pathlib</span>
+                    </div>
+                </div>
+
+                <!-- Extraction -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-slate-800/80 transition group">
+                    <div class="w-12 h-12 bg-red-900/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-file-alt text-red-400 text-3xl"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-white mb-2">Parsing</h4>
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">PDF Table extraction & Data Normalization.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill">pdfplumber</span>
+                        <span class="tech-pill">pandas</span>
+                    </div>
+                </div>
+
+                <!-- Logic -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-slate-800/80 transition group">
+                    <div class="w-12 h-12 bg-yellow-900/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-brain text-yellow-400 text-3xl"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-white mb-2">Logic</h4>
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">Fuzzy matching & Adjacency verification.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill">thefuzz</span>
+                        <span class="tech-pill">regex</span>
+                    </div>
+                </div>
+
+                <!-- Validation -->
+                <div class="glass-panel p-6 rounded-2xl bg-gradient-to-b from-blue-900/10 to-slate-900 border border-blue-500/30 hover:bg-blue-900/20 transition group">
+                    <div class="w-12 h-12 bg-green-900/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-check-double text-green-400 text-3xl"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-white mb-2">Validation</h4>
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">Visual overlay generation for human review.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill">pymupdf (fitz)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTROLS -->
+        <div class="text-center mt-8 pb-12 fade-in" style="animation-delay: 0.6s;">
+            <button onclick="toggleFlow()" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 px-8 py-3 rounded-full text-sm font-bold transition shadow-xl hover:shadow-purple-500/20 flex items-center gap-3 mx-auto uppercase tracking-wide">
+                <i class="fas fa-random text-purple-400"></i> Simulate Outcome Switch
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleFlow() {
+            const lineSuccess = document.getElementById('line-success');
+            const lineFail = document.getElementById('line-failure');
+            const nodeSuccess = document.getElementById('node-success');
+            const nodeFail = document.getElementById('node-failure');
+            
+            const isSuccess = lineSuccess.classList.contains('active-success');
+            
+            if(isSuccess) {
+                // Switch to Fail
+                lineSuccess.classList.remove('active-success');
+                lineSuccess.style.stroke = '#334155';
+                
+                lineFail.classList.add('active-failure');
+                
+                nodeSuccess.style.opacity = '0.3';
+                nodeFail.style.opacity = '1';
+            } else {
+                // Switch to Success
+                lineFail.classList.remove('active-failure');
+                lineFail.style.stroke = '#334155';
+                
+                lineSuccess.classList.add('active-success');
+                lineSuccess.style.stroke = '#22c55e';
+                
+                nodeFail.style.opacity = '0.3';
+                nodeSuccess.style.opacity = '1';
+            }
+        }
+    </script>
+</body>
+</html>
